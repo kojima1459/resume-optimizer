@@ -49,7 +49,7 @@
   - 現在の方針では外部APIを使用しないため未実装
 
 ### その他
-- [ ] 複数パターン生成機能
+- [x] 複数パターン生成機能
 
 ## 複数パターン生成機能（フェーズ5）
 
@@ -108,5 +108,19 @@
 - [x] データベーススキーマにGemini APIキー用のカラムを追加
 - [x] 設定画面UIにGemini APIキー入力欄を追加
 - [x] バックエンドAPIでGemini APIキーの保存・取得に対応
-- [ ] LLM呼び出しをGemini APIに切り替え（JSON Schema対応が必要）
-- [ ] Gemini API連携のテスト
+- [x] LLM呼び出しをinvokeLLMWithUserSettingsに置き換え
+- [x] JSON Schema形式からテキスト形式のJSON出力に変更
+- [x] resume.generateでGemini APIが使用されることを確認
+- [x] resume.generateMultipleでGemini APIが使用されることを確認
+- [x] resume.regenerateでGemini APIが使用されることを確認
+- [x] resume.translateでGemini APIが使用されることを確認
+- [x] Gemini API連携のテスト
+
+## 生成履歴の検索・フィルター機能（フェーズ9）
+
+- [ ] バックエンドAPIに検索・フィルター機能を追加
+- [ ] 日付範囲での検索機能
+- [ ] 求人情報キーワードでの検索機能
+- [ ] フロントエンドに検索・フィルターUIを追加
+- [ ] 検索結果の表示機能
+- [ ] 検索・フィルター機能のテスト

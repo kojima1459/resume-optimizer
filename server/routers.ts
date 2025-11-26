@@ -8,6 +8,7 @@ import { invokeLLM } from "./_core/llm";
 import * as db from "./db";
 import { encryptApiKey, decryptApiKey } from "./encryption";
 import { invokeGemini, type GeminiMessage } from "./gemini";
+import { invokeLLMWithUserSettings } from "./llmHelper";
 
 const STANDARD_ITEMS = [
   "summary",
@@ -116,34 +117,15 @@ ${outputInstructions}
 JSON形式で出力してください。キーは以下の通りです:
 ${outputItems.map((item) => `"${item}": "内容"`).join(", ")}`;
 
-          const response = await invokeLLM({
-            messages: [
-              { role: "system", content: "あなたは職務経歴書最適化の専門家です。" },
-              { role: "user", content: prompt },
-            ],
-            response_format: {
-              type: "json_schema",
-              json_schema: {
-                name: "resume_optimization",
-                strict: true,
-                schema: {
-                  type: "object",
-                  properties: outputItems.reduce(
-                    (acc, item) => {
-                      acc[item] = { type: "string" };
-                      return acc;
-                    },
-                    {} as Record<string, { type: string }>
-                  ),
-                  required: outputItems,
-                  additionalProperties: false,
-                },
-              },
-            },
-          });
+          const content = await invokeLLMWithUserSettings(ctx.user.id, [
+            { role: "system", content: "あなたは職務経歴書最適化の専門家です。JSON形式で出力してください。" },
+            { role: "user", content: prompt },
+          ]);
 
-          const content = response.choices[0]?.message?.content as string;
-          const result = JSON.parse(content);
+          // JSONパース（マークダウンのコードブロックを削除）
+          const jsonMatch = content.match(/```json\n([\s\S]*?)\n```/) || content.match(/```\n([\s\S]*?)\n```/);
+          const jsonString = jsonMatch ? jsonMatch[1] : content;
+          const result = JSON.parse(jsonString.trim());
           patterns.push(result);
         }
 
@@ -232,42 +214,21 @@ ${outputItems.map((item) => `"${item}"`).join(", ")}
   "why_company": "..."
 }`;
 
-        const response = await invokeLLM({
-          messages: [
-            {
-              role: "user",
-              content: prompt,
-            },
-          ],
-          response_format: {
-            type: "json_schema",
-            json_schema: {
-              name: "resume_optimization",
-              strict: true,
-              schema: {
-                type: "object",
-                properties: Object.fromEntries(
-                  outputItems.map((item) => [
-                    item,
-                    {
-                      type: "string",
-                      description: `${itemLabels[item]}の内容`,
-                    },
-                  ])
-                ),
-                required: outputItems,
-                additionalProperties: false,
-              },
-            },
+        const content = await invokeLLMWithUserSettings(ctx.user.id, [
+          {
+            role: "user",
+            content: prompt,
           },
-        });
+        ]);
 
-        const content = response.choices[0]?.message?.content;
         if (!content || typeof content !== "string") {
           throw new Error("生成に失敗しました");
         }
 
-        const result = JSON.parse(content);
+        // JSONパース（マークダウンのコードブロックを削除）
+        const jsonMatch = content.match(/```json\n([\s\S]*?)\n```/) || content.match(/```\n([\s\S]*?)\n```/);
+        const jsonString = jsonMatch ? jsonMatch[1] : content;
+        const result = JSON.parse(jsonString.trim());
 
         // Save to history if requested
         if (saveHistory && ctx.user) {
@@ -294,7 +255,7 @@ ${outputItems.map((item) => `"${item}"`).join(", ")}
           itemLabel: z.string().optional(),
         })
       )
-      .mutation(async ({ input }) => {
+      .mutation(async ({ input, ctx }) => {
         const { item, resumeText, jobDescription, charLimit, previousContent, itemLabel } = input;
 
         const defaultLabels: Record<string, string> = {
@@ -336,39 +297,21 @@ JSON形式で出力してください:
   "content": "生成された${label}の内容"
 }`;
 
-        const response = await invokeLLM({
-          messages: [
-            {
-              role: "user",
-              content: prompt,
-            },
-          ],
-          response_format: {
-            type: "json_schema",
-            json_schema: {
-              name: "resume_regeneration",
-              strict: true,
-              schema: {
-                type: "object",
-                properties: {
-                  content: {
-                    type: "string",
-                    description: `${label}の内容`,
-                  },
-                },
-                required: ["content"],
-                additionalProperties: false,
-              },
-            },
+        const content = await invokeLLMWithUserSettings(ctx.user.id, [
+          {
+            role: "user",
+            content: prompt,
           },
-        });
+        ]);
 
-        const content = response.choices[0]?.message?.content;
         if (!content || typeof content !== "string") {
           throw new Error("再生成に失敗しました");
         }
 
-        const result = JSON.parse(content);
+        // JSONパース（マークダウンのコードブロックを削除）
+        const jsonMatch = content.match(/```json\n([\s\S]*?)\n```/) || content.match(/```\n([\s\S]*?)\n```/);
+        const jsonString = jsonMatch ? jsonMatch[1] : content;
+        const result = JSON.parse(jsonString.trim());
         return { content: result.content };
       }),
 
@@ -419,7 +362,7 @@ JSON形式で出力してください:
           itemLabel: z.string(),
         })
       )
-      .mutation(async ({ input }) => {
+      .mutation(async ({ input, ctx }) => {
         const { text, itemLabel } = input;
 
         const prompt = `以下の日本語の「${itemLabel}」を英語に翻訳してください。
@@ -438,39 +381,21 @@ JSON形式で出力してください:
   "translation": "翻訳された英語テキスト"
 }`;
 
-        const response = await invokeLLM({
-          messages: [
-            {
-              role: "user",
-              content: prompt,
-            },
-          ],
-          response_format: {
-            type: "json_schema",
-            json_schema: {
-              name: "translation",
-              strict: true,
-              schema: {
-                type: "object",
-                properties: {
-                  translation: {
-                    type: "string",
-                    description: "翻訳された英語テキスト",
-                  },
-                },
-                required: ["translation"],
-                additionalProperties: false,
-              },
-            },
+        const content = await invokeLLMWithUserSettings(ctx.user.id, [
+          {
+            role: "user",
+            content: prompt,
           },
-        });
+        ]);
 
-        const content = response.choices[0]?.message?.content;
         if (!content || typeof content !== "string") {
           throw new Error("翻訳に失敗しました");
         }
 
-        const result = JSON.parse(content);
+        // JSONパース（マークダウンのコードブロックを削除）
+        const jsonMatch = content.match(/```json\n([\s\S]*?)\n```/) || content.match(/```\n([\s\S]*?)\n```/);
+        const jsonString = jsonMatch ? jsonMatch[1] : content;
+        const result = JSON.parse(jsonString.trim());
         return { translation: result.translation };
       }),
   }),

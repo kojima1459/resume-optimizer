@@ -69,7 +69,7 @@ describe("resume.generateMultiple", () => {
     const uniqueSummaries = new Set(summaries);
     expect(uniqueSummaries.size).toBeGreaterThan(1);
     },
-    30000
+    60000
   );
 
   it(
@@ -126,6 +126,6 @@ describe("resume.generateMultiple", () => {
       expect(pattern.custom_why_now.length).toBeGreaterThan(0);
     });
     },
-    30000
+    60000
   );
 });
