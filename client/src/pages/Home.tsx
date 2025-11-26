@@ -16,6 +16,7 @@ import { useTheme } from "@/contexts/ThemeContext";
 import { exportToWord, exportToPDF, exportToText, exportToMarkdown, downloadBlob } from "@/lib/exportUtils";
 import { shareToLinkedIn, ShareStats, generateLinkedInShareText } from "@/lib/linkedinShare";
 import { LinkedInShareDialog } from "@/components/LinkedInShareDialog";
+import { useKeyboardShortcuts, getShortcutLabel, KeyboardShortcut } from "@/hooks/useKeyboardShortcuts";
 import {
   Dialog,
   DialogContent,
@@ -78,6 +79,7 @@ export default function Home() {
   const [sortByScore, setSortByScore] = useState(false);
   const [showShareDialog, setShowShareDialog] = useState(false);
   const [shareDialogText, setShareDialogText] = useState("");
+  const [showShortcutHelp, setShowShortcutHelp] = useState(false);
 
   const evaluateMutation = trpc.resume.evaluate.useMutation();
 
@@ -614,6 +616,47 @@ export default function Home() {
     window.open('https://www.linkedin.com/feed/', '_blank', 'noopener,noreferrer');
   };
 
+  // キーボードショートカットの定義
+  const shortcuts: KeyboardShortcut[] = [
+    {
+      key: 'Enter',
+      ctrl: true,
+      callback: () => {
+        if (!resumeText.trim() || !jobDescription.trim() || selectedItems.length === 0 || generateMutation.isPending) {
+          toast.error("生成するには、職務経歴書、求人情報、出力項目を入力してください");
+          return;
+        }
+        handleGenerate();
+        toast.success("ショートカット: Ctrl+Enter");
+      },
+      description: '生成開始',
+    },
+    {
+      key: 'C',
+      ctrl: true,
+      shift: true,
+      callback: () => {
+        if (Object.keys(generatedContent).length === 0) {
+          toast.error("コピーするコンテンツがありません");
+          return;
+        }
+        handleCopyAll();
+        toast.success("ショートカット: Ctrl+Shift+C");
+      },
+      description: '全項目をコピー',
+    },
+    {
+      key: '?',
+      shift: true,
+      callback: () => {
+        setShowShortcutHelp(true);
+      },
+      description: 'ショートカットヘルプを表示',
+    },
+  ];
+
+  useKeyboardShortcuts(shortcuts);
+
   if (authLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -647,12 +690,12 @@ export default function Home() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800">
       <div className="container max-w-7xl mx-auto px-3 sm:px-4 md:px-6 py-4 md:py-6">
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 mb-4 md:mb-6">
           <div className="flex items-center gap-2 md:gap-3">
             <FileText className="h-8 w-8 md:h-10 md:w-10 text-primary" />
-            <h1 className="text-xl md:text-3xl font-bold text-gray-900">職務経歴書最適化ツール</h1>
+            <h1 className="text-xl md:text-3xl font-bold text-gray-900 dark:text-gray-100">職務経歴書最適化ツール</h1>
           </div>
           <div className="flex gap-2 w-full sm:w-auto">
             <Button
@@ -660,8 +703,18 @@ export default function Home() {
               size="icon"
               onClick={toggleTheme}
               className="flex-none"
+              title="テーマ切り替え"
             >
               {theme === 'dark' ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+            </Button>
+            <Button
+              variant="outline"
+              size="icon"
+              onClick={() => setShowShortcutHelp(true)}
+              className="flex-none"
+              title="キーボードショートカット (Shift+?)"
+            >
+              <span className="text-lg font-bold">?</span>
             </Button>
             <Button
               variant="outline"
@@ -1269,6 +1322,29 @@ export default function Home() {
         defaultText={shareDialogText}
         onShare={handleConfirmShare}
       />
+      
+      {/* ショートカットヘルプダイアログ */}
+      <Dialog open={showShortcutHelp} onOpenChange={setShowShortcutHelp}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>キーボードショートカット</DialogTitle>
+            <DialogDescription>
+              以下のショートカットを使用して、より効率的に操作できます。
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-3">
+            {shortcuts.map((shortcut, index) => (
+              <div key={index} className="flex items-center justify-between p-3 border rounded-lg">
+                <span className="text-sm">{shortcut.description}</span>
+                <kbd className="px-2 py-1 text-xs font-semibold text-gray-800 bg-gray-100 border border-gray-200 rounded-lg dark:bg-gray-600 dark:text-gray-100 dark:border-gray-500">
+                  {getShortcutLabel(shortcut)}
+                </kbd>
+              </div>
+            ))}
+          </div>
+        </DialogContent>
+      </Dialog>
+      
       <Footer />
     </div>
   );
