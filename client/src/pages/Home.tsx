@@ -21,6 +21,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { TemplateSelector } from "@/components/TemplateSelector";
 
 type OutputItem = {
   key: string;
@@ -65,6 +66,7 @@ export default function Home() {
   const [generatedPatterns, setGeneratedPatterns] = useState<Record<string, string>[]>([]);
   const [selectedPatternIndex, setSelectedPatternIndex] = useState<number | null>(null);
   const [showPatternDialog, setShowPatternDialog] = useState(false);
+  const [selectedTemplateId, setSelectedTemplateId] = useState<number | null>(null);
 
   const generateMultipleMutation = trpc.resume.generateMultiple.useMutation({
     onSuccess: (data) => {
@@ -82,6 +84,17 @@ export default function Home() {
       setGeneratedContent(data);
       setEditedContent(data);
       toast.success("生成が完了しました");
+    },
+    onError: (error) => {
+      toast.error(error.message || "生成に失敗しました");
+    },
+  });
+
+  const generateWithTemplateMutation = trpc.template.generateWithTemplate.useMutation({
+    onSuccess: (data) => {
+      setGeneratedContent(data);
+      setEditedContent(data);
+      toast.success("テンプレートを使用して生成が完了しました");
     },
     onError: (error) => {
       toast.error(error.message || "生成に失敗しました");
@@ -153,18 +166,36 @@ export default function Home() {
       return;
     }
 
-    generateMutation.mutate({
-      resumeText,
-      jobDescription,
-      outputItems: selectedItems,
-      charLimits,
-      customItems: customItems.map((item) => ({
-        key: item.key,
-        label: item.label,
-        charLimit: item.charLimit,
-      })),
-      saveHistory: true,
-    });
+    if (selectedTemplateId) {
+      // テンプレートを使用して生成
+      generateWithTemplateMutation.mutate({
+        templateId: selectedTemplateId,
+        resumeText,
+        jobDescription,
+        outputItems: selectedItems,
+        charLimits,
+        customItems: customItems.map((item) => ({
+          key: item.key,
+          label: item.label,
+          charLimit: item.charLimit,
+        })),
+        saveHistory: true,
+      });
+    } else {
+      // 通常の生成
+      generateMutation.mutate({
+        resumeText,
+        jobDescription,
+        outputItems: selectedItems,
+        charLimits,
+        customItems: customItems.map((item) => ({
+          key: item.key,
+          label: item.label,
+          charLimit: item.charLimit,
+        })),
+        saveHistory: true,
+      });
+    }
   };
 
   const handleGenerateMultiple = () => {
@@ -196,6 +227,13 @@ export default function Home() {
       setSelectedPatternIndex(index);
       setShowPatternDialog(false);
       toast.success(`パターン${index + 1}を選択しました`);
+    }
+  };
+
+  const handleSelectTemplate = (templateId: number | null) => {
+    setSelectedTemplateId(templateId);
+    if (templateId) {
+      toast.success("テンプレートを選択しました");
     }
   };
 
@@ -591,7 +629,12 @@ export default function Home() {
             </div>
 
             <div>
-              <Label className="text-base font-semibold mb-3 block">3. 出力項目を選択</Label>
+              <Label className="text-base font-semibold mb-3 block">3. テンプレートを選択（オプション）</Label>
+              <TemplateSelector onSelectTemplate={handleSelectTemplate} />
+            </div>
+
+            <div>
+              <Label className="text-base font-semibold mb-3 block">4. 出力項目を選択</Label>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {allItems.map((item) => (
                   <div key={item.key} className="flex items-center space-x-2 p-3 border rounded-lg">
@@ -640,7 +683,7 @@ export default function Home() {
             </div>
 
             <div>
-              <Label className="text-base font-semibold mb-3 block">4. 文字数設定</Label>
+              <Label className="text-base font-semibold mb-3 block">5. 文字数設定</Label>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {allItems
                   .filter((item) => selectedItems.includes(item.key))

@@ -59,3 +59,22 @@ export const apiKeys = mysqlTable("apiKeys", {
 
 export type ApiKey = typeof apiKeys.$inferSelect;
 export type InsertApiKey = typeof apiKeys.$inferInsert;
+
+/**
+ * 業界別・職種別テンプレートテーブル
+ * 業界や職種ごとの最適なフォーマットとサンプルを保存
+ */
+export const templates = mysqlTable("templates", {
+  id: int("id").autoincrement().primaryKey(),
+  category: varchar("category", { length: 64 }).notNull(), // 業界（IT, finance, manufacturing, sales, marketing）
+  jobType: varchar("jobType", { length: 64 }).notNull(), // 職種（engineer, manager, analyst, designer）
+  name: varchar("name", { length: 255 }).notNull(), // テンプレート名
+  description: text("description").notNull(), // テンプレートの説明
+  promptTemplate: text("promptTemplate").notNull(), // LLMに渡すプロンプトテンプレート
+  sampleContent: text("sampleContent").notNull(), // サンプルコンテンツ（JSON string）
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type Template = typeof templates.$inferSelect;
+export type InsertTemplate = typeof templates.$inferInsert;

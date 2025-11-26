@@ -1,6 +1,6 @@
 import { eq } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/mysql2";
-import { InsertUser, users, resumes, InsertResume, apiKeys, InsertApiKey } from "../drizzle/schema";
+import { InsertUser, users, resumes, InsertResume, apiKeys, InsertApiKey, templates, Template } from "../drizzle/schema";
 import { ENV } from './_core/env';
 
 let _db: ReturnType<typeof drizzle> | null = null;
@@ -231,5 +231,57 @@ export async function deleteApiKey(userId: number) {
   } catch (error) {
     console.error("[Database] Failed to delete API key:", error);
     return false;
+  }
+}
+
+// ========================================
+// テンプレート関連のヘルパー関数
+// ========================================
+
+export async function getAllTemplates(): Promise<Template[]> {
+  const db = await getDb();
+  if (!db) {
+    console.warn("[Database] Cannot get templates: database not available");
+    return [];
+  }
+
+  try {
+    const result = await db.select().from(templates);
+    return result;
+  } catch (error) {
+    console.error("[Database] Failed to get templates:", error);
+    return [];
+  }
+}
+
+export async function getTemplatesByCategory(category: string): Promise<Template[]> {
+  const db = await getDb();
+  if (!db) {
+    console.warn("[Database] Cannot get templates: database not available");
+    return [];
+  }
+
+  try {
+    const result = await db.select().from(templates).where(eq(templates.category, category));
+    return result;
+  } catch (error) {
+    console.error("[Database] Failed to get templates by category:", error);
+    return [];
+  }
+}
+
+export async function getTemplateById(id: number): Promise<Template | undefined> {
+  const db = await getDb();
+  if (!db) {
+    console.warn("[Database] Cannot get template: database not available");
+    return undefined;
+  }
+
+  try {
+    const result = await db.select().from(templates).where(eq(templates.id, id)).limit(1);
+    return result.length > 0 ? result[0] : undefined;
+  } catch (error) {
+    console.error("[Database] Failed to get template:", error);
+    return undefined;
   }
 }
