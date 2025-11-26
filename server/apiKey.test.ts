@@ -31,14 +31,14 @@ function createAuthContext(): { ctx: TrpcContext } {
 }
 
 describe("apiKey router", () => {
-  it("should save and retrieve API key", async () => {
+  it("should save and retrieve OpenAI API key", async () => {
     const { ctx } = createAuthContext();
     const caller = appRouter.createCaller(ctx);
 
-    // Save API key
+    // Save OpenAI API key
     const saveResult = await caller.apiKey.save({
-      apiKey: "sk-test1234567890",
-      keyType: "openai",
+      openAIKey: "sk-test1234567890",
+      primaryProvider: "openai",
     });
 
     expect(saveResult.success).toBe(true);
@@ -46,10 +46,56 @@ describe("apiKey router", () => {
     // Get API key
     const getResult = await caller.apiKey.get();
 
-    expect(getResult.hasKey).toBe(true);
-    expect(getResult.keyType).toBe("openai");
-    expect(getResult.maskedKey).toContain("sk-t");
-    expect(getResult.maskedKey).toContain("...");
+    expect(getResult.hasOpenAIKey).toBe(true);
+    expect(getResult.hasGeminiKey).toBe(false);
+    expect(getResult.primaryProvider).toBe("openai");
+    expect(getResult.maskedOpenAIKey).toContain("sk-t");
+    expect(getResult.maskedOpenAIKey).toContain("...");
+  });
+
+  it("should save and retrieve Gemini API key", async () => {
+    const { ctx } = createAuthContext();
+    const caller = appRouter.createCaller(ctx);
+
+    // Save Gemini API key
+    const saveResult = await caller.apiKey.save({
+      geminiKey: "AIza-test1234567890",
+      primaryProvider: "gemini",
+    });
+
+    expect(saveResult.success).toBe(true);
+
+    // Get API key
+    const getResult = await caller.apiKey.get();
+
+    expect(getResult.hasOpenAIKey).toBe(false);
+    expect(getResult.hasGeminiKey).toBe(true);
+    expect(getResult.primaryProvider).toBe("gemini");
+    expect(getResult.maskedGeminiKey).toContain("AIza");
+    expect(getResult.maskedGeminiKey).toContain("...");
+  });
+
+  it("should save both OpenAI and Gemini API keys", async () => {
+    const { ctx } = createAuthContext();
+    const caller = appRouter.createCaller(ctx);
+
+    // Save both API keys
+    const saveResult = await caller.apiKey.save({
+      openAIKey: "sk-test1234567890",
+      geminiKey: "AIza-test1234567890",
+      primaryProvider: "openai",
+    });
+
+    expect(saveResult.success).toBe(true);
+
+    // Get API keys
+    const getResult = await caller.apiKey.get();
+
+    expect(getResult.hasOpenAIKey).toBe(true);
+    expect(getResult.hasGeminiKey).toBe(true);
+    expect(getResult.primaryProvider).toBe("openai");
+    expect(getResult.maskedOpenAIKey).toContain("sk-t");
+    expect(getResult.maskedGeminiKey).toContain("AIza");
   });
 
   it("should delete API key", async () => {
@@ -58,8 +104,8 @@ describe("apiKey router", () => {
 
     // Save API key first
     await caller.apiKey.save({
-      apiKey: "sk-test1234567890",
-      keyType: "openai",
+      openAIKey: "sk-test1234567890",
+      primaryProvider: "openai",
     });
 
     // Delete API key
@@ -68,7 +114,8 @@ describe("apiKey router", () => {
 
     // Verify deletion
     const getResult = await caller.apiKey.get();
-    expect(getResult.hasKey).toBe(false);
+    expect(getResult.hasOpenAIKey).toBe(false);
+    expect(getResult.hasGeminiKey).toBe(false);
   });
 });
 

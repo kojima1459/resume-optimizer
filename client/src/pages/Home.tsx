@@ -49,6 +49,13 @@ const STANDARD_ITEMS: OutputItem[] = [
 export default function Home() {
   const { user, loading: authLoading } = useAuth();
   const { theme, toggleTheme } = useTheme();
+  const [showApiKeyBanner, setShowApiKeyBanner] = useState(false);
+  const [showApiKeyErrorDialog, setShowApiKeyErrorDialog] = useState(false);
+
+  // APIキー設定状態を確認
+  const apiKeyQuery = trpc.apiKey.get.useQuery(undefined, {
+    enabled: !!user,
+  });
   const [resumeText, setResumeText] = useState("");
   const [jobDescription, setJobDescription] = useState("");
   const [selectedItems, setSelectedItems] = useState<string[]>([
@@ -247,6 +254,12 @@ export default function Home() {
       return;
     }
 
+    // APIキーの確認
+    if (!apiKeyQuery.data?.hasOpenAIKey && !apiKeyQuery.data?.hasGeminiKey) {
+      setShowApiKeyErrorDialog(true);
+      return;
+    }
+
     if (selectedTemplateId) {
       // システムテンプレートを使用して生成
       generateWithTemplateMutation.mutate({
@@ -298,6 +311,12 @@ export default function Home() {
     if (!user) {
       toast.error("ログインが必要です");
       window.location.href = getLoginUrl();
+      return;
+    }
+
+    // APIキーの確認
+    if (!apiKeyQuery.data?.hasOpenAIKey && !apiKeyQuery.data?.hasGeminiKey) {
+      setShowApiKeyErrorDialog(true);
       return;
     }
 
@@ -714,6 +733,17 @@ export default function Home() {
     }
   }, [resumeText, jobDescription, selectedItems, charLimits, customItems]);
 
+  // APIキー未設定時のバナー表示
+  useEffect(() => {
+    if (user && apiKeyQuery.data && !apiKeyQuery.data.hasOpenAIKey && !apiKeyQuery.data.hasGeminiKey) {
+      // localStorageでバナーを一度閉じたかどうかを確認
+      const dismissed = localStorage.getItem('apiKeyBannerDismissed');
+      if (!dismissed) {
+        setShowApiKeyBanner(true);
+      }
+    }
+  }, [user, apiKeyQuery.data]);
+
   if (authLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -749,6 +779,51 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800">
       <div className="container max-w-7xl mx-auto px-3 sm:px-4 md:px-6 py-4 md:py-6">
+        {/* APIキー未設定時のバナー */}
+        {showApiKeyBanner && (
+          <div className="mb-4 bg-amber-50 dark:bg-amber-950/20 border-2 border-amber-400 dark:border-amber-600 rounded-lg p-4">
+            <div className="flex items-start gap-3">
+              <div className="flex-shrink-0">
+                <SettingsIcon className="h-6 w-6 text-amber-600 dark:text-amber-400" />
+              </div>
+              <div className="flex-1">
+                <h3 className="text-lg font-semibold text-amber-900 dark:text-amber-100 mb-2">
+                  APIキーが設定されていません
+                </h3>
+                <p className="text-sm text-amber-800 dark:text-amber-200 mb-3">
+                  AI機能を使用するには、OpenAI、Gemini、ClaudeのいずれかのAPIキーを設定する必要があります。
+                  詳しい取得方法はガイドページをご覧ください。
+                </p>
+                <div className="flex gap-2">
+                  <Button
+                    size="sm"
+                    asChild
+                    className="bg-amber-600 hover:bg-amber-700 text-white"
+                  >
+                    <a href="/api-settings">API設定ページへ</a>
+                  </Button>
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    asChild
+                  >
+                    <a href="/guide">ガイドを見る</a>
+                  </Button>
+                  <Button
+                    size="sm"
+                    variant="ghost"
+                    onClick={() => {
+                      setShowApiKeyBanner(false);
+                      localStorage.setItem('apiKeyBannerDismissed', 'true');
+                    }}
+                  >
+                    閉じる
+                  </Button>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 mb-4 md:mb-6">
           <div className="flex items-center gap-2 md:gap-3">
             <FileText className="h-8 w-8 md:h-10 md:w-10 text-primary" />
@@ -802,10 +877,10 @@ export default function Home() {
                 <span className="hidden sm:inline">お気に入り</span>
               </a>
             </Button>
-            <Button variant="outline" asChild className="flex-1 sm:flex-none">
-              <a href="/settings">
+            <Button variant="outline" size="sm" asChild>
+              <a href="/api-settings">
                 <SettingsIcon className="h-4 w-4 mr-2" />
-                <span className="hidden sm:inline">設定</span>
+                <span className="hidden sm:inline">API設定</span>
               </a>
             </Button>
             {lastSaved && (
@@ -1582,6 +1657,62 @@ export default function Home() {
                 </kbd>
               </div>
             ))}
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* APIキー未入力エラーダイアログ */}
+      <Dialog open={showApiKeyErrorDialog} onOpenChange={setShowApiKeyErrorDialog}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2 text-amber-600 dark:text-amber-400">
+              <SettingsIcon className="h-5 w-5" />
+              APIキーが設定されていません
+            </DialogTitle>
+            <DialogDescription>
+              AI機能を使用するには、APIキーの設定が必要です。
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4">
+            <div className="bg-amber-50 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-800 rounded-lg p-4">
+              <p className="text-sm text-amber-900 dark:text-amber-100 mb-3">
+                現在、OpenAI、Gemini、ClaudeのいずれのAPIキーも設定されていません。
+                以下の手順でAPIキーを設定してください：
+              </p>
+              <ol className="text-sm text-amber-800 dark:text-amber-200 space-y-2 list-decimal list-inside">
+                <li>「API設定ページへ」ボタンをクリック</li>
+                <li>使用したいAIプロバイダー（OpenAI / Gemini / Claude）を選択</li>
+                <li>APIキーを入力して保存</li>
+              </ol>
+            </div>
+            <div className="bg-blue-50 dark:bg-blue-950/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4">
+              <p className="text-sm text-blue-900 dark:text-blue-100 mb-2">
+                <strong>APIキーの取得方法がわからない場合：</strong>
+              </p>
+              <p className="text-sm text-blue-800 dark:text-blue-200">
+                ガイドページに各プロバイダーのAPIキー取得方法を詳しく説明しています。
+              </p>
+            </div>
+            <div className="flex gap-2 justify-end">
+              <Button
+                variant="outline"
+                onClick={() => setShowApiKeyErrorDialog(false)}
+              >
+                キャンセル
+              </Button>
+              <Button
+                variant="outline"
+                asChild
+              >
+                <a href="/guide" target="_blank">ガイドを見る</a>
+              </Button>
+              <Button
+                asChild
+                className="bg-amber-600 hover:bg-amber-700 text-white"
+              >
+                <a href="/api-settings">API設定ページへ</a>
+              </Button>
+            </div>
           </div>
         </DialogContent>
       </Dialog>

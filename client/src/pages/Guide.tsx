@@ -260,18 +260,157 @@ export default function Guide() {
                   <Settings className="h-5 w-5" />
                   APIキー設定
                 </CardTitle>
+                <CardDescription>
+                  OpenAI、Gemini、ClaudeのいずれかのAPIキーを設定することで、AI機能を使用できます。
+                </CardDescription>
               </CardHeader>
-              <CardContent>
-                <p className="mb-4">
-                  OpenAIまたはGeminiのAPIキーを設定することで、AI機能を使用できます。
-                  設定画面で両方のAPIキーを登録し、メインプロバイダーを選択できます。
-                </p>
-                <div className="bg-muted p-4 rounded-lg">
-                  <p className="text-sm font-semibold mb-2">APIキーの取得方法</p>
-                  <ul className="text-sm space-y-1 text-muted-foreground">
-                    <li>• OpenAI: <a href="https://platform.openai.com/api-keys" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">platform.openai.com/api-keys</a></li>
-                    <li>• Gemini: <a href="https://aistudio.google.com/app/apikey" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">aistudio.google.com/app/apikey</a></li>
-                  </ul>
+              <CardContent className="space-y-6">
+                <div>
+                  <h3 className="font-semibold mb-3">APIキーの設定方法</h3>
+                  <ol className="space-y-2 text-muted-foreground">
+                    <li className="flex items-start gap-2">
+                      <span className="bg-primary text-primary-foreground rounded-full w-5 h-5 flex items-center justify-center text-xs flex-shrink-0 mt-0.5">1</span>
+                      <span>ヘッダーの「API設定」ボタンをクリックして設定画面を開きます</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="bg-primary text-primary-foreground rounded-full w-5 h-5 flex items-center justify-center text-xs flex-shrink-0 mt-0.5">2</span>
+                      <span>使用したいAIプロバイダー（OpenAI / Gemini / Claude）を選択します</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="bg-primary text-primary-foreground rounded-full w-5 h-5 flex items-center justify-center text-xs flex-shrink-0 mt-0.5">3</span>
+                      <span>選択したプロバイダーのAPIキーを入力して「保存」ボタンをクリックします</span>
+                    </li>
+                  </ol>
+                </div>
+
+                <div className="border-t pt-6">
+                  <h3 className="font-semibold mb-4">各プロバイダーのAPIキー取得方法</h3>
+                  
+                  {/* OpenAI */}
+                  <div className="mb-6">
+                    <div className="flex items-center gap-2 mb-3">
+                      <div className="bg-green-500 text-white rounded px-2 py-1 text-xs font-semibold">OpenAI</div>
+                      <a 
+                        href="https://platform.openai.com/api-keys" 
+                        target="_blank" 
+                        rel="noopener noreferrer" 
+                        className="text-primary hover:underline text-sm"
+                      >
+                        platform.openai.com/api-keys →
+                      </a>
+                    </div>
+                    <ol className="space-y-2 text-sm text-muted-foreground ml-4">
+                      <li className="flex items-start gap-2">
+                        <span className="text-primary">①</span>
+                        <span>OpenAIアカウントにログインします（未登録の場合は新規登録）</span>
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <span className="text-primary">②</span>
+                        <span>「API keys」ページで「+ Create new secret key」をクリックします</span>
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <span className="text-primary">③</span>
+                        <span>キーの名前を入力（例: Resume Optimizer）して「Create secret key」をクリックします</span>
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <span className="text-primary">④</span>
+                        <span>表示されたAPIキー（sk-で始まる文字列）をコピーして保存します</span>
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <span className="text-primary">⚠️</span>
+                        <span className="text-amber-600 dark:text-amber-400">APIキーは一度しか表示されないため、必ず安全な場所に保存してください</span>
+                      </li>
+                    </ol>
+                  </div>
+
+                  {/* Gemini */}
+                  <div className="mb-6">
+                    <div className="flex items-center gap-2 mb-3">
+                      <div className="bg-blue-500 text-white rounded px-2 py-1 text-xs font-semibold">Gemini</div>
+                      <a 
+                        href="https://aistudio.google.com/app/apikey" 
+                        target="_blank" 
+                        rel="noopener noreferrer" 
+                        className="text-primary hover:underline text-sm"
+                      >
+                        aistudio.google.com/app/apikey →
+                      </a>
+                    </div>
+                    <ol className="space-y-2 text-sm text-muted-foreground ml-4">
+                      <li className="flex items-start gap-2">
+                        <span className="text-primary">①</span>
+                        <span>Googleアカウントでログインします</span>
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <span className="text-primary">②</span>
+                        <span>「Get API key」または「Create API key」ボタンをクリックします</span>
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <span className="text-primary">③</span>
+                        <span>新しいプロジェクトを作成するか、既存のプロジェクトを選択します</span>
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <span className="text-primary">④</span>
+                        <span>生成されたAPIキーをコピーして保存します</span>
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <span className="text-primary">💡</span>
+                        <span className="text-blue-600 dark:text-blue-400">Gemini APIは無料枠が充実しているため、お試しに最適です</span>
+                      </li>
+                    </ol>
+                  </div>
+
+                  {/* Claude */}
+                  <div>
+                    <div className="flex items-center gap-2 mb-3">
+                      <div className="bg-purple-500 text-white rounded px-2 py-1 text-xs font-semibold">Claude</div>
+                      <a 
+                        href="https://console.anthropic.com/settings/keys" 
+                        target="_blank" 
+                        rel="noopener noreferrer" 
+                        className="text-primary hover:underline text-sm"
+                      >
+                        console.anthropic.com/settings/keys →
+                      </a>
+                    </div>
+                    <ol className="space-y-2 text-sm text-muted-foreground ml-4">
+                      <li className="flex items-start gap-2">
+                        <span className="text-primary">①</span>
+                        <span>Anthropicアカウントにログインします（未登録の場合は新規登録）</span>
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <span className="text-primary">②</span>
+                        <span>「API Keys」ページで「Create Key」をクリックします</span>
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <span className="text-primary">③</span>
+                        <span>キーの名前を入力（例: Resume Optimizer）して作成します</span>
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <span className="text-primary">④</span>
+                        <span>表示されたAPIキーをコピーして保存します</span>
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <span className="text-primary">⚠️</span>
+                        <span className="text-amber-600 dark:text-amber-400">APIキーは一度しか表示されないため、必ず安全な場所に保存してください</span>
+                      </li>
+                    </ol>
+                  </div>
+                </div>
+
+                <div className="bg-amber-50 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-800 p-4 rounded-lg">
+                  <div className="flex items-start gap-2">
+                    <AlertCircle className="h-5 w-5 text-amber-600 dark:text-amber-400 flex-shrink-0 mt-0.5" />
+                    <div className="space-y-2 text-sm">
+                      <p className="font-semibold text-amber-900 dark:text-amber-100">重要な注意事項</p>
+                      <ul className="space-y-1 text-amber-800 dark:text-amber-200">
+                        <li>• APIキーは第三者に共有しないでください</li>
+                        <li>• 本アプリケーションではAPIキーを暗号化して安全に保存しています</li>
+                        <li>• API使用料金は各プロバイダーの料金体系に従って課金されます</li>
+                        <li>• 無料枠を超えた場合は、各プロバイダーのアカウントで料金が発生します</li>
+                      </ul>
+                    </div>
+                  </div>
                 </div>
               </CardContent>
             </Card>
@@ -303,12 +442,12 @@ export default function Guide() {
                     APIキーの設定
                   </h3>
                   <p className="text-muted-foreground ml-10 mb-2">
-                    設定画面（ヘッダーの「設定」ボタン）からOpenAIまたはGeminiのAPIキーを入力します。
+                    ヘッダーの「API設定」ボタンからOpenAI、Gemini、ClaudeのいずれかのAPIキーを入力します。
                   </p>
                   <ul className="text-sm text-muted-foreground ml-10 space-y-1">
-                    <li>• 両方のAPIキーを登録できます</li>
-                    <li>• メインプロバイダーを選択して、どちらのAIを使用するか決定します</li>
-                    <li>• APIキーは暗号化してデータベースに保存されます</li>
+                    <li>• 3つのAIプロバイダー（OpenAI / Gemini / Claude）から選択できます</li>
+                    <li>• APIキーは暗号化してデータベースに安全に保存されます</li>
+                    <li>• 詳しい取得方法は「機能」タブの「APIキー設定」セクションをご覧ください</li>
                   </ul>
                 </div>
 
