@@ -11,6 +11,7 @@ import { toast } from "sonner";
 import { useAuth } from "@/_core/hooks/useAuth";
 import { getLoginUrl } from "@/const";
 import { extractTextFromFile } from "@/lib/fileUtils";
+import { extractTextFromImage, isImageFile } from "@/lib/ocrUtils";
 import { exportToWord, exportToPDF, downloadBlob } from "@/lib/exportUtils";
 import {
   Dialog,
@@ -58,6 +59,8 @@ export default function Home() {
   const [isUploadingResume, setIsUploadingResume] = useState(false);
   const [isUploadingJob, setIsUploadingJob] = useState(false);
   const [translatingItem, setTranslatingItem] = useState<string | null>(null);
+  const [ocrProgress, setOcrProgress] = useState<number>(0);
+  const [isProcessingOcr, setIsProcessingOcr] = useState(false);
 
   const generateMutation = trpc.resume.generate.useMutation({
     onSuccess: (data) => {
@@ -244,6 +247,27 @@ export default function Home() {
     const file = e.target.files?.[0];
     if (!file) return;
 
+    // 画像ファイルの場合はOCR処理
+    if (isImageFile(file)) {
+      setIsProcessingOcr(true);
+      setOcrProgress(0);
+      try {
+        const text = await extractTextFromImage(file, (progress) => {
+          setOcrProgress(progress);
+        });
+        setJobDescription(text);
+        toast.success("画像からテキストを抽出しました");
+      } catch (error: any) {
+        toast.error(error.message || "OCR処理に失敗しました");
+      } finally {
+        setIsProcessingOcr(false);
+        setOcrProgress(0);
+        e.target.value = "";
+      }
+      return;
+    }
+
+    // PDF/Wordファイルの場合
     setIsUploadingJob(true);
     try {
       const text = await extractTextFromFile(file);
@@ -463,7 +487,7 @@ export default function Home() {
                   <input
                     type="file"
                     id="job-file"
-                    accept=".pdf,.docx,.txt"
+                    accept=".pdf,.docx,.txt,.png,.jpg,.jpeg"
                     onChange={handleJobFileUpload}
                     className="hidden"
                   />
@@ -472,9 +496,9 @@ export default function Home() {
                     variant="outline"
                     size="sm"
                     onClick={() => document.getElementById("job-file")?.click()}
-                    disabled={isUploadingJob}
+                    disabled={isUploadingJob || isProcessingOcr}
                   >
-                    {isUploadingJob ? (
+                    {isUploadingJob || isProcessingOcr ? (
                       <Loader2 className="h-4 w-4 mr-2 animate-spin" />
                     ) : (
                       <Upload className="h-4 w-4 mr-2" />
@@ -483,12 +507,31 @@ export default function Home() {
                   </Button>
                 </div>
               </div>
+              {isProcessingOcr && (
+                <div className="mb-2 p-3 bg-blue-50 border border-blue-200 rounded-lg">
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-sm text-blue-700 font-medium">
+                      画像からテキストを抽出中...
+                    </span>
+                    <span className="text-sm text-blue-700 font-medium">
+                      {Math.round(ocrProgress * 100)}%
+                    </span>
+                  </div>
+                  <div className="w-full bg-blue-200 rounded-full h-2">
+                    <div
+                      className="bg-blue-600 h-2 rounded-full transition-all duration-300"
+                      style={{ width: `${ocrProgress * 100}%` }}
+                    />
+                  </div>
+                </div>
+              )}
               <Textarea
                 id="job"
-                placeholder="応募する求人情報をここに貼り付けてください。またはPDF/Wordファイルをアップロードできます..."
+                placeholder="応募する求人情報をここに貼り付けてください。またはPDF/Wordファイル、画像ファイルをアップロードできます..."
                 value={jobDescription}
                 onChange={(e) => setJobDescription(e.target.value)}
                 className="min-h-[200px]"
+                disabled={isProcessingOcr}
               />
             </div>
 
