@@ -50,8 +50,9 @@ export type InsertResume = typeof resumes.$inferInsert;
 export const apiKeys = mysqlTable("apiKeys", {
   id: int("id").autoincrement().primaryKey(),
   userId: int("userId").notNull().unique(), // ユーザーごとに1つのAPIキー
-  encryptedKey: text("encryptedKey").notNull(), // 暗号化されたAPIキー
-  keyType: varchar("keyType", { length: 64 }).notNull().default("openai"), // APIキーの種類（openai, anthropic等）
+  encryptedOpenAIKey: text("encryptedOpenAIKey"), // 暗号化されたOpenAI APIキー
+  encryptedGeminiKey: text("encryptedGeminiKey"), // 暗号化されたGemini APIキー
+  primaryProvider: varchar("primaryProvider", { length: 64 }).notNull().default("gemini"), // メインのプロバイダー（gemini, openai）
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
 });

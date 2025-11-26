@@ -7,6 +7,7 @@ import { z } from "zod";
 import { invokeLLM } from "./_core/llm";
 import * as db from "./db";
 import { encryptApiKey, decryptApiKey } from "./encryption";
+import { invokeGemini, type GeminiMessage } from "./gemini";
 
 const STANDARD_ITEMS = [
   "summary",
@@ -480,24 +481,39 @@ JSON形式で出力してください:
     get: protectedProcedure.query(async ({ ctx }) => {
       const apiKeyRecord = await db.getApiKey(ctx.user.id);
       if (!apiKeyRecord) {
-        return { hasKey: false, keyType: null };
+        return { hasOpenAIKey: false, hasGeminiKey: false, primaryProvider: null };
       }
 
       try {
-        const decryptedKey = decryptApiKey(apiKeyRecord.encryptedKey);
-        // セキュリティのため、最初の4文字と最後の4文字だけ表示
-        const maskedKey =
-          decryptedKey.length > 8
-            ? `${decryptedKey.slice(0, 4)}...${decryptedKey.slice(-4)}`
-            : "****";
+        let maskedOpenAIKey = null;
+        let maskedGeminiKey = null;
+
+        if (apiKeyRecord.encryptedOpenAIKey) {
+          const decryptedKey = decryptApiKey(apiKeyRecord.encryptedOpenAIKey);
+          maskedOpenAIKey =
+            decryptedKey.length > 8
+              ? `${decryptedKey.slice(0, 4)}...${decryptedKey.slice(-4)}`
+              : "****";
+        }
+
+        if (apiKeyRecord.encryptedGeminiKey) {
+          const decryptedKey = decryptApiKey(apiKeyRecord.encryptedGeminiKey);
+          maskedGeminiKey =
+            decryptedKey.length > 8
+              ? `${decryptedKey.slice(0, 4)}...${decryptedKey.slice(-4)}`
+              : "****";
+        }
+
         return {
-          hasKey: true,
-          keyType: apiKeyRecord.keyType,
-          maskedKey,
+          hasOpenAIKey: !!apiKeyRecord.encryptedOpenAIKey,
+          hasGeminiKey: !!apiKeyRecord.encryptedGeminiKey,
+          primaryProvider: apiKeyRecord.primaryProvider,
+          maskedOpenAIKey,
+          maskedGeminiKey,
         };
       } catch (error) {
         console.error("[APIKey] Failed to decrypt API key:", error);
-        return { hasKey: false, keyType: null };
+        return { hasOpenAIKey: false, hasGeminiKey: false, primaryProvider: null };
       }
     }),
 
@@ -505,14 +521,21 @@ JSON形式で出力してください:
     save: protectedProcedure
       .input(
         z.object({
-          apiKey: z.string().min(1, "APIキーを入力してください"),
-          keyType: z.string().default("openai"),
+          openAIKey: z.string().optional(),
+          geminiKey: z.string().optional(),
+          primaryProvider: z.string().default("gemini"),
         })
       )
       .mutation(async ({ ctx, input }) => {
         try {
-          const encryptedKey = encryptApiKey(input.apiKey);
-          const success = await db.upsertApiKey(ctx.user.id, encryptedKey, input.keyType);
+          const encryptedOpenAIKey = input.openAIKey ? encryptApiKey(input.openAIKey) : null;
+          const encryptedGeminiKey = input.geminiKey ? encryptApiKey(input.geminiKey) : null;
+          const success = await db.upsertApiKey(
+            ctx.user.id,
+            encryptedOpenAIKey,
+            encryptedGeminiKey,
+            input.primaryProvider
+          );
           return { success };
         } catch (error) {
           console.error("[APIKey] Failed to save API key:", error);

@@ -167,7 +167,12 @@ export async function deleteResume(id: number, userId: number) {
 // APIキー関連のヘルパー関数
 // ========================================
 
-export async function upsertApiKey(userId: number, encryptedKey: string, keyType: string = "openai") {
+export async function upsertApiKey(
+  userId: number,
+  encryptedOpenAIKey: string | null,
+  encryptedGeminiKey: string | null,
+  primaryProvider: string
+) {
   const db = await getDb();
   if (!db) {
     console.warn("[Database] Cannot upsert API key: database not available");
@@ -177,14 +182,16 @@ export async function upsertApiKey(userId: number, encryptedKey: string, keyType
   try {
     const values: InsertApiKey = {
       userId,
-      encryptedKey,
-      keyType,
+      encryptedOpenAIKey,
+      encryptedGeminiKey,
+      primaryProvider,
     };
 
     await db.insert(apiKeys).values(values).onDuplicateKeyUpdate({
       set: {
-        encryptedKey,
-        keyType,
+        encryptedOpenAIKey,
+        encryptedGeminiKey,
+        primaryProvider,
         updatedAt: new Date(),
       },
     });
