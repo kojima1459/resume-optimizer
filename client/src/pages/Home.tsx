@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Loader2, FileText, Copy, RefreshCw, Plus, X, History, Download, Upload, Languages, Settings as SettingsIcon, Moon, Sun, Star } from "lucide-react";
+import { Loader2, FileText, Copy, RefreshCw, Plus, X, History, Download, Upload, Languages, Settings as SettingsIcon, Moon, Sun, Star, Share2 } from "lucide-react";
 import { trpc } from "@/lib/trpc";
 import { toast } from "sonner";
 import { useAuth } from "@/_core/hooks/useAuth";
@@ -14,6 +14,7 @@ import { extractTextFromFile } from "@/lib/fileUtils";
 import { extractTextFromImage, isImageFile } from "@/lib/ocrUtils";
 import { useTheme } from "@/contexts/ThemeContext";
 import { exportToWord, exportToPDF, exportToText, exportToMarkdown, downloadBlob } from "@/lib/exportUtils";
+import { shareToLinkedIn, ShareStats } from "@/lib/linkedinShare";
 import {
   Dialog,
   DialogContent,
@@ -569,6 +570,33 @@ export default function Home() {
     }
   };
 
+  const handleShareToLinkedIn = () => {
+    try {
+      const itemsToExport = selectedItems
+        .map((key) => {
+          const item = allItems.find((i) => i.key === key);
+          return item ? item.label : null;
+        })
+        .filter((label): label is string => label !== null);
+
+      const totalCharCount = selectedItems.reduce((sum, key) => {
+        const content = editedContent[key] || generatedContent[key] || '';
+        return sum + content.length;
+      }, 0);
+
+      const stats: ShareStats = {
+        itemCount: selectedItems.length,
+        totalCharCount,
+        items: itemsToExport,
+      };
+
+      shareToLinkedIn(stats);
+      toast.success("シェア用テキストをクリップボードにコピーしました\nLinkedInで貼り付けて投稿してください");
+    } catch (error: any) {
+      toast.error(error.message || "シェアに失敗しました");
+    }
+  };
+
   if (authLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -1016,6 +1044,10 @@ export default function Home() {
                   <Button onClick={handleDownloadMarkdown} variant="outline" size="sm">
                     <Download className="h-4 w-4 mr-2" />
                     Markdown
+                  </Button>
+                  <Button onClick={handleShareToLinkedIn} variant="outline" size="sm" className="bg-[#0A66C2] text-white hover:bg-[#004182]">
+                    <Share2 className="h-4 w-4 mr-2" />
+                    LinkedInでシェア
                   </Button>
                 </div>
               </div>
