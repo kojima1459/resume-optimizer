@@ -114,3 +114,28 @@ ${resumeContent}
     throw new Error("職務経歴書の評価に失敗しました");
   }
 }
+
+/**
+ * 複数の職務経歴書を並列で評価する
+ */
+export async function evaluateResumesInParallel(
+  resumes: Array<{ id: number; content: string }>,
+  jobDescription: string
+): Promise<Array<{ id: number; evaluation: EvaluationResult }>> {
+  try {
+    // Promise.allを使用して並列実行
+    const evaluationPromises = resumes.map(async (resume) => {
+      const evaluation = await evaluateResume(resume.content, jobDescription);
+      return {
+        id: resume.id,
+        evaluation,
+      };
+    });
+
+    const results = await Promise.all(evaluationPromises);
+    return results;
+  } catch (error) {
+    console.error("Parallel resume evaluation failed:", error);
+    throw new Error("複数の職務経歴書の評価に失敗しました");
+  }
+}

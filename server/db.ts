@@ -425,7 +425,7 @@ export async function createFavoritePattern(data: InsertFavoritePattern) {
   return result;
 }
 
-export async function getUserFavoritePatterns(userId: number) {
+export async function listFavoritePatterns(userId: number) {
   const db = await getDb();
   if (!db) return [];
   
@@ -435,7 +435,19 @@ export async function getUserFavoritePatterns(userId: number) {
     .where(eq(favoritePatterns.userId, userId))
     .orderBy(desc(favoritePatterns.createdAt));
   
-  return result;
+  // JSON文字列をパース
+  return result.map(pattern => ({
+    ...pattern,
+    generatedContent: typeof pattern.generatedContent === 'string' 
+      ? JSON.parse(pattern.generatedContent) 
+      : pattern.generatedContent,
+    customItems: pattern.customItems && typeof pattern.customItems === 'string'
+      ? JSON.parse(pattern.customItems)
+      : pattern.customItems,
+    evaluationDetails: pattern.evaluationDetails && typeof pattern.evaluationDetails === 'string'
+      ? JSON.parse(pattern.evaluationDetails)
+      : pattern.evaluationDetails,
+  }));
 }
 
 export async function getFavoritePatternById(id: number) {
@@ -448,7 +460,22 @@ export async function getFavoritePatternById(id: number) {
     .where(eq(favoritePatterns.id, id))
     .limit(1);
   
-  return result.length > 0 ? result[0] : undefined;
+  if (result.length === 0) return undefined;
+  
+  const pattern = result[0];
+  // JSON文字列をパース
+  return {
+    ...pattern,
+    generatedContent: typeof pattern.generatedContent === 'string' 
+      ? JSON.parse(pattern.generatedContent) 
+      : pattern.generatedContent,
+    customItems: pattern.customItems && typeof pattern.customItems === 'string'
+      ? JSON.parse(pattern.customItems)
+      : pattern.customItems,
+    evaluationDetails: pattern.evaluationDetails && typeof pattern.evaluationDetails === 'string'
+      ? JSON.parse(pattern.evaluationDetails)
+      : pattern.evaluationDetails,
+  };
 }
 
 export async function updateFavoritePattern(id: number, data: Partial<InsertFavoritePattern>) {

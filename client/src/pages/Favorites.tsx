@@ -9,6 +9,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { trpc } from "@/lib/trpc";
 import { toast } from "sonner";
 import { Loader2, Star, Trash2, Edit, FileText, ArrowLeft, Copy } from "lucide-react";
+import { DiffHighlight } from "@/components/DiffHighlight";
+import { calculateDifferenceRate } from "@/lib/diffUtils";
 import { getLoginUrl } from "@/const";
 
 export default function Favorites() {
@@ -209,38 +211,78 @@ export default function Favorites() {
                       <CardTitle>パターン比較 ({selectedForCompare.length}件)</CardTitle>
                     </CardHeader>
                   </Card>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    {selectedForCompare.map(patternId => {
-                      const pattern = favoritesQuery.data?.find(p => p.id === patternId);
-                      if (!pattern) return null;
+                  <div className="space-y-6">
+                    {/* 各項目ごとに比較 */}
+                    {selectedForCompare.length > 0 && (() => {
+                      const patterns = selectedForCompare
+                        .map(id => favoritesQuery.data?.find(p => p.id === id))
+                        .filter(Boolean);
                       
-                      return (
-                        <Card key={patternId}>
-                          <CardHeader>
-                            <CardTitle className="text-lg">{pattern.name}</CardTitle>
-                            {pattern.evaluationScore && (
-                              <div className="text-xl font-bold text-blue-600">
-                                {pattern.evaluationScore}点
+                      if (patterns.length === 0) return null;
+                      
+                      // 全パターンから共通の項目を取得
+                      const allKeys = new Set<string>();
+                      patterns.forEach(pattern => {
+                        if (pattern?.generatedContent) {
+                          Object.keys(pattern.generatedContent).forEach(key => allKeys.add(key));
+                        }
+                      });
+                      
+                      return Array.from(allKeys).map(key => {
+                        const contents = patterns.map(p => p?.generatedContent?.[key] || '');
+                        const hasContent = contents.some(c => c);
+                        
+                        if (!hasContent) return null;
+                        
+                        return (
+                          <Card key={key}>
+                            <CardHeader>
+                              <CardTitle className="text-lg">{key}</CardTitle>
+                            </CardHeader>
+                            <CardContent>
+                              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                {patterns.map((pattern, index) => {
+                                  if (!pattern) return null;
+                                  const content = pattern.generatedContent?.[key] || '';
+                                  const otherContents = contents.filter((_, i) => i !== index);
+                                  const avgDiffRate = otherContents.length > 0
+                                    ? Math.round(
+                                        otherContents.reduce((sum, other) => 
+                                          sum + calculateDifferenceRate(content, other), 0
+                                        ) / otherContents.length
+                                      )
+                                    : 0;
+                                  
+                                  return (
+                                    <div key={pattern.id} className="space-y-2">
+                                      <div className="flex items-center justify-between">
+                                        <h4 className="font-semibold text-sm">{pattern.name}</h4>
+                                        {avgDiffRate > 0 && (
+                                          <span className="text-xs text-muted-foreground">
+                                            差異率: {avgDiffRate}%
+                                          </span>
+                                        )}
+                                      </div>
+                                      <div className="p-3 bg-gray-50 dark:bg-gray-900 rounded border text-sm">
+                                        {otherContents.length > 0 ? (
+                                          <DiffHighlight
+                                            text1={content}
+                                            text2={otherContents[0]}
+                                            index={0}
+                                          />
+                                        ) : (
+                                          <div className="whitespace-pre-wrap">{content}</div>
+                                        )}
+                                      </div>
+                                    </div>
+                                  );
+                                })}
                               </div>
-                            )}
-                          </CardHeader>
-                          <CardContent>
-                            <Button
-                              variant="outline"
-                              size="sm"
-                              className="w-full"
-                              onClick={() => {
-                                setSelectedPattern(patternId);
-                                setCompareMode(false);
-                                setSelectedForCompare([]);
-                              }}
-                            >
-                              詳細を表示
-                            </Button>
-                          </CardContent>
-                        </Card>
-                      );
-                    })}
+                            </CardContent>
+                          </Card>
+                        );
+                      });
+                    })()}
                   </div>
                 </div>
               ) : selectedPattern && patternQuery.data ? (

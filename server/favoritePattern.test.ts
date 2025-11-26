@@ -92,10 +92,11 @@ describe("favoritePattern", () => {
     const patterns = await caller.favoritePattern.list();
     const pattern = patterns.find(p => p.name === "Test Pattern for Get");
 
+    expect(pattern).toBeDefined();
     if (pattern) {
       const retrieved = await caller.favoritePattern.get({ id: pattern.id });
       expect(retrieved).toBeDefined();
-      expect(retrieved.name).toBe("Test Pattern for Get");
+      expect(retrieved?.name).toBe("Test Pattern for Get");
     }
   });
 

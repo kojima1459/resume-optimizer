@@ -116,3 +116,45 @@ export function downloadBlob(blob: Blob, filename: string) {
   document.body.removeChild(link);
   URL.revokeObjectURL(url);
 }
+
+/**
+ * テキストファイル形式でエクスポート
+ */
+export function exportToText(
+  content: Record<string, string>,
+  items: Array<{ key: string; label: string }>
+): Blob {
+  let text = "職務経歴書\n";
+  text += "=".repeat(50) + "\n\n";
+
+  items.forEach((item) => {
+    const itemContent = content[item.key];
+    if (!itemContent) return;
+
+    text += `【${item.label}】\n`;
+    text += "-".repeat(50) + "\n";
+    text += itemContent + "\n\n";
+  });
+
+  return new Blob([text], { type: "text/plain;charset=utf-8" });
+}
+
+/**
+ * Markdown形式でエクスポート
+ */
+export function exportToMarkdown(
+  content: Record<string, string>,
+  items: Array<{ key: string; label: string }>
+): Blob {
+  let markdown = "# 職務経歴書\n\n";
+
+  items.forEach((item) => {
+    const itemContent = content[item.key];
+    if (!itemContent) return;
+
+    markdown += `## ${item.label}\n\n`;
+    markdown += itemContent + "\n\n";
+  });
+
+  return new Blob([markdown], { type: "text/markdown;charset=utf-8" });
+}

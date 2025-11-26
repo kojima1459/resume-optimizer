@@ -842,12 +842,13 @@ JSON形式で出力してください:
 
     // お気に入りパターン一覧を取得
     list: protectedProcedure.query(async ({ ctx }) => {
-      const patterns = await db.getUserFavoritePatterns(ctx.user.id);
-      return patterns.map((pattern) => ({
+      const patterns = await db.listFavoritePatterns(ctx.user.id);
+      return patterns.map((pattern: any) => ({
         id: pattern.id,
         name: pattern.name,
         evaluationScore: pattern.evaluationScore,
         notes: pattern.notes,
+        generatedContent: pattern.generatedContent,
         createdAt: pattern.createdAt,
         updatedAt: pattern.updatedAt,
       }));
@@ -867,10 +868,10 @@ JSON形式で出力してください:
           name: pattern.name,
           resumeText: pattern.resumeText,
           jobDescription: pattern.jobDescription,
-          generatedContent: JSON.parse(pattern.generatedContent),
-          customItems: pattern.customItems ? JSON.parse(pattern.customItems) : null,
+          generatedContent: pattern.generatedContent,
+          customItems: pattern.customItems,
           evaluationScore: pattern.evaluationScore,
-          evaluationDetails: pattern.evaluationDetails ? JSON.parse(pattern.evaluationDetails) : null,
+          evaluationDetails: pattern.evaluationDetails,
           notes: pattern.notes,
           createdAt: pattern.createdAt,
           updatedAt: pattern.updatedAt,

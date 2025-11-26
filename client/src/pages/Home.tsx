@@ -13,7 +13,7 @@ import { getLoginUrl } from "@/const";
 import { extractTextFromFile } from "@/lib/fileUtils";
 import { extractTextFromImage, isImageFile } from "@/lib/ocrUtils";
 import { useTheme } from "@/contexts/ThemeContext";
-import { exportToWord, exportToPDF, downloadBlob } from "@/lib/exportUtils";
+import { exportToWord, exportToPDF, exportToText, exportToMarkdown, downloadBlob } from "@/lib/exportUtils";
 import {
   Dialog,
   DialogContent,
@@ -82,26 +82,42 @@ export default function Home() {
       setShowPatternDialog(true);
       toast.success(`${data.patternCount}個のパターンを生成しました`);
       
-      // 自動評価を実行
+      // 自動評価を並列実行
       setIsEvaluating(true);
-      const evaluations: Record<number, { score: number; details: any }> = {};
       
-      for (let i = 0; i < data.patterns.length; i++) {
-        try {
-          const pattern = data.patterns[i];
-          const resumeContent = Object.values(pattern).join('\n\n');
-          const evaluation = await evaluateMutation.mutateAsync({
-            resumeContent,
-            jobDescription,
-          });
-          evaluations[i] = evaluation;
-        } catch (error) {
-          console.error(`Pattern ${i} evaluation failed:`, error);
-        }
+      try {
+        // Promise.allを使用して並列評価
+        const evaluationPromises = data.patterns.map(async (pattern, i) => {
+          try {
+            const resumeContent = Object.values(pattern).join('\n\n');
+            const evaluation = await evaluateMutation.mutateAsync({
+              resumeContent,
+              jobDescription,
+            });
+            return { index: i, evaluation };
+          } catch (error) {
+            console.error(`Pattern ${i} evaluation failed:`, error);
+            return null;
+          }
+        });
+        
+        const results = await Promise.all(evaluationPromises);
+        
+        // 結果をRecord形式に変換
+        const evaluations: Record<number, { score: number; details: any }> = {};
+        results.forEach((result) => {
+          if (result) {
+            evaluations[result.index] = result.evaluation;
+          }
+        });
+        
+        setPatternEvaluations(evaluations);
+      } catch (error) {
+        console.error('Parallel evaluation failed:', error);
+        toast.error('評価処理に失敗しました');
+      } finally {
+        setIsEvaluating(false);
       }
-      
-      setPatternEvaluations(evaluations);
-      setIsEvaluating(false);
     },
     onError: (error) => {
       toast.error(error.message || "生成に失敗しました");
@@ -518,6 +534,40 @@ export default function Home() {
     }
   };
 
+  const handleDownloadText = () => {
+    try {
+      const itemsToExport = selectedItems
+        .map((key) => {
+          const item = allItems.find((i) => i.key === key);
+          return item ? { key, label: item.label } : null;
+        })
+        .filter((item): item is { key: string; label: string } => item !== null);
+
+      const blob = exportToText(editedContent, itemsToExport);
+      downloadBlob(blob, "職務経歴書.txt");
+      toast.success("テキストファイルをダウンロードしました");
+    } catch (error: any) {
+      toast.error(error.message || "ダウンロードに失敗しました");
+    }
+  };
+
+  const handleDownloadMarkdown = () => {
+    try {
+      const itemsToExport = selectedItems
+        .map((key) => {
+          const item = allItems.find((i) => i.key === key);
+          return item ? { key, label: item.label } : null;
+        })
+        .filter((item): item is { key: string; label: string } => item !== null);
+
+      const blob = exportToMarkdown(editedContent, itemsToExport);
+      downloadBlob(blob, "職務経歴書.md");
+      toast.success("Markdownファイルをダウンロードしました");
+    } catch (error: any) {
+      toast.error(error.message || "ダウンロードに失敗しました");
+    }
+  };
+
   if (authLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -893,18 +943,26 @@ export default function Home() {
             <CardHeader>
               <div className="flex items-center justify-between">
                 <CardTitle>生成結果</CardTitle>
-                <div className="flex gap-2">
-                  <Button onClick={handleCopyAll} variant="outline">
+                <div className="flex flex-wrap gap-2">
+                  <Button onClick={handleCopyAll} variant="outline" size="sm">
                     <Copy className="h-4 w-4 mr-2" />
                     全項目をコピー
                   </Button>
-                  <Button onClick={handleDownloadWord} variant="outline">
+                  <Button onClick={handleDownloadWord} variant="outline" size="sm">
                     <Download className="h-4 w-4 mr-2" />
                     Word
                   </Button>
-                  <Button onClick={handleDownloadPDF} variant="outline">
+                  <Button onClick={handleDownloadPDF} variant="outline" size="sm">
                     <Download className="h-4 w-4 mr-2" />
                     PDF
+                  </Button>
+                  <Button onClick={handleDownloadText} variant="outline" size="sm">
+                    <Download className="h-4 w-4 mr-2" />
+                    テキスト
+                  </Button>
+                  <Button onClick={handleDownloadMarkdown} variant="outline" size="sm">
+                    <Download className="h-4 w-4 mr-2" />
+                    Markdown
                   </Button>
                 </div>
               </div>
