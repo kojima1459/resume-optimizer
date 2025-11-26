@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
@@ -17,6 +17,7 @@ import { exportToWord, exportToPDF, exportToText, exportToMarkdown, downloadBlob
 import { shareToLinkedIn, ShareStats, generateLinkedInShareText } from "@/lib/linkedinShare";
 import { LinkedInShareDialog } from "@/components/LinkedInShareDialog";
 import { useKeyboardShortcuts, getShortcutLabel, KeyboardShortcut } from "@/hooks/useKeyboardShortcuts";
+import { useAutoSave } from "@/hooks/useAutoSave";
 import {
   Dialog,
   DialogContent,
@@ -26,6 +27,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { TemplateSelector } from "@/components/TemplateSelector";
+import { FileDropZone } from "@/components/FileDropZone";
 import Footer from "@/components/Footer";
 
 type OutputItem = {
@@ -80,6 +82,7 @@ export default function Home() {
   const [showShareDialog, setShowShareDialog] = useState(false);
   const [shareDialogText, setShareDialogText] = useState("");
   const [showShortcutHelp, setShowShortcutHelp] = useState(false);
+  const { scheduleSave, loadData, clearData, lastSaved, isSaving } = useAutoSave();
 
   const evaluateMutation = trpc.resume.evaluate.useMutation();
 
@@ -657,6 +660,40 @@ export default function Home() {
 
   useKeyboardShortcuts(shortcuts);
 
+  // ページ読み込み時に保存データを復元
+  useEffect(() => {
+    const savedData = loadData();
+    if (savedData) {
+      const shouldRestore = window.confirm(
+        `前回の入力内容が見つかりました。\n最終保存: ${new Date(savedData.timestamp).toLocaleString('ja-JP')}\n\n復元しますか？`
+      );
+      
+      if (shouldRestore) {
+        setResumeText(savedData.resumeText);
+        setJobDescription(savedData.jobDescription);
+        setSelectedItems(savedData.selectedItems);
+        setCharLimits(savedData.charLimits);
+        setCustomItems(savedData.customItems);
+        toast.success('保存データを復元しました');
+      } else {
+        clearData();
+      }
+    }
+  }, []);
+
+  // 入力内容が変更されたら自動保存
+  useEffect(() => {
+    if (resumeText || jobDescription || selectedItems.length > 0) {
+      scheduleSave({
+        resumeText,
+        jobDescription,
+        selectedItems,
+        charLimits,
+        customItems,
+      });
+    }
+  }, [resumeText, jobDescription, selectedItems, charLimits, customItems]);
+
   if (authLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -695,7 +732,14 @@ export default function Home() {
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 mb-4 md:mb-6">
           <div className="flex items-center gap-2 md:gap-3">
             <FileText className="h-8 w-8 md:h-10 md:w-10 text-primary" />
-            <h1 className="text-xl md:text-3xl font-bold text-gray-900 dark:text-gray-100">職務経歴書最適化ツール</h1>
+            <div>
+              <h1 className="text-xl md:text-3xl font-bold text-gray-900 dark:text-gray-100">職務経歴書最適化ツール</h1>
+              {lastSaved && (
+                <p className="text-xs text-muted-foreground mt-1">
+                  {isSaving ? '保存中...' : `最終保存: ${lastSaved.toLocaleTimeString('ja-JP')}`}
+                </p>
+              )}
+            </div>
           </div>
           <div className="flex gap-2 w-full sm:w-auto">
             <Button
@@ -744,6 +788,22 @@ export default function Home() {
                 <span className="hidden sm:inline">設定</span>
               </a>
             </Button>
+            {lastSaved && (
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => {
+                  if (window.confirm('保存されたデータをクリアしますか？')) {
+                    clearData();
+                  }
+                }}
+                className="flex-none"
+                title="保存データをクリア"
+              >
+                <X className="h-4 w-4 mr-2" />
+                <span className="hidden sm:inline">クリア</span>
+              </Button>
+            )}
             <Dialog open={showHistory} onOpenChange={setShowHistory}>
               <DialogTrigger asChild>
                 <Button variant="outline" className="flex-1 sm:flex-none">
@@ -883,13 +943,29 @@ export default function Home() {
                   </Button>
                 </div>
               </div>
-              <Textarea
-                id="resume"
-                placeholder="あなたの職務経歴書をここに貼り付けてください。またはPDF/Wordファイルをアップロードできます..."
-                value={resumeText}
-                onChange={(e) => setResumeText(e.target.value)}
-                className="min-h-[200px]"
-              />
+              <FileDropZone
+                onFileDrop={async (file) => {
+                  setIsUploadingResume(true);
+                  try {
+                    const text = await extractTextFromFile(file);
+                    setResumeText(text);
+                    toast.success("ファイルをドロップして読み込みました");
+                  } catch (error: any) {
+                    toast.error(error.message || "ファイルの読み込みに失敗しました");
+                  } finally {
+                    setIsUploadingResume(false);
+                  }
+                }}
+                accept={['.pdf', '.docx', '.txt']}
+              >
+                <Textarea
+                  id="resume"
+                  placeholder="あなたの職務経歴書をここに貼り付けてください。またはPDF/Wordファイルをアップロード、またはドラッグ&ドロップできます..."
+                  value={resumeText}
+                  onChange={(e) => setResumeText(e.target.value)}
+                  className="min-h-[200px]"
+                />
+              </FileDropZone>
             </div>
 
             <div>
@@ -939,14 +1015,47 @@ export default function Home() {
                   </div>
                 </div>
               )}
-              <Textarea
-                id="job"
-                placeholder="応募する求人情報をここに貼り付けてください。またはPDF/Wordファイル、画像ファイルをアップロードできます..."
-                value={jobDescription}
-                onChange={(e) => setJobDescription(e.target.value)}
-                className="min-h-[200px]"
-                disabled={isProcessingOcr}
-              />
+              <FileDropZone
+                onFileDrop={async (file) => {
+                  if (isImageFile(file)) {
+                    setIsProcessingOcr(true);
+                    setOcrProgress(0);
+                    try {
+                      const text = await extractTextFromImage(file, (progress) => {
+                        setOcrProgress(progress);
+                      });
+                      setJobDescription(text);
+                      toast.success("画像からテキストを抽出しました");
+                    } catch (error: any) {
+                      toast.error(error.message || "画像の読み込みに失敗しました");
+                    } finally {
+                      setIsProcessingOcr(false);
+                      setOcrProgress(0);
+                    }
+                  } else {
+                    setIsUploadingJob(true);
+                    try {
+                      const text = await extractTextFromFile(file);
+                      setJobDescription(text);
+                      toast.success("ファイルをドロップして読み込みました");
+                    } catch (error: any) {
+                      toast.error(error.message || "ファイルの読み込みに失敗しました");
+                    } finally {
+                      setIsUploadingJob(false);
+                    }
+                  }
+                }}
+                accept={['.pdf', '.docx', '.txt', '.png', '.jpg', '.jpeg']}
+              >
+                <Textarea
+                  id="job"
+                  placeholder="応募する求人情報をここに貼り付けてください。またはPDF/Wordファイル、画像ファイルをアップロード、またはドラッグ&ドロップできます..."
+                  value={jobDescription}
+                  onChange={(e) => setJobDescription(e.target.value)}
+                  className="min-h-[200px]"
+                  disabled={isProcessingOcr}
+                />
+              </FileDropZone>
             </div>
 
             <div>
