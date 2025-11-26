@@ -138,11 +138,11 @@ export function TemplateSelector({ onSelectTemplate, onSelectUserTemplate }: Tem
           マイテンプレート
         </Button>
         <Button
-          variant="ghost"
+          variant="outline"
           size="sm"
           asChild
         >
-          <a href="/my-templates" target="_blank">
+          <a href="/my-templates" target="_blank" className="inline-flex items-center justify-center">
             テンプレート管理
           </a>
         </Button>
