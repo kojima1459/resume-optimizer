@@ -698,11 +698,52 @@ export default function Home() {
           求人情報に合わせて、あなたの職務経歴書を最適化します
         </p>
 
+        {/* 機能説明セクション */}
+        <Card className="mb-6 bg-gradient-to-r from-blue-50 to-indigo-50 border-blue-200">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <FileText className="h-5 w-5 text-blue-600" />
+              職務経歴書最適化ツールの使い方
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <p className="text-sm text-gray-700">
+              求人情報に合わせて、あなたの職務経歴書を最適化します
+            </p>
+            <div className="grid md:grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <h4 className="font-semibold text-sm text-blue-900">📝 基本機能</h4>
+                <ul className="text-sm text-gray-600 space-y-1 list-disc list-inside">
+                  <li>職務経歴書と求人情報を入力</li>
+                  <li>出力項目を選択（職務要約、志望動機など）</li>
+                  <li>文字数を設定して生成開始</li>
+                  <li>PDF/Word/テキスト/Markdown形式でエクスポート</li>
+                </ul>
+              </div>
+              <div className="space-y-2">
+                <h4 className="font-semibold text-sm text-blue-900">✨ 高度な機能</h4>
+                <ul className="text-sm text-gray-600 space-y-1 list-disc list-inside">
+                  <li><strong>複数パターン生成:</strong> 一度に3パターン生成して比較</li>
+                  <li><strong>AI自動評価:</strong> 求人との適合度をスコア化</li>
+                  <li><strong>お気に入り保存:</strong> 良いパターンを保存・比較</li>
+                  <li><strong>テンプレート:</strong> 業界別・独自テンプレート</li>
+                </ul>
+              </div>
+            </div>
+            <div className="bg-white rounded-lg p-4 border border-blue-200">
+              <h4 className="font-semibold text-sm text-blue-900 mb-2">🚀 NEW! 複数求人への一括適用機能（近日公開予定）</h4>
+              <p className="text-sm text-gray-600">
+                1つの職務経歴書を複数の求人に対して一括で最適化し、比較できる機能を開発中です。
+                複数の企業に応募する際の効率が大幅に向上します！
+              </p>
+            </div>
+          </CardContent>
+        </Card>
+
         <Card className="mb-6">
           <CardHeader>
             <CardTitle>入力情報</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-6">
+          </CardHeader>          <CardContent className="space-y-6">
             <div>
               <div className="flex items-center justify-between mb-2">
                 <Label htmlFor="resume" className="text-base font-semibold">
