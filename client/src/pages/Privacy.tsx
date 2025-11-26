@@ -369,6 +369,63 @@ export default function Privacy() {
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Shield className="h-5 w-5" />
+                Google AdSenseについて
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <p>
+                本サービスでは、広告配信のためにGoogle AdSenseを使用しています。
+                Google AdSenseは、Cookieを使用してユーザーの興味・関心に基づいた広告を表示します。
+              </p>
+
+              <div>
+                <h3 className="font-semibold mb-2">収集される情報</h3>
+                <ul className="list-disc list-inside text-muted-foreground space-y-1 ml-4">
+                  <li>サイト訪問履歴</li>
+                  <li>広告のクリック履歴</li>
+                  <li>IPアドレス</li>
+                  <li>デバイス情報</li>
+                </ul>
+              </div>
+
+              <div>
+                <h3 className="font-semibold mb-2">広告のパーソナライズを無効にする方法</h3>
+                <p className="text-muted-foreground">
+                  Google AdSenseによる広告配信を無効にする場合は、
+                  <a
+                    href="https://support.google.com/ads/answer/2662856"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-primary hover:underline"
+                  >
+                    Googleの広告設定ページ
+                  </a>
+                  で設定できます。
+                </p>
+              </div>
+
+              <div>
+                <h3 className="font-semibold mb-2">Googleのプライバシーポリシー</h3>
+                <p className="text-muted-foreground">
+                  Google AdSenseのプライバシーポリシーについては、
+                  <a
+                    href="https://policies.google.com/privacy"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-primary hover:underline"
+                  >
+                    Googleプライバシーポリシー
+                  </a>
+                  をご確認ください。
+                </p>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Shield className="h-5 w-5" />
                 プライバシーポリシーの変更
               </CardTitle>
             </CardHeader>

@@ -10,6 +10,8 @@ import MyTemplates from "./pages/MyTemplates";
 import Favorites from "./pages/Favorites";
 import Guide from "./pages/Guide";
 import Privacy from "./pages/Privacy";
+import Terms from "./pages/Terms";
+import AdSenseGuide from "./pages/AdSenseGuide";
 import ApiSettings from "./pages/ApiSettings";
 
 function Router() {
@@ -22,6 +24,8 @@ function Router() {
       <Route path={"/favorites"} component={Favorites} />
       <Route path={"/guide"} component={Guide} />
       <Route path={"/privacy"} component={Privacy} />
+      <Route path={"/terms"} component={Terms} />
+      <Route path={"/adsense-guide"} component={AdSenseGuide} />
       <Route path={"/api-settings"} component={ApiSettings} />
       <Route path={"/404"} component={NotFound} />
       {/* Final fallback route */}

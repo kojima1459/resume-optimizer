@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Loader2, FileText, Copy, RefreshCw, Plus, X, History, Download, Upload, Languages, Settings as SettingsIcon, Moon, Sun, Star, Share2 } from "lucide-react";
+import { Loader2, FileText, Copy, RefreshCw, Plus, X, History, Download, Upload, Languages, Settings as SettingsIcon, Moon, Sun, Star, Share2, Bell } from "lucide-react";
 import { trpc } from "@/lib/trpc";
 import { toast } from "sonner";
 import { useAuth } from "@/_core/hooks/useAuth";
@@ -30,6 +30,7 @@ import {
 import { TemplateSelector } from "@/components/TemplateSelector";
 import { FileDropZone } from "@/components/FileDropZone";
 import Footer from "@/components/Footer";
+import { AnnouncementDialog } from "@/components/AnnouncementDialog";
 
 type OutputItem = {
   key: string;
@@ -95,6 +96,7 @@ export default function Home() {
   const [historySearchKeyword, setHistorySearchKeyword] = useState("");
   const [historyDateFilter, setHistoryDateFilter] = useState<"all" | "today" | "week" | "month">("all");
   const [showFavoritesOnly, setShowFavoritesOnly] = useState(false);
+  const [showAnnouncement, setShowAnnouncement] = useState(false);
   const { scheduleSave, loadData, clearData, lastSaved, isSaving } = useAutoSave();
 
   const evaluateMutation = trpc.resume.evaluate.useMutation();
@@ -837,6 +839,16 @@ export default function Home() {
             </div>
           </div>
           <div className="flex gap-2 w-full sm:w-auto">
+            <Button
+              variant="outline"
+              size="icon"
+              onClick={() => setShowAnnouncement(true)}
+              className="flex-none relative"
+              title="お知らせ"
+            >
+              <Bell className="h-4 w-4" />
+              <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center">7</span>
+            </Button>
             <Button
               variant="outline"
               size="icon"
@@ -1716,6 +1728,12 @@ export default function Home() {
           </div>
         </DialogContent>
       </Dialog>
+
+      {/* お知らせダイアログ */}
+      <AnnouncementDialog
+        open={showAnnouncement}
+        onOpenChange={setShowAnnouncement}
+      />
       
       <Footer />
     </div>

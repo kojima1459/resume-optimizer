@@ -62,6 +62,20 @@ export default function Footer() {
                   </a>
                 </Link>
               </li>
+              <li>
+                <Link href="/terms">
+                  <a className="text-muted-foreground hover:text-primary transition-colors">
+                    利用規約
+                  </a>
+                </Link>
+              </li>
+              <li>
+                <Link href="/adsense-guide">
+                  <a className="text-muted-foreground hover:text-primary transition-colors">
+                    AdSense申請ガイド
+                  </a>
+                </Link>
+              </li>
             </ul>
           </div>
 
