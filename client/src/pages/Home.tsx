@@ -61,6 +61,21 @@ export default function Home() {
   const [translatingItem, setTranslatingItem] = useState<string | null>(null);
   const [ocrProgress, setOcrProgress] = useState<number>(0);
   const [isProcessingOcr, setIsProcessingOcr] = useState(false);
+  const [patternCount, setPatternCount] = useState(3);
+  const [generatedPatterns, setGeneratedPatterns] = useState<Record<string, string>[]>([]);
+  const [selectedPatternIndex, setSelectedPatternIndex] = useState<number | null>(null);
+  const [showPatternDialog, setShowPatternDialog] = useState(false);
+
+  const generateMultipleMutation = trpc.resume.generateMultiple.useMutation({
+    onSuccess: (data) => {
+      setGeneratedPatterns(data.patterns);
+      setShowPatternDialog(true);
+      toast.success(`${data.patternCount}個のパターンを生成しました`);
+    },
+    onError: (error) => {
+      toast.error(error.message || "生成に失敗しました");
+    },
+  });
 
   const generateMutation = trpc.resume.generate.useMutation({
     onSuccess: (data) => {
@@ -150,6 +165,38 @@ export default function Home() {
       })),
       saveHistory: true,
     });
+  };
+
+  const handleGenerateMultiple = () => {
+    if (!user) {
+      toast.error("ログインが必要です");
+      window.location.href = getLoginUrl();
+      return;
+    }
+
+    generateMultipleMutation.mutate({
+      resumeText,
+      jobDescription,
+      outputItems: selectedItems,
+      charLimits,
+      customItems: customItems.map((item) => ({
+        key: item.key,
+        label: item.label,
+        charLimit: item.charLimit,
+      })),
+      patternCount,
+    });
+  };
+
+  const handleSelectPattern = (index: number) => {
+    const selectedPattern = generatedPatterns[index];
+    if (selectedPattern) {
+      setGeneratedContent(selectedPattern);
+      setEditedContent(selectedPattern);
+      setSelectedPatternIndex(index);
+      setShowPatternDialog(false);
+      toast.success(`パターン${index + 1}を選択しました`);
+    }
   };
 
   const handleRegenerate = (itemKey: string) => {
@@ -609,25 +656,64 @@ export default function Home() {
               </div>
             </div>
 
-            <Button
-              onClick={handleGenerate}
-              disabled={
-                !resumeText.trim() ||
-                !jobDescription.trim() ||
-                selectedItems.length === 0 ||
-                generateMutation.isPending
-              }
-              className="w-full h-12 text-lg"
-            >
-              {generateMutation.isPending ? (
-                <>
-                  <Loader2 className="mr-2 h-5 w-5 animate-spin" />
-                  生成中...
-                </>
-              ) : (
-                "生成開始"
-              )}
-            </Button>
+            <div className="space-y-3">
+              <Button
+                onClick={handleGenerate}
+                disabled={
+                  !resumeText.trim() ||
+                  !jobDescription.trim() ||
+                  selectedItems.length === 0 ||
+                  generateMutation.isPending
+                }
+                className="w-full h-12 text-lg"
+              >
+                {generateMutation.isPending ? (
+                  <>
+                    <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+                    生成中...
+                  </>
+                ) : (
+                  "生成開始"
+                )}
+              </Button>
+
+              <div className="flex items-center gap-3">
+                <div className="flex items-center gap-2 flex-1">
+                  <Label htmlFor="pattern-count" className="text-sm whitespace-nowrap">
+                    パターン数:
+                  </Label>
+                  <Input
+                    id="pattern-count"
+                    type="number"
+                    min="2"
+                    max="5"
+                    value={patternCount}
+                    onChange={(e) => setPatternCount(parseInt(e.target.value) || 3)}
+                    className="w-20"
+                  />
+                </div>
+                <Button
+                  onClick={handleGenerateMultiple}
+                  disabled={
+                    !resumeText.trim() ||
+                    !jobDescription.trim() ||
+                    selectedItems.length === 0 ||
+                    generateMultipleMutation.isPending
+                  }
+                  variant="outline"
+                  className="flex-1"
+                >
+                  {generateMultipleMutation.isPending ? (
+                    <>
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                      複数生成中...
+                    </>
+                  ) : (
+                    "複数パターン生成"
+                  )}
+                </Button>
+              </div>
+            </div>
           </CardContent>
         </Card>
 
@@ -716,6 +802,57 @@ export default function Home() {
           </Card>
         )}
       </div>
+
+      {/* 複数パターン選択ダイアログ */}
+      <Dialog open={showPatternDialog} onOpenChange={setShowPatternDialog}>
+        <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle>生成されたパターンから選択してください</DialogTitle>
+            <DialogDescription>
+              {generatedPatterns.length}個の異なる表現パターンを生成しました。最適なものを選択してください。
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4 mt-4">
+            {generatedPatterns.map((pattern, index) => (
+              <Card
+                key={index}
+                className={`cursor-pointer transition-all ${
+                  selectedPatternIndex === index
+                    ? "border-blue-500 border-2 bg-blue-50"
+                    : "hover:border-gray-400"
+                }`}
+                onClick={() => handleSelectPattern(index)}
+              >
+                <CardHeader>
+                  <CardTitle className="text-lg">
+                    パターン {index + 1}
+                    {selectedPatternIndex === index && (
+                      <span className="ml-2 text-sm text-blue-600 font-normal">
+                        (選択中)
+                      </span>
+                    )}
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-3">
+                  {selectedItems.map((key) => {
+                    const item = allItems.find((i) => i.key === key);
+                    if (!item || !pattern[key]) return null;
+
+                    return (
+                      <div key={key} className="p-3 bg-white border rounded">
+                        <h4 className="font-semibold text-sm mb-2">{item.label}</h4>
+                        <p className="text-sm text-gray-700 whitespace-pre-wrap">
+                          {pattern[key]}
+                        </p>
+                      </div>
+                    );
+                  })}
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
