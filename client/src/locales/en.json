@@ -24,7 +24,7 @@
     "viewGuide": "View Guide",
     "close": "Close",
     "title": "AI Resume Optimizer Maker",
-    "subtitle": "Optimize your resume based on job postings",
+    "subtitle": "AI optimizes your resume based on job postings - the ultimate cheat tool!",
     "loginRequired": "Login with Manus account required",
     "loginButton": "Login to Start",
     "description": "How to use Resume Optimizer",
@@ -96,33 +96,340 @@
       "aiEvaluation": "AI evaluation: Score job fit",
       "favoritePatterns": "Save favorites: Save and compare good patterns",
       "templates": "Templates: Industry & custom templates"
+    },
+    "toast": {
+      "patternSelected": "Pattern {{index}} selected",
+      "templateSelected": "Template selected",
+      "patternNotFound": "Pattern not found",
+      "myTemplateSelected": "My template selected",
+      "favoriteAdded": "Added to favorites",
+      "favoriteRemoved": "Removed from favorites"
+    },
+    "confirm": {
+      "deleteHistory": "Are you sure you want to delete this history?",
+      "restoreData": "Previous input found.\nLast saved: {{timestamp}}\n\nRestore?",
+      "clearData": "Clear saved data?"
+    },
+    "fileName": {
+      "word": "resume.docx",
+      "pdf": "resume.pdf",
+      "text": "resume.txt",
+      "markdown": "resume.md"
+    },
+    "shortcut": {
+      "generate": "Generate",
+      "copyAll": "Copy All",
+      "showHelp": "Show Shortcut Help"
+    },
+    "label": {
+      "characters": "chars",
+      "score": "pts",
+      "relevance": "Relevance",
+      "clarity": "Clarity",
+      "impact": "Impact",
+      "completeness": "Completeness"
     }
   },
   "guide": {
+    "header": {
+      "home": "Home",
+      "myTemplates": "My Templates",
+      "favorites": "Favorites"
+    },
     "title": "Guide & Tutorial",
-    "howToUse": "How to Use",
-    "features": "Features",
-    "tips": "Tips & Notes",
-    "apiKeySetup": "API Key Setup",
-    "apiKeyDescription": "To use this tool, you need an API key for OpenAI, Gemini, or Claude.",
-    "apiKeySteps": "How to Get API Keys",
-    "openaiLink": "How to get OpenAI API key",
-    "geminiLink": "How to get Gemini API key",
-    "claudeLink": "How to get Claude API key"
+    "subtitle": "Learn how to use {{title}}, its features, and important tips.",
+    "tabs": {
+      "overview": "Overview",
+      "features": "Features",
+      "tutorial": "How to Use",
+      "tips": "Tips & FAQ"
+    },
+    "overview": {
+      "what": {
+        "title": "What is {{title}}?",
+        "description": "{{title}} is a web application that optimizes your resume to job postings using AI technology. Simply input your resume and the job posting you want to apply for, and AI will automatically generate optimized career summaries, motivation letters, self-PR, and more."
+      },
+      "fast": {
+        "title": "Fast Generation",
+        "description": "AI generates optimized documents in seconds."
+      },
+      "optimized": {
+        "title": "Optimized for Jobs",
+        "description": "Analyzes job postings and emphasizes required skills and experience."
+      },
+      "multiple": {
+        "title": "Multiple Pattern Generation",
+        "description": "Compare different expression patterns and select the best one."
+      },
+      "recommended": {
+        "title": "Recommended for",
+        "1": "Those who want to create tailored resumes for multiple job applications",
+        "2": "Those struggling with writing career summaries or motivation letters",
+        "3": "Those wanting to improve self-PR expressions",
+        "4": "Those seeking to improve job search efficiency"
+      }
+    },
+    "features": {
+      "basic": {
+        "title": "Basic Features",
+        "1": {
+          "title": "AI Document Generation",
+          "description": "Input your resume and job posting, and AI will automatically generate career summaries, motivation letters, self-PR, 'Why this company?' sections, and more. You can also specify character limits for each section."
+        },
+        "2": {
+          "title": "Multiple Pattern Generation",
+          "description": "Generate 2-5 different expression patterns from the same input and compare them to select the best one. Each pattern includes an AI evaluation score."
+        },
+        "3": {
+          "title": "File Upload Support",
+          "description": "Upload PDF, Word, or image (PNG/JPEG) files to automatically extract text. For image files, OCR technology is used to recognize text."
+        },
+        "4": {
+          "title": "Export Features",
+          "description": "Download generated documents in PDF, Word, text, or Markdown format. You can also copy or regenerate individual sections."
+        }
+      },
+      "advanced": {
+        "title": "Advanced Features",
+        "1": {
+          "title": "Industry & Job-Specific Templates",
+          "description": "Use industry and job-specific templates for IT, finance, manufacturing, sales, marketing, and more to generate more professional documents."
+        },
+        "2": {
+          "title": "Custom User Templates",
+          "description": "Create, save, and manage your own custom templates. Templating frequently used expressions and formats improves generation efficiency."
+        },
+        "3": {
+          "title": "Favorite Pattern Saving",
+          "description": "Save favorite patterns to review or compare later. You can also compare multiple favorite patterns side by side with highlighted differences."
+        },
+        "4": {
+          "title": "AI Auto-Evaluation",
+          "description": "Automatically evaluate generated patterns against job postings and display scores. Higher scores indicate better job fit."
+        },
+        "5": {
+          "title": "English Conversion",
+          "description": "Convert generated Japanese resumes to English. Useful when applying to English-speaking job markets."
+        }
+      },
+      "api": {
+        "title": "API Settings",
+        "description": "To use this app, you need an API key for OpenAI, Gemini, or Claude. You can obtain API keys by following these steps:",
+        "openai": {
+          "title": "How to Get OpenAI API Key",
+          "step1": "Visit the OpenAI official website (https://platform.openai.com/) and create an account or log in.",
+          "step2": "Navigate to the 'API Keys' section from the dashboard.",
+          "step3": "Click the 'Create new secret key' button to generate a new API key.",
+          "step4": "Copy the generated API key and paste it into the API Settings page of this app.",
+          "note": "Note: API keys are only displayed once, so be sure to save them in a secure location."
+        },
+        "gemini": {
+          "title": "How to Get Gemini API Key",
+          "step1": "Visit Google AI Studio (https://makersuite.google.com/app/apikey) and log in with your Google account.",
+          "step2": "Click the 'Get API Key' button.",
+          "step3": "Create a new project or select an existing one.",
+          "step4": "Copy the generated API key and paste it into the API Settings page of this app."
+        },
+        "claude": {
+          "title": "How to Get Claude API Key",
+          "step1": "Visit Anthropic Console (https://console.anthropic.com/) and create an account or log in.",
+          "step2": "Navigate to the 'API Keys' section.",
+          "step3": "Click the 'Create Key' button to generate a new API key.",
+          "step4": "Copy the generated API key and paste it into the API Settings page of this app."
+        },
+        "important": {
+          "title": "Important Notes",
+          "1": "Do not share your API key with others. It could be misused.",
+          "2": "If you lose your API key, immediately revoke it and generate a new one.",
+          "3": "API usage may incur charges. Check the pricing structure of each provider.",
+          "4": "This app encrypts and stores API keys in the database."
+        }
+      }
+    },
+    "tutorial": {
+      "basic": {
+        "title": "Basic Usage",
+        "step1": {
+          "title": "Login",
+          "description": "Log in with your Manus account."
+        },
+        "step2": {
+          "title": "API Settings",
+          "description": "Click the 'API Settings' button in the header and set your OpenAI, Gemini, or Claude API key."
+        },
+        "step3": {
+          "title": "Input Resume",
+          "description": "Enter your resume in the 'Resume' field or upload a PDF/Word file."
+        },
+        "step4": {
+          "title": "Input Job Posting",
+          "description": "Enter the job posting you want to apply for in the 'Job Posting' field or upload a PDF/Word/image file."
+        },
+        "step5": {
+          "title": "Select Output Items",
+          "description": "Select the items you want to generate (career summary, motivation letter, self-PR, why this company). You can also add custom items."
+        },
+        "step6": {
+          "title": "Set Character Limits",
+          "description": "Specify character limits for each item (optional)."
+        },
+        "step7": {
+          "title": "Start Generation",
+          "description": "Click the 'Generate' button to start AI document generation."
+        },
+        "step8": {
+          "title": "Review and Download Results",
+          "description": "Review the generated documents and copy or download as needed."
+        }
+      },
+      "advanced": {
+        "title": "Advanced Usage",
+        "template": {
+          "title": "Using Templates",
+          "description": "Select industry or job-specific templates to generate more professional documents. You can also create and manage your own templates on the My Templates page."
+        },
+        "multiple": {
+          "title": "Multiple Pattern Generation",
+          "description": "Click the 'Generate Multiple Patterns' button next to the generate button to create 2-5 different expression patterns. Each pattern includes an AI evaluation score to help you select the best one."
+        },
+        "favorite": {
+          "title": "Using Favorites",
+          "description": "Save favorite patterns to review or compare later. On the Favorites page, you can compare multiple patterns side by side with highlighted differences."
+        },
+        "english": {
+          "title": "English Conversion",
+          "description": "Convert generated Japanese documents to English. Click the 'Convert to English' button to generate an English version optimized for English-speaking resume formats."
+        }
+      }
+    },
+    "tips": {
+      "notes": {
+        "title": "Important Notes",
+        "1": {
+          "title": "API Key Management",
+          "description": "Do not share your API key with others. We also recommend updating it regularly."
+        },
+        "2": {
+          "title": "API Usage Fees",
+          "description": "OpenAI, Gemini, and Claude APIs charge based on usage. Check each provider's pricing structure."
+        },
+        "3": {
+          "title": "Review Generated Content",
+          "description": "Always review AI-generated documents and make necessary edits. AI is not perfect."
+        },
+        "4": {
+          "title": "Personal Information Handling",
+          "description": "Input resumes and job postings are sent to AI provider APIs. Be cautious if they contain confidential information."
+        }
+      },
+      "effective": {
+        "title": "Tips for Effective Use",
+        "1": {
+          "title": "Input Detailed Resume",
+          "description": "Include specific job duties, achievements, tools used, and skills in your resume for higher quality document generation."
+        },
+        "2": {
+          "title": "Input Accurate Job Posting",
+          "description": "Include detailed required skills, experience, and job duties in the job posting for better job-fit documents."
+        },
+        "3": {
+          "title": "Compare Multiple Patterns",
+          "description": "Use the multiple pattern generation feature to compare different expressions and select the best document."
+        },
+        "4": {
+          "title": "Use Templates",
+          "description": "Use industry or job-specific templates to generate more professional documents. Save frequently used expressions in My Templates for efficiency."
+        },
+        "5": {
+          "title": "Use Favorites",
+          "description": "Save favorite patterns to review or compare later for creating better documents."
+        }
+      },
+      "faq": {
+        "title": "Frequently Asked Questions",
+        "1": {
+          "question": "Can I use this app without setting an API key?",
+          "answer": "No, this app requires an OpenAI, Gemini, or Claude API key. You cannot use AI features without setting an API key."
+        },
+        "2": {
+          "question": "Where are generated documents saved?",
+          "answer": "Generated documents are automatically saved as history. You can review past generation results on the History page."
+        },
+        "3": {
+          "question": "Can I apply to multiple jobs simultaneously?",
+          "answer": "Currently, the app generates one document per job posting, but we plan to add a batch application feature in future updates."
+        },
+        "4": {
+          "question": "Can I edit generated documents?",
+          "answer": "Yes, you can copy generated documents and edit them in a text editor. You can also regenerate individual sections."
+        },
+        "5": {
+          "question": "Can I generate English resumes?",
+          "answer": "Yes, you can use the English conversion feature to convert generated Japanese documents to English."
+        }
+      }
+    }
   },
   "apiSettings": {
     "title": "API Settings",
-    "description": "To use AI features, please set one of the following API keys.",
-    "provider": "AI Provider",
-    "selectProvider": "Select provider",
+    "description": "Set your API key for OpenAI, Gemini, or Claude.",
+    "provider": "Main Provider",
+    "selectProvider": "Select provider...",
     "apiKey": "API Key",
     "apiKeyPlaceholder": "Enter API key",
-    "howToGet": "How to get",
+    "howToGet": "How to Get API Keys",
     "save": "Save",
     "delete": "Delete",
     "saved": "API key saved",
     "deleted": "API key deleted",
-    "error": "An error occurred"
+    "error": "An error occurred",
+    "openai": "OpenAI",
+    "gemini": "Gemini",
+    "claude": "Claude",
+    "openaiKey": "OpenAI API Key",
+    "geminiKey": "Gemini API Key",
+    "claudeKey": "Claude API Key (Coming Soon)",
+    "keyPlaceholder": "Enter API key...",
+    "openaiLink": "Get OpenAI API Key",
+    "geminiLink": "Get Gemini API Key",
+    "claudeLink": "Get Claude API Key",
+    "toast": {
+      "saved": "API settings saved",
+      "saveFailed": "Failed to save"
+    },
+    "loginRequired": "Login Required",
+    "loginDescription": "You need to log in with your Manus account to use this feature",
+    "loginButton": "Login to Start",
+    "header": {
+      "title": "AI Resume Optimizer Maker",
+      "backHome": "Back to Home"
+    },
+    "selectProviderLabel": "Select AI Provider",
+    "openaiDescription": "GPT-4, GPT-3.5, etc.",
+    "geminiDescription": "Gemini Pro, Gemini Ultra, etc.",
+    "claudeDescription": "Claude 3 Opus, Claude 3 Sonnet, etc.",
+    "apiKeyLabel": "{{provider}} API Key",
+    "getApiKey": "Get API Key",
+    "apiKeyPlaceholderFull": "Enter {{provider}} API key",
+    "apiKeyStorage": "API key is securely stored in browser localStorage",
+    "howToGetTitle": "How to Get API Keys",
+    "openaiSteps": {
+      "step1": "Visit",
+      "step2": "Click 'Create new secret key'",
+      "step3": "Copy the generated API key and paste it above"
+    },
+    "geminiSteps": {
+      "step1": "Visit",
+      "step2": "Click 'Get API key'",
+      "step3": "Copy the generated API key and paste it above"
+    },
+    "claudeSteps": {
+      "step1": "Visit",
+      "step2": "Click 'Create Key'",
+      "step3": "Copy the generated API key and paste it above"
+    },
+    "warning": "Warning: Do not share your API key with others. Using API keys may incur charges from the provider.",
+    "toastEnterApiKey": "Please enter an API key"
   },
   "history": {
     "title": "Generation History",
@@ -184,13 +491,47 @@
     "helpMessage": "The guide page provides detailed instructions on how to obtain API keys for each provider."
   },
   "favorites": {
-    "title": "Favorites",
-    "noFavorites": "No favorites",
+    "title": "Favorite Patterns",
+    "noFavorites": "No favorite patterns",
     "createdAt": "Created: {{date}}",
     "view": "View Details",
     "delete": "Delete",
     "compare": "Compare",
-    "selectToCompare": "Select items to compare (2 or more)"
+    "selectToCompare": "Select items to compare (2 or more)",
+    "loginRequired": "Login Required",
+    "loginDescription": "You need to log in with your Manus account to use this feature",
+    "loginButton": "Login to Start",
+    "compareMode": "Compare Mode",
+    "compareModeEnd": "End Compare Mode",
+    "selectedCount": "{{count}} selected",
+    "evaluationScore": "Score: {{score}}",
+    "compareTitle": "Pattern Comparison ({{count}})",
+    "differenceRate": "Difference: {{rate}}%",
+    "patternDetails": "Pattern Details",
+    "selectPattern": "Select a pattern from the left",
+    "name": "Name",
+    "notes": "Notes",
+    "generatedContent": "Generated Content",
+    "edit": "Edit",
+    "copy": "Copy",
+    "editDialog": {
+      "title": "Edit Favorite Pattern",
+      "name": "Name",
+      "notes": "Notes",
+      "save": "Save",
+      "cancel": "Cancel"
+    },
+    "toast": {
+      "deleted": "Favorite pattern deleted",
+      "updated": "Favorite pattern updated",
+      "copied": "Copied",
+      "deleteFailed": "Failed to delete",
+      "updateFailed": "Failed to update"
+    },
+    "confirm": {
+      "delete": "Are you sure you want to delete this favorite pattern?"
+    },
+    "noFavoritesDescription": "Add favorites from the generation results screen"
   },
   "template": {
     "systemTemplate": "System Templates",
@@ -223,7 +564,7 @@
     "createdAt": "Created: {{date}}"
   },
   "footer": {
-    "description": "A web application that helps create resumes using AI technology",
+    "description": "A web application that optimizes resumes to job postings using AI technology",
     "links": "Links",
     "home": "Home",
     "guide": "Guide & Tutorial",
@@ -233,13 +574,13 @@
     "privacy": "Privacy Policy",
     "terms": "Terms of Service",
     "adsenseGuide": "AdSense Application Guide",
-    "author": "Author & Copyright",
-    "twitter": "Twitter: @kojima920",
-    "email": "Contact: mk19830920@gmail.com",
+    "author": "Author & Donation",
+    "twitter": "Author",
+    "email": "Contact",
     "donation": "Donation",
-    "paypay": "PayPayID: kojima1459",
+    "paypay": "PayPayID",
     "donationMessage": "★Your donation encourages us to develop better apps★",
-    "copyright": "© 2025 AI Resume Optimizer Maker. All rights reserved.",
+    "copyright": "© {{year}} {{title}}. All rights reserved.",
     "madeWith": "Made with ❤️ by"
   },
   "toast": {
@@ -291,5 +632,57 @@
     "ok": "OK",
     "yes": "Yes",
     "no": "No"
+  },
+  "announcement": {
+    "title": "Upcoming Features",
+    "description": "We are planning to implement the following features to make our service more convenient and user-friendly.",
+    "feature1": {
+      "title": "AI Resume Review & Scoring",
+      "description": "Analyze your current resume and provide specific improvement suggestions. Display scores for categories like 'readability,' 'specificity,' and 'impact.'"
+    },
+    "feature2": {
+      "title": "AI Interview Preparation (Free!)",
+      "description": "Automatically generate expected interview questions from job postings and resumes, and provide sample answers based on your experience. Prepare efficiently for interviews."
+    },
+    "feature3": {
+      "title": "LinkedIn Talent Search",
+      "description": "Use LinkedIn API to retrieve company and talent information, and suggest relevant companies based on your resume. Discover job opportunities smoothly."
+    },
+    "feature4": {
+      "title": "Batch Application Feature",
+      "description": "Apply to multiple companies at once. Select job postings and automatically send optimized resumes. Apply to 3+ companies simultaneously for comparison, significantly improving job search efficiency."
+    },
+    "feature5": {
+      "title": "Before & After Resume Comparison",
+      "description": "Display optimized and original resumes side by side. See improvements at a glance."
+    },
+    "feature6": {
+      "title": "Industry-Specific Template Collection",
+      "description": "Provide templates optimized for industries like IT, sales, administration, and creative fields."
+    },
+    "feature7": {
+      "title": "Social Media Sharing",
+      "description": "Share parts of your generated resume on Twitter/LinkedIn to receive feedback."
+    },
+    "feature8": {
+      "title": "Premium Plan (Subscription)",
+      "description": "Monthly subscription offering unlimited generations, priority support, custom template creation, and more."
+    },
+    "priority": {
+      "high": "Priority: High",
+      "medium": "Priority: Medium",
+      "low": "Priority: Low"
+    },
+    "status": {
+      "implemented": "Implemented",
+      "inProgress": "In Progress",
+      "planned": "Planned"
+    },
+    "schedule": {
+      "title": "Implementation Schedule",
+      "description": "We will implement features in order of priority. We will notify you when each feature is completed."
+    },
+    "dismissForever": "Don't show again",
+    "close": "Close"
   }
 }

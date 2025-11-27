@@ -325,14 +325,14 @@ export default function Home() {
       setEditedContent(selectedPattern);
       setSelectedPatternIndex(index);
       setShowPatternDialog(false);
-      toast.success(`パターン${index + 1}を選択しました`);
+      toast.success(t('home.toast.patternSelected', { index: index + 1 }));
     }
   };
 
   const handleSelectTemplate = (templateId: number | null) => {
     setSelectedTemplateId(templateId);
     if (templateId) {
-      toast.success("テンプレートを選択しました");
+      toast.success(t('home.toast.templateSelected'));
     }
   };
 
@@ -341,7 +341,7 @@ export default function Home() {
     const evaluation = patternEvaluations[patternIndex];
     
     if (!pattern) {
-      toast.error("パターンが見つかりません");
+      toast.error(t('home.toast.patternNotFound'));
       return;
     }
 
@@ -369,7 +369,7 @@ export default function Home() {
   const handleSelectUserTemplate = (templateId: number | null) => {
     setSelectedUserTemplateId(templateId);
     if (templateId) {
-      toast.success("マイテンプレートを選択しました");
+      toast.success(t('home.toast.myTemplateSelected'));
     }
   };
 
@@ -442,7 +442,7 @@ export default function Home() {
   };
 
   const handleDeleteHistory = (id: number) => {
-    if (confirm("この履歴を削除してもよろしいですか？")) {
+    if (confirm(t('home.confirm.deleteHistory'))) {
       deleteHistoryMutation.mutate({ id });
     }
   };
@@ -450,7 +450,7 @@ export default function Home() {
   const toggleFavoriteMutation = trpc.resume.history.toggleFavorite.useMutation({
     onSuccess: (data) => {
       historyQuery.refetch();
-      toast.success(data.isFavorite ? "お気に入りに登録しました" : "お気に入りを解除しました");
+      toast.success(data.isFavorite ? t('home.toast.favoriteAdded') : t('home.toast.favoriteRemoved'));
     },
     onError: (error) => {
       toast.error(error.message || t('common.error'));
@@ -543,7 +543,7 @@ export default function Home() {
         .filter((item): item is { key: string; label: string } => item !== null);
 
       const blob = await exportToWord(editedContent, itemsToExport);
-      downloadBlob(blob, "職務経歴書.docx");
+      downloadBlob(blob, t('home.fileName.word'));
       toast.success(t('toast.downloadedWord'));
     } catch (error: any) {
       toast.error(error.message || t('toast.downloadError'));
@@ -560,7 +560,7 @@ export default function Home() {
         .filter((item): item is { key: string; label: string } => item !== null);
 
       const doc = exportToPDF(editedContent, itemsToExport);
-      doc.save("職務経歴書.pdf");
+      doc.save(t('home.fileName.pdf'));
       toast.success(t('toast.downloadedPdf'));
     } catch (error: any) {
       toast.error(error.message || t('toast.downloadError'));
@@ -577,7 +577,7 @@ export default function Home() {
         .filter((item): item is { key: string; label: string } => item !== null);
 
       const blob = exportToText(editedContent, itemsToExport);
-      downloadBlob(blob, "職務経歴書.txt");
+      downloadBlob(blob, t('home.fileName.text'));
       toast.success(t('toast.downloadedText'));
     } catch (error: any) {
       toast.error(error.message || t('toast.downloadError'));
@@ -594,7 +594,7 @@ export default function Home() {
         .filter((item): item is { key: string; label: string } => item !== null);
 
       const blob = exportToMarkdown(editedContent, itemsToExport);
-      downloadBlob(blob, "職務経歴書.md");
+      downloadBlob(blob, t('home.fileName.markdown'));
       toast.success(t('toast.downloadedMarkdown'));
     } catch (error: any) {
       toast.error(error.message || t('toast.downloadError'));
@@ -655,7 +655,7 @@ export default function Home() {
         handleGenerate();
         toast.success(t('toast.shortcutGenerate'));
       },
-      description: '生成開始',
+      description: t('home.shortcut.generate'),
     },
     {
       key: 'C',
@@ -669,7 +669,7 @@ export default function Home() {
         handleCopyAll();
         toast.success(t('toast.shortcutCopyAll'));
       },
-      description: '全項目をコピー',
+      description: t('home.shortcut.copyAll'),
     },
     {
       key: '?',
@@ -677,7 +677,7 @@ export default function Home() {
       callback: () => {
         setShowShortcutHelp(true);
       },
-      description: 'ショートカットヘルプを表示',
+      description: t('home.shortcut.showHelp'),
     },
   ];
 
@@ -688,7 +688,7 @@ export default function Home() {
     const savedData = loadData();
     if (savedData) {
       const shouldRestore = window.confirm(
-        `前回の入力内容が見つかりました。\n最終保存: ${new Date(savedData.timestamp).toLocaleString('ja-JP')}\n\n復元しますか？`
+        t('home.confirm.restoreData', { timestamp: new Date(savedData.timestamp).toLocaleString() })
       );
       
       if (shouldRestore) {
@@ -896,7 +896,7 @@ export default function Home() {
                 variant="outline"
                 size="sm"
                 onClick={() => {
-                  if (window.confirm('保存されたデータをクリアしますか？')) {
+                  if (window.confirm(t('home.confirm.clearData'))) {
                     clearData();
                   }
                 }}
@@ -1064,7 +1064,7 @@ export default function Home() {
         </div>
 
         <p className="text-center text-2xl md:text-3xl font-bold text-blue-900 mb-8 px-4">
-          求人情報に合わせて、あなたの職務経歴書をAIが最適化するチート便利ツールです！
+          {t('home.subtitle')}
         </p>
 
         {/* 機能説明セクション */}

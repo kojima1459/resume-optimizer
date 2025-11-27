@@ -1,7 +1,9 @@
 import { APP_TITLE } from "@/const";
 import { Link } from "wouter";
+import { useTranslation } from "react-i18next";
 
 export default function Footer() {
+  const { t } = useTranslation();
   const currentYear = new Date().getFullYear();
 
   return (
@@ -12,39 +14,39 @@ export default function Footer() {
           <div>
             <h3 className="font-semibold mb-3">{APP_TITLE}</h3>
             <p className="text-sm text-muted-foreground">
-              AI技術を活用して職務経歴書を求人情報に最適化するWebアプリケーション
+              {t('footer.description')}
             </p>
           </div>
 
           {/* リンク */}
           <div>
-            <h3 className="font-semibold mb-3">リンク</h3>
+            <h3 className="font-semibold mb-3">{t('footer.links')}</h3>
             <ul className="space-y-2 text-sm">
               <li>
                 <Link href="/">
                   <a className="text-muted-foreground hover:text-primary transition-colors">
-                    ホーム
+                    {t('footer.home')}
                   </a>
                 </Link>
               </li>
               <li>
                 <Link href="/guide">
                   <a className="text-muted-foreground hover:text-primary transition-colors">
-                    ガイド・チュートリアル
+                    {t('footer.guide')}
                   </a>
                 </Link>
               </li>
               <li>
                 <Link href="/my-templates">
                   <a className="text-muted-foreground hover:text-primary transition-colors">
-                    マイテンプレート
+                    {t('footer.myTemplates')}
                   </a>
                 </Link>
               </li>
               <li>
                 <Link href="/favorites">
                   <a className="text-muted-foreground hover:text-primary transition-colors">
-                    お気に入り
+                    {t('footer.favorites')}
                   </a>
                 </Link>
               </li>
@@ -53,26 +55,26 @@ export default function Footer() {
 
           {/* 法的情報 */}
           <div>
-            <h3 className="font-semibold mb-3">法的情報</h3>
+            <h3 className="font-semibold mb-3">{t('footer.legal')}</h3>
             <ul className="space-y-2 text-sm">
               <li>
                 <Link href="/privacy">
                   <a className="text-muted-foreground hover:text-primary transition-colors">
-                    プライバシーポリシー
+                    {t('footer.privacy')}
                   </a>
                 </Link>
               </li>
               <li>
                 <Link href="/terms">
                   <a className="text-muted-foreground hover:text-primary transition-colors">
-                    利用規約
+                    {t('footer.terms')}
                   </a>
                 </Link>
               </li>
               <li>
                 <Link href="/adsense-guide">
                   <a className="text-muted-foreground hover:text-primary transition-colors">
-                    AdSense申請ガイド
+                    {t('footer.adsenseGuide')}
                   </a>
                 </Link>
               </li>
@@ -81,10 +83,10 @@ export default function Footer() {
 
           {/* 製作者・寄付情報 */}
           <div>
-            <h3 className="font-semibold mb-3">製作者・寄付情報</h3>
+            <h3 className="font-semibold mb-3">{t('footer.author')}</h3>
             <ul className="space-y-2 text-sm">
               <li>
-                <span className="text-muted-foreground">製作者: </span>
+                <span className="text-muted-foreground">{t('footer.twitter')}: </span>
                 <a 
                   href="https://x.com/kojima920" 
                   target="_blank" 
@@ -95,7 +97,7 @@ export default function Footer() {
                 </a>
               </li>
               <li>
-                <span className="text-muted-foreground">問い合わせ: </span>
+                <span className="text-muted-foreground">{t('footer.email')}: </span>
                 <a 
                   href="mailto:mk19830920@gmail.com"
                   className="text-primary hover:underline"
@@ -104,13 +106,13 @@ export default function Footer() {
                 </a>
               </li>
               <li className="pt-2">
-                <p className="text-muted-foreground mb-1">寄付先:</p>
+                <p className="text-muted-foreground mb-1">{t('footer.donation')}:</p>
                 <p className="text-sm">
-                  <span className="text-muted-foreground">PayPayID→</span>
+                  <span className="text-muted-foreground">{t('footer.paypay')}: </span>
                   <span className="font-semibold">kojima1459</span>
                 </p>
                 <p className="text-xs text-muted-foreground mt-1">
-                  ★寄付頂けると励みになる為よりよい良いアプリ開発の為にご寄付を★
+                  {t('footer.donationMessage')}
                 </p>
               </li>
             </ul>
@@ -119,9 +121,9 @@ export default function Footer() {
 
         {/* コピーライト */}
         <div className="mt-8 pt-8 border-t text-center text-sm text-muted-foreground space-y-2">
-          <p>© {currentYear} {APP_TITLE}. All rights reserved.</p>
+          <p>{t('footer.copyright', { year: currentYear, title: APP_TITLE })}</p>
           <p className="text-xs">
-            Made with ❤️ by{" "}
+            {t('footer.madeWith')}{" "}
             <a 
               href="https://x.com/kojima920" 
               target="_blank" 

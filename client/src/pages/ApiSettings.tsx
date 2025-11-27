@@ -7,10 +7,12 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { toast } from "sonner";
 import { ExternalLink, Save, Eye, EyeOff } from "lucide-react";
 import Footer from "@/components/Footer";
+import { useTranslation } from "react-i18next";
 
 type ApiProvider = "openai" | "gemini" | "claude";
 
 export default function ApiSettings() {
+  const { t } = useTranslation();
   const [provider, setProvider] = useState<ApiProvider>("openai");
   const [apiKey, setApiKey] = useState("");
   const [showApiKey, setShowApiKey] = useState(false);
@@ -26,7 +28,7 @@ export default function ApiSettings() {
 
   const handleSave = () => {
     if (!apiKey.trim()) {
-      toast.error("APIキーを入力してください");
+      toast.error(t('apiSettings.toastEnterApiKey'));
       return;
     }
 
@@ -34,7 +36,7 @@ export default function ApiSettings() {
     localStorage.setItem("apiProvider", provider);
     localStorage.setItem("apiKey", apiKey);
     
-    toast.success("API設定を保存しました");
+    toast.success(t('apiSettings.toast.saved'));
   };
 
   const getApiKeyLink = (provider: ApiProvider) => {
@@ -62,12 +64,12 @@ export default function ApiSettings() {
         <div className="container mx-auto px-4 py-3 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <a href="/" className="text-xl md:text-2xl font-bold text-gray-900 dark:text-gray-100 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
-              職務経歴書最適化ツール
+              {t('apiSettings.header.title')}
             </a>
           </div>
           <div className="flex items-center gap-2">
             <Button variant="outline" size="sm" asChild>
-              <a href="/">ホームに戻る</a>
+              <a href="/">{t('apiSettings.header.backHome')}</a>
             </Button>
           </div>
         </div>
@@ -77,35 +79,35 @@ export default function ApiSettings() {
       <main className="flex-1 container mx-auto px-4 py-8 max-w-4xl">
         <Card className="mb-6">
           <CardHeader>
-            <CardTitle className="text-2xl">API設定</CardTitle>
+            <CardTitle className="text-2xl">{t('apiSettings.title')}</CardTitle>
             <CardDescription>
-              使用するAIプロバイダーとAPIキーを設定してください
+              {t('apiSettings.description')}
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-6">
             {/* プロバイダー選択 */}
             <div className="space-y-3">
-              <Label className="text-base font-semibold">AIプロバイダーを選択</Label>
+              <Label className="text-base font-semibold">{t('apiSettings.selectProviderLabel')}</Label>
               <RadioGroup value={provider} onValueChange={(value) => setProvider(value as ApiProvider)}>
                 <div className="flex items-center space-x-2 p-3 border rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
                   <RadioGroupItem value="openai" id="openai" />
                   <Label htmlFor="openai" className="flex-1 cursor-pointer">
-                    <div className="font-semibold">OpenAI</div>
-                    <div className="text-sm text-gray-500 dark:text-gray-400">GPT-4, GPT-3.5など</div>
+                    <div className="font-semibold">{t('apiSettings.openai')}</div>
+                    <div className="text-sm text-gray-500 dark:text-gray-400">{t('apiSettings.openaiDescription')}</div>
                   </Label>
                 </div>
                 <div className="flex items-center space-x-2 p-3 border rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
                   <RadioGroupItem value="gemini" id="gemini" />
                   <Label htmlFor="gemini" className="flex-1 cursor-pointer">
-                    <div className="font-semibold">Google Gemini</div>
-                    <div className="text-sm text-gray-500 dark:text-gray-400">Gemini Pro, Gemini Ultraなど</div>
+                    <div className="font-semibold">{t('apiSettings.gemini')}</div>
+                    <div className="text-sm text-gray-500 dark:text-gray-400">{t('apiSettings.geminiDescription')}</div>
                   </Label>
                 </div>
                 <div className="flex items-center space-x-2 p-3 border rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
                   <RadioGroupItem value="claude" id="claude" />
                   <Label htmlFor="claude" className="flex-1 cursor-pointer">
-                    <div className="font-semibold">Anthropic Claude</div>
-                    <div className="text-sm text-gray-500 dark:text-gray-400">Claude 3 Opus, Claude 3 Sonnetなど</div>
+                    <div className="font-semibold">{t('apiSettings.claude')}</div>
+                    <div className="text-sm text-gray-500 dark:text-gray-400">{t('apiSettings.claudeDescription')}</div>
                   </Label>
                 </div>
               </RadioGroup>
@@ -115,7 +117,7 @@ export default function ApiSettings() {
             <div className="space-y-3">
               <div className="flex items-center justify-between">
                 <Label htmlFor="apiKey" className="text-base font-semibold">
-                  {getProviderName(provider)} APIキー
+                  {t('apiSettings.apiKeyLabel', { provider: getProviderName(provider) })}
                 </Label>
                 <Button
                   variant="link"
@@ -124,7 +126,7 @@ export default function ApiSettings() {
                   asChild
                 >
                   <a href={getApiKeyLink(provider)} target="_blank" rel="noopener noreferrer">
-                    APIキーを取得 <ExternalLink className="ml-1 h-3 w-3" />
+                    {t('apiSettings.getApiKey')} <ExternalLink className="ml-1 h-3 w-3" />
                   </a>
                 </Button>
               </div>
@@ -134,7 +136,7 @@ export default function ApiSettings() {
                   type={showApiKey ? "text" : "password"}
                   value={apiKey}
                   onChange={(e) => setApiKey(e.target.value)}
-                  placeholder={`${getProviderName(provider)} APIキーを入力してください`}
+                  placeholder={t('apiSettings.apiKeyPlaceholderFull', { provider: getProviderName(provider) })}
                   className="pr-10"
                 />
                 <Button
@@ -152,7 +154,7 @@ export default function ApiSettings() {
                 </Button>
               </div>
               <p className="text-sm text-gray-500 dark:text-gray-400">
-                APIキーはブラウザのlocalStorageに安全に保存されます
+                {t('apiSettings.apiKeyStorage')}
               </p>
             </div>
 
@@ -160,7 +162,7 @@ export default function ApiSettings() {
             <div className="flex justify-end">
               <Button onClick={handleSave} size="lg" className="gap-2">
                 <Save className="h-4 w-4" />
-                保存
+                {t('apiSettings.save')}
               </Button>
             </div>
           </CardContent>
@@ -169,54 +171,54 @@ export default function ApiSettings() {
         {/* ヘルプカード */}
         <Card>
           <CardHeader>
-            <CardTitle>APIキーの取得方法</CardTitle>
+            <CardTitle>{t('apiSettings.howToGetTitle')}</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="space-y-2">
-              <h3 className="font-semibold">OpenAI</h3>
+              <h3 className="font-semibold">{t('apiSettings.openai')}</h3>
               <ol className="list-decimal list-inside space-y-1 text-sm text-gray-600 dark:text-gray-400">
                 <li>
                   <a href="https://platform.openai.com/api-keys" target="_blank" rel="noopener noreferrer" className="text-blue-600 dark:text-blue-400 hover:underline">
                     OpenAI Platform
                   </a>
-                  にアクセス
+                  {t('apiSettings.openaiSteps.step1')}
                 </li>
-                <li>「Create new secret key」をクリック</li>
-                <li>生成されたAPIキーをコピーして上記に貼り付け</li>
+                <li>{t('apiSettings.openaiSteps.step2')}</li>
+                <li>{t('apiSettings.openaiSteps.step3')}</li>
               </ol>
             </div>
 
             <div className="space-y-2">
-              <h3 className="font-semibold">Google Gemini</h3>
+              <h3 className="font-semibold">{t('apiSettings.gemini')}</h3>
               <ol className="list-decimal list-inside space-y-1 text-sm text-gray-600 dark:text-gray-400">
                 <li>
                   <a href="https://aistudio.google.com/app/apikey" target="_blank" rel="noopener noreferrer" className="text-blue-600 dark:text-blue-400 hover:underline">
                     Google AI Studio
                   </a>
-                  にアクセス
+                  {t('apiSettings.geminiSteps.step1')}
                 </li>
-                <li>「Get API key」をクリック</li>
-                <li>生成されたAPIキーをコピーして上記に貼り付け</li>
+                <li>{t('apiSettings.geminiSteps.step2')}</li>
+                <li>{t('apiSettings.geminiSteps.step3')}</li>
               </ol>
             </div>
 
             <div className="space-y-2">
-              <h3 className="font-semibold">Anthropic Claude</h3>
+              <h3 className="font-semibold">{t('apiSettings.claude')}</h3>
               <ol className="list-decimal list-inside space-y-1 text-sm text-gray-600 dark:text-gray-400">
                 <li>
                   <a href="https://console.anthropic.com/settings/keys" target="_blank" rel="noopener noreferrer" className="text-blue-600 dark:text-blue-400 hover:underline">
                     Anthropic Console
                   </a>
-                  にアクセス
+                  {t('apiSettings.claudeSteps.step1')}
                 </li>
-                <li>「Create Key」をクリック</li>
-                <li>生成されたAPIキーをコピーして上記に貼り付け</li>
+                <li>{t('apiSettings.claudeSteps.step2')}</li>
+                <li>{t('apiSettings.claudeSteps.step3')}</li>
               </ol>
             </div>
 
             <div className="mt-4 p-4 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg">
               <p className="text-sm text-yellow-800 dark:text-yellow-200">
-                <strong>注意:</strong> APIキーは第三者に共有しないでください。APIキーを使用すると、プロバイダーから料金が発生する場合があります。
+                <strong>{t('apiSettings.warning').split(':')[0]}:</strong> {t('apiSettings.warning').split(':')[1]}
               </p>
             </div>
           </CardContent>

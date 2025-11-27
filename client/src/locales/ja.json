@@ -24,10 +24,10 @@
     "viewGuide": "ガイドを見る",
     "close": "閉じる",
     "title": "AI職務経歴書最適化メイカー",
-    "subtitle": "求人情報に合わせて、あなたの職務経歴書を最適化します",
+    "subtitle": "求人情報に合わせて、あなたの職務経歴書をAIが最適化するチート便利ツールです！",
     "loginRequired": "ご利用にはManusアカウントでのログインが必要です",
     "loginButton": "ログインして開始",
-    "description": "職務経歴書最適化ツールの使い方",
+    "description": "説明",
     "descriptionText": "求人情報に合わせて、あなたの職務経歴書を最適化します",
     "basicFeatures": "基本機能",
     "advancedFeatures": "高度な機能",
@@ -49,7 +49,6 @@
     "selectTemplate": "テンプレートを選択...",
     "details": "詳細",
     "templateDetails": "テンプレート詳細",
-    "description": "説明",
     "sampleOutput": "サンプル出力",
     "clear": "クリア",
     "outputSection": "出力項目を選択",
@@ -101,33 +100,340 @@
       "aiEvaluation": "AI自動評価: 求人との適合度をスコア化",
       "favoritePatterns": "お気に入り保存: 良いパターンを保存・比較",
       "templates": "テンプレート: 業界・独自テンプレート"
+    },
+    "toast": {
+      "patternSelected": "パターン{{index}}を選択しました",
+      "templateSelected": "テンプレートを選択しました",
+      "patternNotFound": "パターンが見つかりません",
+      "myTemplateSelected": "マイテンプレートを選択しました",
+      "favoriteAdded": "お気に入りに登録しました",
+      "favoriteRemoved": "お気に入りを解除しました"
+    },
+    "confirm": {
+      "deleteHistory": "この履歴を削除してもよろしいですか？",
+      "restoreData": "前回の入力内容が見つかりました。\n最終保存: {{timestamp}}\n\n復元しますか？",
+      "clearData": "保存されたデータをクリアしますか？"
+    },
+    "fileName": {
+      "word": "職務経歴書.docx",
+      "pdf": "職務経歴書.pdf",
+      "text": "職務経歴書.txt",
+      "markdown": "職務経歴書.md"
+    },
+    "shortcut": {
+      "generate": "生成開始",
+      "copyAll": "全項目をコピー",
+      "showHelp": "ショートカットヘルプを表示"
+    },
+    "label": {
+      "characters": "文字",
+      "score": "点",
+      "relevance": "関連性",
+      "clarity": "明確さ",
+      "impact": "インパクト",
+      "completeness": "完成度"
     }
   },
   "guide": {
+    "header": {
+      "home": "ホーム",
+      "myTemplates": "マイテンプレート",
+      "favorites": "お気に入り"
+    },
     "title": "ガイド・チュートリアル",
-    "howToUse": "使い方",
-    "features": "機能",
-    "tips": "注意点・ヒント",
-    "apiKeySetup": "APIキーの設定",
-    "apiKeyDescription": "本ツールを使用するには、OpenAI、Gemini、またはClaudeのAPIキーが必要です。",
-    "apiKeySteps": "APIキーの取得方法",
-    "openaiLink": "OpenAI APIキー取得方法",
-    "geminiLink": "Gemini APIキー取得方法",
-    "claudeLink": "Claude APIキー取得方法"
+    "subtitle": "{{title}}の使い方、機能、注意点を詳しく解説します。",
+    "tabs": {
+      "overview": "概要",
+      "features": "機能",
+      "tutorial": "使い方",
+      "tips": "注意点・Tips"
+    },
+    "overview": {
+      "what": {
+        "title": "{{title}}とは",
+        "description": "{{title}}は、AI技術を活用して職務経歴書を求人情報に最適化するWebアプリケーションです。あなたの職務経歴書と応募したい求人情報を入力するだけで、AIが求人に最適化された職務要約、志望動機、自己PRなどを自動生成します。"
+      },
+      "fast": {
+        "title": "高速生成",
+        "description": "AIが数秒で最適化された文書を生成します。"
+      },
+      "optimized": {
+        "title": "求人に最適化",
+        "description": "求人情報を分析し、求められるスキルや経験を強調します。"
+      },
+      "multiple": {
+        "title": "複数パターン生成",
+        "description": "異なる表現パターンを比較して最適なものを選択できます。"
+      },
+      "recommended": {
+        "title": "こんな方におすすめ",
+        "1": "複数の求人に応募する際、それぞれに合わせた職務経歴書を作成したい方",
+        "2": "職務要約や志望動機の書き方に悩んでいる方",
+        "3": "自己PRの表現を改善したい方",
+        "4": "転職活動の効率を上げたい方"
+      }
+    },
+    "features": {
+      "basic": {
+        "title": "基本機能",
+        "1": {
+          "title": "AI文書生成",
+          "description": "職務経歴書と求人情報を入力すると、AIが職務要約、志望動機、自己PR、「なぜ御社か」などの項目を自動生成します。各項目の文字数を指定することも可能です。"
+        },
+        "2": {
+          "title": "複数パターン生成",
+          "description": "同じ入力から2〜5個の異なる表現パターンを生成し、比較して最適なものを選択できます。各パターンにはAIによる自動評価スコアが表示されます。"
+        },
+        "3": {
+          "title": "ファイルアップロード対応",
+          "description": "PDF、Word、画像（PNG/JPEG）ファイルをアップロードして、自動的にテキストを抽出できます。画像ファイルの場合はOCR技術を使用してテキストを認識します。"
+        },
+        "4": {
+          "title": "エクスポート機能",
+          "description": "生成された文書をPDF、Word、テキスト、Markdown形式でダウンロードできます。個別項目のコピーや再生成も可能です。"
+        }
+      },
+      "advanced": {
+        "title": "高度な機能",
+        "1": {
+          "title": "業界別・職種別テンプレート",
+          "description": "IT、金融、製造、営業、マーケティングなどの業界・職種別テンプレートを使用して、より専門的な文書を生成できます。"
+        },
+        "2": {
+          "title": "ユーザー独自テンプレート",
+          "description": "自分だけのカスタムテンプレートを作成・保存・管理できます。よく使う表現やフォーマットをテンプレート化することで、生成の効率が向上します。"
+        },
+        "3": {
+          "title": "お気に入りパターン保存",
+          "description": "気に入ったパターンをお気に入りに保存し、後で見返したり比較したりできます。複数のお気に入りパターンを並べて比較し、差異をハイライト表示する機能もあります。"
+        },
+        "4": {
+          "title": "AI自動評価",
+          "description": "生成されたパターンを求人情報と照らし合わせて自動評価し、スコアを表示します。スコアが高いパターンほど求人に適合していると判断されます。"
+        },
+        "5": {
+          "title": "英語変換機能",
+          "description": "生成された日本語の職務経歴書を英語に変換できます。英語圏の求人に応募する際に便利です。"
+        }
+      },
+      "api": {
+        "title": "API設定",
+        "description": "このアプリを使用するには、OpenAI、Gemini、またはClaudeのAPIキーが必要です。APIキーは以下の手順で取得できます:",
+        "openai": {
+          "title": "OpenAI APIキーの取得方法",
+          "step1": "OpenAIの公式サイト（https://platform.openai.com/）にアクセスし、アカウントを作成またはログインします。",
+          "step2": "ダッシュボードから「API Keys」セクションに移動します。",
+          "step3": "「Create new secret key」ボタンをクリックして新しいAPIキーを生成します。",
+          "step4": "生成されたAPIキーをコピーし、このアプリのAPI設定ページに貼り付けます。",
+          "note": "注意: APIキーは一度しか表示されないため、必ず安全な場所に保存してください。"
+        },
+        "gemini": {
+          "title": "Gemini APIキーの取得方法",
+          "step1": "Google AI Studio（https://makersuite.google.com/app/apikey）にアクセスし、Googleアカウントでログインします。",
+          "step2": "「Get API Key」ボタンをクリックします。",
+          "step3": "新しいプロジェクトを作成するか、既存のプロジェクトを選択します。",
+          "step4": "生成されたAPIキーをコピーし、このアプリのAPI設定ページに貼り付けます。"
+        },
+        "claude": {
+          "title": "Claude APIキーの取得方法",
+          "step1": "Anthropic Console（https://console.anthropic.com/）にアクセスし、アカウントを作成またはログインします。",
+          "step2": "「API Keys」セクションに移動します。",
+          "step3": "「Create Key」ボタンをクリックして新しいAPIキーを生成します。",
+          "step4": "生成されたAPIキーをコピーし、このアプリのAPI設定ページに貼り付けます。"
+        },
+        "important": {
+          "title": "重要な注意事項",
+          "1": "APIキーは他人に共有しないでください。悪用される可能性があります。",
+          "2": "APIキーを紛失した場合は、すぐに無効化して新しいキーを生成してください。",
+          "3": "API使用には料金が発生する場合があります。各プロバイダーの料金体系を確認してください。",
+          "4": "このアプリはAPIキーを暗号化してデータベースに保存します。"
+        }
+      }
+    },
+    "tutorial": {
+      "basic": {
+        "title": "基本的な使い方",
+        "step1": {
+          "title": "ログイン",
+          "description": "Manusアカウントでログインします。"
+        },
+        "step2": {
+          "title": "API設定",
+          "description": "ヘッダーの「API設定」ボタンをクリックし、OpenAI、Gemini、またはClaudeのAPIキーを設定します。"
+        },
+        "step3": {
+          "title": "職務経歴書の入力",
+          "description": "「職務経歴書」欄にあなたの職務経歴書を入力するか、PDF/Wordファイルをアップロードします。"
+        },
+        "step4": {
+          "title": "求人情報の入力",
+          "description": "「求人情報」欄に応募したい求人情報を入力するか、PDF/Word/画像ファイルをアップロードします。"
+        },
+        "step5": {
+          "title": "出力項目の選択",
+          "description": "生成したい項目（職務要約、志望動機、自己PR、なぜ御社か）を選択します。カスタム項目を追加することも可能です。"
+        },
+        "step6": {
+          "title": "文字数の設定",
+          "description": "各項目の文字数を指定します（オプション）。"
+        },
+        "step7": {
+          "title": "生成開始",
+          "description": "「生成」ボタンをクリックして、AIによる文書生成を開始します。"
+        },
+        "step8": {
+          "title": "結果の確認とダウンロード",
+          "description": "生成された文書を確認し、必要に応じてコピーやダウンロードを行います。"
+        }
+      },
+      "advanced": {
+        "title": "高度な使い方",
+        "template": {
+          "title": "テンプレートの使用",
+          "description": "業界別・職種別テンプレートを選択すると、より専門的な文書を生成できます。また、マイテンプレートページで独自のテンプレートを作成・管理できます。"
+        },
+        "multiple": {
+          "title": "複数パターン生成",
+          "description": "生成ボタンの横にある「複数パターン生成」ボタンをクリックすると、2〜5個の異なる表現パターンを生成できます。各パターンにはAI評価スコアが表示されるため、最適なものを選択できます。"
+        },
+        "favorite": {
+          "title": "お気に入りの活用",
+          "description": "気に入ったパターンをお気に入りに保存し、後で見返したり比較したりできます。お気に入りページでは、複数のパターンを並べて比較し、差異をハイライト表示できます。"
+        },
+        "english": {
+          "title": "英語変換",
+          "description": "生成された日本語の文書を英語に変換できます。「英語に変換」ボタンをクリックすると、英語圏の履歴書フォーマットに最適化された英語版が生成されます。"
+        }
+      }
+    },
+    "tips": {
+      "notes": {
+        "title": "注意事項",
+        "1": {
+          "title": "APIキーの管理",
+          "description": "APIキーは他人に共有しないでください。また、定期的に更新することをおすすめします。"
+        },
+        "2": {
+          "title": "API使用料金",
+          "description": "OpenAI、Gemini、ClaudeのAPIは使用量に応じて料金が発生します。各プロバイダーの料金体系を確認してください。"
+        },
+        "3": {
+          "title": "生成内容の確認",
+          "description": "AIが生成した文書は必ず内容を確認し、必要に応じて修正してください。AIは完璧ではありません。"
+        },
+        "4": {
+          "title": "個人情報の取り扱い",
+          "description": "入力した職務経歴書や求人情報は、AIプロバイダーのAPIに送信されます。機密情報を含む場合は注意してください。"
+        }
+      },
+      "effective": {
+        "title": "効果的な使い方のTips",
+        "1": {
+          "title": "詳細な職務経歴書を入力",
+          "description": "職務経歴書には、具体的な業務内容、成果、使用したツールやスキルを詳しく記載すると、より質の高い文書が生成されます。"
+        },
+        "2": {
+          "title": "求人情報を正確に入力",
+          "description": "求人情報には、求められるスキル、経験、業務内容を詳しく記載すると、より求人に適合した文書が生成されます。"
+        },
+        "3": {
+          "title": "複数パターンを比較",
+          "description": "複数パターン生成機能を使用して、異なる表現を比較することで、最適な文書を選択できます。"
+        },
+        "4": {
+          "title": "テンプレートを活用",
+          "description": "業界別・職種別テンプレートを使用すると、より専門的な文書を生成できます。また、よく使う表現をマイテンプレートに保存しておくと効率的です。"
+        },
+        "5": {
+          "title": "お気に入りを活用",
+          "description": "気に入ったパターンをお気に入りに保存し、後で見返したり比較したりすることで、より良い文書を作成できます。"
+        }
+      },
+      "faq": {
+        "title": "よくある質問",
+        "1": {
+          "question": "APIキーを設定しないと使えませんか？",
+          "answer": "はい、このアプリはOpenAI、Gemini、またはClaudeのAPIキーが必要です。APIキーを設定しないとAI機能を使用できません。"
+        },
+        "2": {
+          "question": "生成された文書はどこに保存されますか？",
+          "answer": "生成された文書は履歴として自動的に保存されます。履歴ページで過去の生成結果を確認できます。"
+        },
+        "3": {
+          "question": "複数の求人に同時に応募できますか？",
+          "answer": "現在は1つの求人に対して1つの文書を生成する仕様ですが、今後のアップデートでバッチ一括応募機能を追加予定です。"
+        },
+        "4": {
+          "question": "生成された文書を編集できますか？",
+          "answer": "はい、生成された文書はコピーしてテキストエディタで編集できます。また、個別項目の再生成も可能です。"
+        },
+        "5": {
+          "question": "英語の職務経歴書を生成できますか？",
+          "answer": "はい、英語変換機能を使用して、生成された日本語の文書を英語に変換できます。"
+        }
+      }
+    }
   },
   "apiSettings": {
     "title": "API設定",
-    "description": "AI機能を使用するには、以下のいずれかのAPIキーを設定してください。",
-    "provider": "AIプロバイダー",
-    "selectProvider": "プロバイダーを選択",
+    "description": "OpenAI、Gemini、またはClaudeのAPIキーを設定してください。",
+    "provider": "メインプロバイダー",
+    "selectProvider": "プロバイダーを選択...",
     "apiKey": "APIキー",
     "apiKeyPlaceholder": "APIキーを入力してください",
-    "howToGet": "取得方法",
+    "howToGet": "APIキーの取得方法",
     "save": "保存",
     "delete": "削除",
     "saved": "APIキーを保存しました",
     "deleted": "APIキーを削除しました",
-    "error": "エラーが発生しました"
+    "error": "エラーが発生しました",
+    "openai": "OpenAI",
+    "gemini": "Gemini",
+    "claude": "Claude",
+    "openaiKey": "OpenAI APIキー",
+    "geminiKey": "Gemini APIキー",
+    "claudeKey": "Claude APIキー (Coming Soon)",
+    "keyPlaceholder": "APIキーを入力...",
+    "openaiLink": "OpenAI APIキーを取得",
+    "geminiLink": "Gemini APIキーを取得",
+    "claudeLink": "Claude APIキーを取得",
+    "toast": {
+      "saved": "API設定を保存しました",
+      "saveFailed": "保存に失敗しました"
+    },
+    "loginRequired": "ログインが必要です",
+    "loginDescription": "ご利用にはManusアカウントでのログインが必要です",
+    "loginButton": "ログインして開始",
+    "header": {
+      "title": "職務経歴書最適化ツール",
+      "backHome": "ホームに戻る"
+    },
+    "selectProviderLabel": "AIプロバイダーを選択",
+    "openaiDescription": "GPT-4, GPT-3.5など",
+    "geminiDescription": "Gemini Pro, Gemini Ultraなど",
+    "claudeDescription": "Claude 3 Opus, Claude 3 Sonnetなど",
+    "apiKeyLabel": "{{provider}} APIキー",
+    "getApiKey": "APIキーを取得",
+    "apiKeyPlaceholderFull": "{{provider}} APIキーを入力してください",
+    "apiKeyStorage": "APIキーはブラウザのlocalStorageに安全に保存されます",
+    "howToGetTitle": "APIキーの取得方法",
+    "openaiSteps": {
+      "step1": "にアクセス",
+      "step2": "「Create new secret key」をクリック",
+      "step3": "生成されたAPIキーをコピーして上記に貼り付け"
+    },
+    "geminiSteps": {
+      "step1": "にアクセス",
+      "step2": "「Get API key」をクリック",
+      "step3": "生成されたAPIキーをコピーして上記に貼り付け"
+    },
+    "claudeSteps": {
+      "step1": "にアクセス",
+      "step2": "「Create Key」をクリック",
+      "step3": "生成されたAPIキーをコピーして上記に貼り付け"
+    },
+    "warning": "注意: APIキーは第三者に共有しないでください。APIキーを使用すると、プロバイダーから料金が発生する場合があります。",
+    "toastEnterApiKey": "APIキーを入力してください"
   },
   "history": {
     "title": "生成履歴",
@@ -189,13 +495,47 @@
     "helpMessage": "ガイドページに各プロバイダーのAPIキー取得方法を詳しく説明しています。"
   },
   "favorites": {
-    "title": "お気に入り",
-    "noFavorites": "お気に入りがありません",
+    "title": "お気に入りパターン",
+    "noFavorites": "お気に入りパターンがありません",
     "createdAt": "作成日時: {{date}}",
     "view": "詳細を見る",
     "delete": "削除",
     "compare": "比較",
-    "selectToCompare": "比較するアイテムを選択してください（2つ以上）"
+    "selectToCompare": "比較するアイテムを選択してください（2つ以上）",
+    "loginRequired": "ログインが必要です",
+    "loginDescription": "ご利用にはManusアカウントでのログインが必要です",
+    "loginButton": "ログインして開始",
+    "compareMode": "比較モード",
+    "compareModeEnd": "比較モード終了",
+    "selectedCount": "{{count}}件選択中",
+    "evaluationScore": "評価スコア: {{score}}点",
+    "compareTitle": "パターン比較 ({{count}}件)",
+    "differenceRate": "差異率: {{rate}}%",
+    "patternDetails": "パターン詳細",
+    "selectPattern": "左側からパターンを選択してください",
+    "name": "名前",
+    "notes": "メモ",
+    "generatedContent": "生成内容",
+    "edit": "編集",
+    "copy": "コピー",
+    "editDialog": {
+      "title": "お気に入りパターンを編集",
+      "name": "名前",
+      "notes": "メモ",
+      "save": "保存",
+      "cancel": "キャンセル"
+    },
+    "toast": {
+      "deleted": "お気に入りパターンを削除しました",
+      "updated": "お気に入りパターンを更新しました",
+      "copied": "コピーしました",
+      "deleteFailed": "削除に失敗しました",
+      "updateFailed": "更新に失敗しました"
+    },
+    "confirm": {
+      "delete": "このお気に入りパターンを削除しますか？"
+    },
+    "noFavoritesDescription": "生成結果画面でお気に入りに追加してください"
   },
   "template": {
     "systemTemplate": "システムテンプレート",
@@ -228,7 +568,7 @@
     "createdAt": "作成日時: {{date}}"
   },
   "footer": {
-    "description": "AI技術を活用して職務経歴書の作成を支援するWebアプリケーション",
+    "description": "AI技術を活用して職務経歴書を求人情報に最適化するWebアプリケーション",
     "links": "リンク",
     "home": "ホーム",
     "guide": "ガイド・チュートリアル",
@@ -238,13 +578,13 @@
     "privacy": "プライバシーポリシー",
     "terms": "利用規約",
     "adsenseGuide": "AdSense申請ガイド",
-    "author": "製作者・著作権情報",
-    "twitter": "Twitter: @kojima920",
-    "email": "問い合わせ: mk19830920@gmail.com",
+    "author": "製作者・寄付情報",
+    "twitter": "製作者",
+    "email": "問い合わせ",
     "donation": "寄付先",
-    "paypay": "PayPayID: kojima1459",
+    "paypay": "PayPayID",
     "donationMessage": "★寄付頂けると励みになる為よりよい良いアプリ開発の為にご寄付を★",
-    "copyright": "© 2025 AI職務経歴書最適化メイカー. All rights reserved.",
+    "copyright": "© {{year}} {{title}}. All rights reserved.",
     "madeWith": "Made with ❤️ by"
   },
   "toast": {
@@ -296,5 +636,57 @@
     "ok": "OK",
     "yes": "はい",
     "no": "いいえ"
+  },
+  "announcement": {
+    "title": "今後の機能追加予定",
+    "description": "より便利で使いやすいサービスを目指して、以下の機能を実装予定です。",
+    "feature1": {
+      "title": "AIによる職務経歴書の添削・スコアリング機能",
+      "description": "現在の職務経歴書を分析して、改善点を具体的に指摘。「読みやすさ」「具体性」「インパクト」などの項目別スコアを表示します。"
+    },
+    "feature2": {
+      "title": "AI面接対策機能（無料！）",
+      "description": "求人情報と職務経歴書からAIが想定質問を自動生成し、あなたの経歴に基づいた回答例を提示します。面接前の準備が効率的に行えます。"
+    },
+    "feature3": {
+      "title": "LinkedIn人材検索機能",
+      "description": "LinkedIn APIを使用して企業情報や人材情報を取得し、あなたの職務経歴書に基づいて関連企業を提案します。転職先の発見がスムーズになります。"
+    },
+    "feature4": {
+      "title": "バッチ一括応募機能",
+      "description": "複数企業への応募を一括で行える機能。求人情報を選択し、最適化された職務経歴書を自動で送信します。比較を3社以上に同時応募でき、転職活動を大幅に効率化します。"
+    },
+    "feature5": {
+      "title": "職務経歴書のビフォー・アフター比較機能",
+      "description": "最適化前と最適化後の職務経歴書を並べて比較表示。どこが改善されたかが一目瞭然です。"
+    },
+    "feature6": {
+      "title": "業界別テンプレート集",
+      "description": "IT、営業、事務、クリエイティブなど、業界別に最適化されたテンプレートを提供します。"
+    },
+    "feature7": {
+      "title": "SNSシェア機能",
+      "description": "生成した職務経歴書の一部をTwitter/LinkedInでシェアして、フィードバックを受け取れます。"
+    },
+    "feature8": {
+      "title": "プレミアムプラン（サブスクリプション）",
+      "description": "月額課金で、無制限の生成回数、優先サポート、独自テンプレート作成などの特典を提供します。"
+    },
+    "priority": {
+      "high": "優先度: 高",
+      "medium": "優先度: 中",
+      "low": "優先度: 低"
+    },
+    "status": {
+      "implemented": "実装済み",
+      "inProgress": "開発中",
+      "planned": "予定"
+    },
+    "schedule": {
+      "title": "実装スケジュール",
+      "description": "優先度の高い機能から順次実装していきます。実装完了次第、お知らせいたします。"
+    },
+    "dismissForever": "今後表示しない",
+    "close": "閉じる"
   }
 }
