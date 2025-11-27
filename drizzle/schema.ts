@@ -122,3 +122,80 @@ export const favoritePatterns = mysqlTable("favoritePatterns", {
 export type FavoritePattern = typeof favoritePatterns.$inferSelect;
 export type InsertFavoritePattern = typeof favoritePatterns.$inferInsert;
 
+/**
+ * 統計情報テーブル
+ * 日別の訪問者数、利用回数、API使用状況を記録
+ */
+export const analytics = mysqlTable("analytics", {
+  id: int("id").autoincrement().primaryKey(),
+  date: varchar("date", { length: 10 }).notNull(), // YYYY-MM-DD形式
+  uniqueVisitors: int("uniqueVisitors").notNull().default(0), // ユニークユーザー数
+  totalGenerations: int("totalGenerations").notNull().default(0), // 職務経歴書生成回数
+  openaiUsage: int("openaiUsage").notNull().default(0), // OpenAI API使用回数
+  geminiUsage: int("geminiUsage").notNull().default(0), // Gemini API使用回数
+  claudeUsage: int("claudeUsage").notNull().default(0), // Claude API使用回数
+  translationCount: int("translationCount").notNull().default(0), // 翻訳機能使用回数
+  errorCount: int("errorCount").notNull().default(0), // エラー発生回数
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type Analytics = typeof analytics.$inferSelect;
+export type InsertAnalytics = typeof analytics.$inferInsert;
+
+/**
+ * エラーログテーブル
+ * システムエラー、APIエラー、ユーザーエラーを記録
+ */
+export const errorLogs = mysqlTable("errorLogs", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId"), // エラーが発生したユーザー（匿名の場合はnull）
+  errorType: varchar("errorType", { length: 64 }).notNull(), // エラーの種類（api_error, validation_error, system_error）
+  errorMessage: text("errorMessage").notNull(), // エラーメッセージ
+  errorStack: text("errorStack"), // スタックトレース
+  requestPath: varchar("requestPath", { length: 255 }), // リクエストパス
+  userAgent: text("userAgent"), // ユーザーエージェント
+  ipAddress: varchar("ipAddress", { length: 45 }), // IPアドレス
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+export type ErrorLog = typeof errorLogs.$inferSelect;
+export type InsertErrorLog = typeof errorLogs.$inferInsert;
+
+/**
+ * 通知テーブル
+ * ユーザーへの通知を保存
+ */
+export const notifications = mysqlTable("notifications", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId"), // 通知対象ユーザー（全体通知の場合はnull）
+  type: mysqlEnum("type", ["success", "error", "warning", "info"]).notNull(), // 通知の種類
+  title: varchar("title", { length: 255 }).notNull(), // 通知タイトル
+  message: text("message").notNull(), // 通知メッセージ
+  actionLabel: varchar("actionLabel", { length: 64 }), // アクションボタンのラベル
+  actionUrl: varchar("actionUrl", { length: 255 }), // アクションボタンのURL
+  isRead: int("isRead").notNull().default(0), // 既読フラグ（0: 未読, 1: 既読）
+  expiresAt: timestamp("expiresAt"), // 通知の有効期限
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+export type Notification = typeof notifications.$inferSelect;
+export type InsertNotification = typeof notifications.$inferInsert;
+
+/**
+ * 不正利用検知テーブル
+ * 異常なアクセスパターンを記録
+ */
+export const abuseDetections = mysqlTable("abuseDetections", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId"), // 不正利用が疑われるユーザー
+  ipAddress: varchar("ipAddress", { length: 45 }).notNull(), // IPアドレス
+  detectionType: varchar("detectionType", { length: 64 }).notNull(), // 検知タイプ（rate_limit, suspicious_pattern）
+  requestCount: int("requestCount").notNull(), // リクエスト回数
+  timeWindow: int("timeWindow").notNull(), // 時間枠（秒）
+  isBlocked: int("isBlocked").notNull().default(0), // ブロック済みフラグ（0: 未ブロック, 1: ブロック済み）
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+export type AbuseDetection = typeof abuseDetections.$inferSelect;
+export type InsertAbuseDetection = typeof abuseDetections.$inferInsert;

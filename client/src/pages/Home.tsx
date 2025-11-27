@@ -110,7 +110,7 @@ export default function Home() {
     onSuccess: async (data) => {
       setGeneratedPatterns(data.patterns);
       setShowPatternDialog(true);
-      toast.success(`${data.patternCount}個のパターンを生成しました`);
+      toast.success(t('toast.generatedSuccess'));
       
       // 自動評価を並列実行
       setIsEvaluating(true);
@@ -144,13 +144,13 @@ export default function Home() {
         setPatternEvaluations(evaluations);
       } catch (error) {
         console.error('Parallel evaluation failed:', error);
-        toast.error('評価処理に失敗しました');
+        toast.error(t('toast.generatedError'));
       } finally {
         setIsEvaluating(false);
       }
     },
     onError: (error) => {
-      toast.error(error.message || "生成に失敗しました");
+      toast.error(error.message || t('toast.generatedError'));
     },
   });
 
@@ -158,19 +158,19 @@ export default function Home() {
     onSuccess: (data) => {
       setGeneratedContent(data);
       setEditedContent(data);
-      toast.success("生成が完了しました");
+      toast.success(t('toast.generatedSuccess'));
     },
     onError: (error) => {
-      toast.error(error.message || "生成に失敗しました");
+      toast.error(error.message || t('toast.generatedError'));
     },
   });
 
   const saveFavoriteMutation = trpc.favoritePattern.create.useMutation({
     onSuccess: () => {
-      toast.success("お気に入りに保存しました");
+      toast.success(t('toast.savedContent'));
     },
     onError: (error) => {
-      toast.error(error.message || "保存に失敗しました");
+      toast.error(error.message || t('toast.generatedError'));
     },
   });
 
@@ -178,10 +178,10 @@ export default function Home() {
     onSuccess: (data) => {
       setGeneratedContent(data);
       setEditedContent(data);
-      toast.success("テンプレートを使用して生成が完了しました");
+      toast.success(t('toast.generatedSuccess'));
     },
     onError: (error) => {
-      toast.error(error.message || "生成に失敗しました");
+      toast.error(error.message || t('toast.generatedError'));
     },
   });
 
@@ -189,10 +189,10 @@ export default function Home() {
     onSuccess: (data) => {
       setGeneratedContent(data);
       setEditedContent(data);
-      toast.success("マイテンプレートを使用して生成が完了しました");
+      toast.success(t('toast.generatedSuccess'));
     },
     onError: (error) => {
-      toast.error(error.message || "生成に失敗しました");
+      toast.error(error.message || t('toast.generatedError'));
     },
   });
 
@@ -200,10 +200,10 @@ export default function Home() {
     onSuccess: (data, variables) => {
       setGeneratedContent((prev) => ({ ...prev, [variables.item]: data.content }));
       setEditedContent((prev) => ({ ...prev, [variables.item]: data.content }));
-      toast.success("再生成が完了しました");
+      toast.success(t('toast.regenerateSuccess'));
     },
     onError: (error) => {
-      toast.error(error.message || "再生成に失敗しました");
+      toast.error(error.message || t('toast.regenerateError'));
     },
   });
 
@@ -224,30 +224,30 @@ export default function Home() {
         setCustomItems(data.customItems);
       }
       setShowHistory(false);
-      toast.success("履歴を読み込みました");
+      toast.success(t('toast.savedAutoSave'));
     } catch (error: any) {
-      toast.error(error.message || "履歴の読み込みに失敗しました");
+      toast.error(error.message || t('toast.fileUploadError'));
     }
   };
 
   const deleteHistoryMutation = trpc.resume.history.delete.useMutation({
     onSuccess: () => {
       historyQuery.refetch();
-      toast.success("履歴を削除しました");
+      toast.success(t('common.success'));
     },
     onError: (error) => {
-      toast.error(error.message || "削除に失敗しました");
+      toast.error(error.message || t('common.error'));
     },
   });
 
   const translateMutation = trpc.resume.translate.useMutation({
     onSuccess: (data, variables) => {
       setEditedContent((prev) => ({ ...prev, [`${variables.text.substring(0, 10)}_en`]: data.translation }));
-      toast.success("翻訳が完了しました");
+      toast.success(t('toast.translateSuccess'));
       setTranslatingItem(null);
     },
     onError: (error) => {
-      toast.error(error.message || "翻訳に失敗しました");
+      toast.error(error.message || t('toast.translateError'));
       setTranslatingItem(null);
     },
   });
@@ -256,7 +256,7 @@ export default function Home() {
 
   const handleGenerate = () => {
     if (!user) {
-      toast.error("ログインが必要です");
+      toast.error(t('toast.apiKeyRequired'));
       window.location.href = getLoginUrl();
       return;
     }
@@ -316,7 +316,7 @@ export default function Home() {
 
   const handleGenerateMultiple = () => {
     if (!user) {
-      toast.error("ログインが必要です");
+      toast.error(t('toast.apiKeyRequired'));
       window.location.href = getLoginUrl();
       return;
     }
@@ -412,7 +412,7 @@ export default function Home() {
 
   const handleCopy = (content: string) => {
     navigator.clipboard.writeText(content);
-    toast.success("コピーしました");
+    toast.success(t('toast.copiedItem'));
   };
 
   const handleCopyAll = () => {
@@ -425,12 +425,12 @@ export default function Home() {
       .join("\n\n");
 
     navigator.clipboard.writeText(allContent);
-    toast.success("全項目をコピーしました");
+    toast.success(t('toast.copiedAll'));
   };
 
   const handleAddCustomItem = () => {
     if (!newCustomLabel.trim()) {
-      toast.error("項目名を入力してください");
+      toast.error(t('toast.inputRequired'));
       return;
     }
 
@@ -442,7 +442,7 @@ export default function Home() {
     setSelectedItems((prev) => [...prev, key]);
     setNewCustomLabel("");
     setNewCustomCharLimit("400");
-    toast.success("カスタム項目を追加しました");
+    toast.success(t('toast.customItemAdded'));
   };
 
   const handleRemoveCustomItem = (key: string) => {
@@ -451,7 +451,7 @@ export default function Home() {
     const newCharLimits = { ...charLimits };
     delete newCharLimits[key];
     setCharLimits(newCharLimits);
-    toast.success("カスタム項目を削除しました");
+    toast.success(t('toast.customItemRemoved'));
   };
 
   const handleToggleItem = (key: string) => {
@@ -476,7 +476,7 @@ export default function Home() {
       toast.success(data.isFavorite ? "お気に入りに登録しました" : "お気に入りを解除しました");
     },
     onError: (error) => {
-      toast.error(error.message || "お気に入りの更新に失敗しました");
+      toast.error(error.message || t('common.error'));
     },
   });
 
@@ -492,9 +492,9 @@ export default function Home() {
     try {
       const text = await extractTextFromFile(file);
       setResumeText(text);
-      toast.success("ファイルを読み込みました");
+      toast.success(t('toast.fileUploaded'));
     } catch (error: any) {
-      toast.error(error.message || "ファイルの読み込みに失敗しました");
+      toast.error(error.message || t('toast.fileUploadError'));
     } finally {
       setIsUploadingResume(false);
       e.target.value = "";
@@ -514,9 +514,9 @@ export default function Home() {
           setOcrProgress(progress);
         });
         setJobDescription(text);
-        toast.success("画像からテキストを抽出しました");
+        toast.success(t('toast.ocrSuccess'));
       } catch (error: any) {
-        toast.error(error.message || "OCR処理に失敗しました");
+        toast.error(error.message || t('toast.ocrError'));
       } finally {
         setIsProcessingOcr(false);
         setOcrProgress(0);
@@ -530,9 +530,9 @@ export default function Home() {
     try {
       const text = await extractTextFromFile(file);
       setJobDescription(text);
-      toast.success("ファイルを読み込みました");
+      toast.success(t('toast.fileUploaded'));
     } catch (error: any) {
-      toast.error(error.message || "ファイルの読み込みに失敗しました");
+      toast.error(error.message || t('toast.fileUploadError'));
     } finally {
       setIsUploadingJob(false);
       e.target.value = "";
@@ -545,7 +545,7 @@ export default function Home() {
 
     const text = editedContent[itemKey] || generatedContent[itemKey];
     if (!text) {
-      toast.error("翻訳するテキストがありません");
+      toast.error(t('toast.noContentToCopy'));
       return;
     }
 
@@ -567,9 +567,9 @@ export default function Home() {
 
       const blob = await exportToWord(editedContent, itemsToExport);
       downloadBlob(blob, "職務経歴書.docx");
-      toast.success("Wordファイルをダウンロードしました");
+      toast.success(t('toast.downloadedWord'));
     } catch (error: any) {
-      toast.error(error.message || "ダウンロードに失敗しました");
+      toast.error(error.message || t('toast.downloadError'));
     }
   };
 
@@ -584,9 +584,9 @@ export default function Home() {
 
       const doc = exportToPDF(editedContent, itemsToExport);
       doc.save("職務経歴書.pdf");
-      toast.success("PDFファイルをダウンロードしました");
+      toast.success(t('toast.downloadedPdf'));
     } catch (error: any) {
-      toast.error(error.message || "ダウンロードに失敗しました");
+      toast.error(error.message || t('toast.downloadError'));
     }
   };
 
@@ -601,9 +601,9 @@ export default function Home() {
 
       const blob = exportToText(editedContent, itemsToExport);
       downloadBlob(blob, "職務経歴書.txt");
-      toast.success("テキストファイルをダウンロードしました");
+      toast.success(t('toast.downloadedText'));
     } catch (error: any) {
-      toast.error(error.message || "ダウンロードに失敗しました");
+      toast.error(error.message || t('toast.downloadError'));
     }
   };
 
@@ -618,9 +618,9 @@ export default function Home() {
 
       const blob = exportToMarkdown(editedContent, itemsToExport);
       downloadBlob(blob, "職務経歴書.md");
-      toast.success("Markdownファイルをダウンロードしました");
+      toast.success(t('toast.downloadedMarkdown'));
     } catch (error: any) {
-      toast.error(error.message || "ダウンロードに失敗しました");
+      toast.error(error.message || t('toast.downloadError'));
     }
   };
 
@@ -648,14 +648,14 @@ export default function Home() {
       setShareDialogText(text);
       setShowShareDialog(true);
     } catch (error: any) {
-      toast.error(error.message || "シェアに失敗しました");
+      toast.error(error.message || t('toast.shareError'));
     }
   };
 
   const handleConfirmShare = (text: string) => {
     if (navigator.clipboard && navigator.clipboard.writeText) {
       navigator.clipboard.writeText(text).then(() => {
-        toast.success("シェア用テキストをクリップボードにコピーしました");
+        toast.success(t('toast.sharedLinkedIn'));
       }).catch((err) => {
         console.error('Failed to copy text:', err);
       });
@@ -672,11 +672,11 @@ export default function Home() {
       ctrl: true,
       callback: () => {
         if (!resumeText.trim() || !jobDescription.trim() || selectedItems.length === 0 || generateMutation.isPending) {
-          toast.error("生成するには、職務経歴書、求人情報、出力項目を入力してください");
+          toast.error(t('toast.inputRequired'));
           return;
         }
         handleGenerate();
-        toast.success("ショートカット: Ctrl+Enter");
+        toast.success(t('toast.shortcutGenerate'));
       },
       description: '生成開始',
     },
@@ -686,11 +686,11 @@ export default function Home() {
       shift: true,
       callback: () => {
         if (Object.keys(generatedContent).length === 0) {
-          toast.error("コピーするコンテンツがありません");
+          toast.error(t('toast.noContentToCopy'));
           return;
         }
         handleCopyAll();
-        toast.success("ショートカット: Ctrl+Shift+C");
+        toast.success(t('toast.shortcutCopyAll'));
       },
       description: '全項目をコピー',
     },
@@ -720,7 +720,7 @@ export default function Home() {
         setSelectedItems(savedData.selectedItems);
         setCharLimits(savedData.charLimits);
         setCustomItems(savedData.customItems);
-        toast.success('保存データを復元しました');
+        toast.success(t('toast.savedAutoSave'));
       } else {
         clearData();
       }
@@ -779,17 +779,17 @@ export default function Home() {
         <Card className="w-full max-w-md">
           <CardHeader className="text-center">
             <FileText className="h-12 w-12 mx-auto mb-4 text-primary" />
-            <CardTitle className="text-2xl">職務経歴書最適化ツール</CardTitle>
+            <CardTitle className="text-2xl">{t('home.title')}</CardTitle>
             <p className="text-muted-foreground mt-2">
-              求人情報に合わせて、あなたの職務経歴書を最適化します
+              {t('home.subtitle')}
             </p>
           </CardHeader>
           <CardContent className="text-center">
             <p className="text-sm text-muted-foreground mb-4">
-              ご利用にはManusアカウントでのログインが必要です
+              {t('home.loginRequired')}
             </p>
             <Button asChild className="w-full">
-              <a href={getLoginUrl()}>ログインして開始</a>
+              <a href={getLoginUrl()}>{t('home.loginButton')}</a>
             </Button>
           </CardContent>
         </Card>
@@ -849,10 +849,10 @@ export default function Home() {
           <div className="flex items-center gap-2 md:gap-3">
             <FileText className="h-8 w-8 md:h-10 md:w-10 text-primary" />
             <div>
-              <h1 className="text-xl md:text-3xl font-bold text-gray-900 dark:text-gray-100">職務経歴書最適化ツール</h1>
+              <h1 className="text-xl md:text-3xl font-bold text-gray-900 dark:text-gray-100">{t('home.title')}</h1>
               {lastSaved && (
                 <p className="text-xs text-muted-foreground mt-1">
-                  {isSaving ? '保存中...' : `最終保存: ${lastSaved.toLocaleTimeString('ja-JP')}`}
+                  {isSaving ? t('header.saving') : t('header.lastSaved', { time: lastSaved.toLocaleTimeString() })}
                 </p>
               )}
             </div>
@@ -863,7 +863,7 @@ export default function Home() {
               size="icon"
               onClick={() => setShowAnnouncement(true)}
               className="flex-none relative"
-              title="お知らせ"
+              title={t('header.announcements')}
             >
               <Bell className="h-4 w-4" />
               <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center">7</span>
@@ -874,7 +874,7 @@ export default function Home() {
               size="icon"
               onClick={toggleTheme}
               className="flex-none"
-              title="テーマ切り替え"
+              title={t('header.theme')}
             >
               {theme === 'dark' ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
             </Button>
@@ -883,7 +883,7 @@ export default function Home() {
               size="icon"
               onClick={() => setShowShortcutHelp(true)}
               className="flex-none"
-              title="キーボードショートカット (Shift+?)"
+              title={t('header.shortcuts')}
             >
               <span className="text-lg font-bold">?</span>
             </Button>
@@ -895,7 +895,7 @@ export default function Home() {
             >
               <a href="/guide">
                 <FileText className="h-4 w-4 mr-2" />
-                <span className="hidden sm:inline">ガイド</span>
+                <span className="hidden sm:inline">{t('header.guide')}</span>
               </a>
             </Button>
             <Button
@@ -906,13 +906,13 @@ export default function Home() {
             >
               <a href="/favorites">
                 <Star className="h-4 w-4 mr-2" />
-                <span className="hidden sm:inline">お気に入り</span>
+                <span className="hidden sm:inline">{t('header.favorites')}</span>
               </a>
             </Button>
             <Button variant="outline" size="sm" asChild>
               <a href="/api-settings">
                 <SettingsIcon className="h-4 w-4 mr-2" />
-                <span className="hidden sm:inline">API設定</span>
+                <span className="hidden sm:inline">{t('header.apiSettings')}</span>
               </a>
             </Button>
             {lastSaved && (
@@ -925,17 +925,17 @@ export default function Home() {
                   }
                 }}
                 className="flex-none"
-                title="保存データをクリア"
+                title={t('header.clear')}
               >
                 <X className="h-4 w-4 mr-2" />
-                <span className="hidden sm:inline">クリア</span>
+                <span className="hidden sm:inline">{t('header.clear')}</span>
               </Button>
             )}
             <Dialog open={showHistory} onOpenChange={setShowHistory}>
               <DialogTrigger asChild>
                 <Button variant="outline" className="flex-1 sm:flex-none">
                   <History className="h-4 w-4 mr-2" />
-                  <span className="hidden sm:inline">履歴</span>
+                  <span className="hidden sm:inline">{t('header.history')}</span>
                 </Button>
               </DialogTrigger>
               <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto">
@@ -1172,9 +1172,9 @@ export default function Home() {
                   try {
                     const text = await extractTextFromFile(file);
                     setResumeText(text);
-                    toast.success("ファイルをドロップして読み込みました");
+                    toast.success(t('toast.fileDropped'));
                   } catch (error: any) {
-                    toast.error(error.message || "ファイルの読み込みに失敗しました");
+                    toast.error(error.message || t('toast.fileUploadError'));
                   } finally {
                     setIsUploadingResume(false);
                   }
@@ -1248,9 +1248,9 @@ export default function Home() {
                         setOcrProgress(progress);
                       });
                       setJobDescription(text);
-                      toast.success("画像からテキストを抽出しました");
+                      toast.success(t('toast.ocrSuccess'));
                     } catch (error: any) {
-                      toast.error(error.message || "画像の読み込みに失敗しました");
+                      toast.error(error.message || t('toast.ocrError'));
                     } finally {
                       setIsProcessingOcr(false);
                       setOcrProgress(0);
@@ -1260,9 +1260,9 @@ export default function Home() {
                     try {
                       const text = await extractTextFromFile(file);
                       setJobDescription(text);
-                      toast.success("ファイルをドロップして読み込みました");
+                      toast.success(t('toast.fileDropped'));
                     } catch (error: any) {
-                      toast.error(error.message || "ファイルの読み込みに失敗しました");
+                      toast.error(error.message || t('toast.fileUploadError'));
                     } finally {
                       setIsUploadingJob(false);
                     }
@@ -1425,35 +1425,35 @@ export default function Home() {
           <Card>
             <CardHeader>
               <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
-                <CardTitle>生成結果</CardTitle>
+                <CardTitle>{t('home.result')}</CardTitle>
                 <div className="flex flex-wrap gap-1.5">
                   <Button onClick={handleCopyAll} variant="outline" size="sm" className="text-xs">
                     <Copy className="h-3.5 w-3.5 mr-1.5" />
-                    コピー
+                    {t('home.copyAll')}
                   </Button>
                   <Button onClick={handleDownloadWord} variant="outline" size="sm" className="text-xs">
                     <Download className="h-3.5 w-3.5 mr-1.5" />
-                    Word
+                    {t('home.downloadWord')}
                   </Button>
                   <Button onClick={handleDownloadPDF} variant="outline" size="sm" className="text-xs">
                     <Download className="h-3.5 w-3.5 mr-1.5" />
-                    PDF
+                    {t('home.downloadPdf')}
                   </Button>
                   <Button onClick={handleDownloadText} variant="outline" size="sm" className="text-xs">
                     <Download className="h-3.5 w-3.5 mr-1.5" />
-                    テキスト
+                    {t('home.downloadText')}
                   </Button>
                   <Button onClick={handleDownloadMarkdown} variant="outline" size="sm" className="text-xs">
                     <Download className="h-3.5 w-3.5 mr-1.5" />
-                    Markdown
+                    {t('home.downloadMarkdown')}
                   </Button>
                   <Button onClick={handleShareToLinkedIn} variant="outline" size="sm" className="bg-[#0A66C2] text-white hover:bg-[#0A66C2]/90 text-xs">
                     <Share2 className="h-3.5 w-3.5 mr-1.5" />
-                    LinkedIn
+                    {t('home.shareLinkedIn')}
                   </Button>
                   <Button onClick={() => setShowEnglishConversion(true)} variant="outline" size="sm" className="bg-green-600 text-white hover:bg-green-700 text-xs">
                     <Languages className="h-3.5 w-3.5 mr-1.5" />
-                    英語に変換
+                    {t('home.convertToEnglish')}
                   </Button>
                 </div>
               </div>
