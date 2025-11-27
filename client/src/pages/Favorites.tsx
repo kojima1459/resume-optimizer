@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useAuth } from "@/_core/hooks/useAuth";
+import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogDescription } from "@/components/ui/dialog";
@@ -15,6 +16,7 @@ import { getLoginUrl } from "@/const";
 import Footer from "@/components/Footer";
 
 export default function Favorites() {
+  const { t } = useTranslation();
   const { user, loading: authLoading } = useAuth();
   const [selectedPattern, setSelectedPattern] = useState<number | null>(null);
   const [showEditDialog, setShowEditDialog] = useState(false);
@@ -34,29 +36,29 @@ export default function Favorites() {
 
   const deleteMutation = trpc.favoritePattern.delete.useMutation({
     onSuccess: () => {
-      toast.success("お気に入りパターンを削除しました");
+      toast.success(t('favorites.toast.deleted'));
       favoritesQuery.refetch();
       setSelectedPattern(null);
     },
     onError: (error) => {
-      toast.error(error.message || "削除に失敗しました");
+      toast.error(error.message || t('favorites.toast.deleteFailed'));
     },
   });
 
   const updateMutation = trpc.favoritePattern.update.useMutation({
     onSuccess: () => {
-      toast.success("お気に入りパターンを更新しました");
+      toast.success(t('favorites.toast.updated'));
       favoritesQuery.refetch();
       patternQuery.refetch();
       setShowEditDialog(false);
     },
     onError: (error) => {
-      toast.error(error.message || "更新に失敗しました");
+      toast.error(error.message || t('favorites.toast.updateFailed'));
     },
   });
 
   const handleDelete = (id: number) => {
-    if (confirm("このお気に入りパターンを削除しますか？")) {
+    if (confirm(t('favorites.deleteConfirm'))) {
       deleteMutation.mutate({ id });
     }
   };
@@ -79,7 +81,7 @@ export default function Favorites() {
 
   const handleCopyContent = (content: string) => {
     navigator.clipboard.writeText(content);
-    toast.success("コピーしました");
+    toast.success(t('favorites.toast.copied'));
   };
 
   if (authLoading) {
@@ -96,14 +98,14 @@ export default function Favorites() {
         <div className="container max-w-md">
           <Card>
             <CardHeader>
-              <CardTitle>ログインが必要です</CardTitle>
+              <CardTitle>{t('favorites.loginRequired')}</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <p className="text-muted-foreground">
-                ご利用にはManusアカウントでのログインが必要です
+                {t('favorites.loginDescription')}
               </p>
               <Button asChild className="w-full">
-                <a href={getLoginUrl()}>ログインして開始</a>
+                <a href={getLoginUrl()}>{t('favorites.loginButton')}</a>
               </Button>
             </CardContent>
           </Card>
@@ -123,7 +125,7 @@ export default function Favorites() {
           </Button>
           <div className="flex items-center gap-2">
             <Star className="h-8 w-8 md:h-10 md:w-10 text-yellow-500" />
-            <h1 className="text-xl md:text-3xl font-bold text-gray-900">お気に入りパターン</h1>
+            <h1 className="text-xl md:text-3xl font-bold text-gray-900">{t('favorites.title')}</h1>
           </div>
         </div>
 
@@ -144,11 +146,11 @@ export default function Favorites() {
                     setSelectedForCompare([]);
                   }}
                 >
-                  {compareMode ? "比較モード終了" : "比較モード"}
+                  {compareMode ? t('favorites.compareModeEnd') : t('favorites.compareMode')}
                 </Button>
                 {compareMode && selectedForCompare.length > 0 && (
                   <span className="text-sm text-muted-foreground">
-                    {selectedForCompare.length}件選択中
+                    {t('favorites.selectedCount', { count: selectedForCompare.length })}
                   </span>
                 )}
               </div>
@@ -180,7 +182,7 @@ export default function Favorites() {
                         <h3 className="font-semibold text-lg mb-1">{pattern.name}</h3>
                         {pattern.evaluationScore && (
                           <div className="text-sm text-blue-600 font-semibold">
-                            評価スコア: {pattern.evaluationScore}点
+                            {t('favorites.evaluationScore', { score: pattern.evaluationScore })}
                           </div>
                         )}
                         <p className="text-xs text-muted-foreground mt-2">
@@ -343,7 +345,7 @@ export default function Favorites() {
                   <CardContent className="flex flex-col items-center justify-center py-12">
                     <FileText className="h-16 w-16 text-gray-300 mb-4" />
                     <p className="text-muted-foreground">
-                      左側からパターンを選択してください
+                      {t('favorites.selectPattern')}
                     </p>
                   </CardContent>
                 </Card>

@@ -235,3 +235,51 @@
 - [ ] 全ページで日本語表示の確認
 - [ ] 全ページで英語表示の確認
 - [ ] チェックポイント保存
+
+## フェーズ53: 残りのページとHome.tsxフォーム要素の翻訳対応（最優先）
+
+### Favorites.tsxの翻訳対応
+- [x] ページタイトルとヘッダー
+- [x] フィルター、検索、ソート機能
+- [x] お気に入りリストの表示
+- [x] ボタンとアクション
+
+### Privacy.tsxの翻訳対応
+- [ ] プライバシーポリシーの全文
+- [ ] セクション見出しと内容
+
+### Terms.tsxの翻訳対応
+- [ ] 利用規約の全文
+- [ ] セクション見出しと内容
+
+### MyTemplates.tsxの翻訳対応
+- [ ] テンプレート管理画面の全要素
+- [ ] フォーム、ボタン、メッセージ
+
+### Home.tsxのメインフォーム要素の翻訳対応
+- [x] "Input Information" セクション
+- [x] "Resume" ラベルとプレースホルダー
+- [x] "Job Posting" ラベルとプレースホルダー
+- [x] "Select Template (Optional)" セクション
+- [x] "Select Output Items" セクション
+- [x] "Add Custom Item" セクション
+- [x] "Character Settings" セクション
+- [x] "Generate" ボタン
+- [x] "Pattern count" 設定
+- [x] "Multiple pattern generation" テキスト
+
+### 英語切り替え時の全ページ検証
+- [x] Home.tsx の全要素を英語で確認
+- [x] Guide.tsx を英語で確認
+- [x] Favorites.tsx を英語で確認
+- [x] ApiSettings.tsx を英語で確認
+- [x] Privacy.tsx を英語で確認
+- [x] Terms.tsx を英語で確認
+- [x] MyTemplates.tsx を英語で確認
+- [x] AnnouncementDialog を英語で確認
+- [x] Footer を英語で確認
+
+### 最終確認とチェックポイント保存
+- [x] 全ページで翻訳漏れがないか確認
+- [x] 翻訳の品質確認
+- [x] チェックポイント保存

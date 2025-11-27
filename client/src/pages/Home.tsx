@@ -1329,7 +1329,7 @@ export default function Home() {
                         }
                         className="w-20"
                       />
-                      <span className="text-sm text-muted-foreground">文字</span>
+                      <span className="text-sm text-muted-foreground">{t('home.label.characters')}</span>
                     </div>
                   ))}
               </div>
@@ -1488,7 +1488,7 @@ export default function Home() {
                     />
                     <p className="text-sm text-muted-foreground mt-2">
                       {(editedContent[key] || generatedContent[key]).length} / {charLimits[key]}{" "}
-                      文字
+                      {t('home.label.characters')}
                     </p>
                   </div>
                 );
@@ -1558,7 +1558,7 @@ export default function Home() {
                     {patternEvaluations[index] && (
                       <div className="flex flex-col items-end">
                         <div className="text-2xl font-bold text-blue-600">
-                          {patternEvaluations[index].score}点
+                          {patternEvaluations[index].score}{t('home.label.score')}
                         </div>
                         <div className="text-xs text-muted-foreground">
                           {t('patterns.aiScore')}
@@ -1570,19 +1570,19 @@ export default function Home() {
                     <div className="mt-3 grid grid-cols-2 gap-2 text-sm">
                       <div className="flex justify-between">
                         <span className="text-muted-foreground">{t('patterns.relevance')}:</span>
-                        <span className="font-semibold">{patternEvaluations[index].details.relevance}点</span>
+                        <span className="font-semibold">{patternEvaluations[index].details.relevance}{t('home.label.score')}</span>
                       </div>
                       <div className="flex justify-between">
                         <span className="text-muted-foreground">{t('patterns.clarity')}:</span>
-                        <span className="font-semibold">{patternEvaluations[index].details.clarity}点</span>
+                        <span className="font-semibold">{patternEvaluations[index].details.clarity}{t('home.label.score')}</span>
                       </div>
                       <div className="flex justify-between">
                         <span className="text-muted-foreground">{t('patterns.impact')}:</span>
-                        <span className="font-semibold">{patternEvaluations[index].details.impact}点</span>
+                        <span className="font-semibold">{patternEvaluations[index].details.impact}{t('home.label.score')}</span>
                       </div>
                       <div className="flex justify-between">
                         <span className="text-muted-foreground">{t('patterns.completeness')}:</span>
-                        <span className="font-semibold">{patternEvaluations[index].details.completeness}点</span>
+                        <span className="font-semibold">{patternEvaluations[index].details.completeness}{t('home.label.score')}</span>
                       </div>
                     </div>
                   )}

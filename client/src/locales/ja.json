@@ -501,7 +501,7 @@
     "view": "詳細を見る",
     "delete": "削除",
     "compare": "比較",
-    "selectToCompare": "比較するアイテムを選択してください（2つ以上）",
+    "selectToCompare": "比較するパターンを選択してください",
     "loginRequired": "ログインが必要です",
     "loginDescription": "ご利用にはManusアカウントでのログインが必要です",
     "loginButton": "ログインして開始",
@@ -520,7 +520,7 @@
     "copy": "コピー",
     "editDialog": {
       "title": "お気に入りパターンを編集",
-      "name": "名前",
+      "name": "パターン名",
       "notes": "メモ",
       "save": "保存",
       "cancel": "キャンセル"
@@ -535,7 +535,10 @@
     "confirm": {
       "delete": "このお気に入りパターンを削除しますか？"
     },
-    "noFavoritesDescription": "生成結果画面でお気に入りに追加してください"
+    "noFavoritesDescription": "ホーム画面で生成したパターンをお気に入りに登録すると、ここに表示されます。",
+    "deleteConfirm": "このお気に入りパターンを削除しますか？",
+    "backToHome": "ホームに戻る",
+    "comparePatterns": "パターン比較"
   },
   "template": {
     "systemTemplate": "システムテンプレート",
@@ -688,5 +691,37 @@
     },
     "dismissForever": "今後表示しない",
     "close": "閉じる"
+  },
+  "privacy": {
+    "title": "プライバシーポリシー",
+    "lastUpdated": "最終更新日: {{date}}"
+  },
+  "terms": {
+    "title": "利用規約",
+    "lastUpdated": "最終更新日: {{date}}"
+  },
+  "myTemplates": {
+    "title": "マイテンプレート",
+    "create": "新規作成",
+    "edit": "編集",
+    "delete": "削除",
+    "noTemplates": "テンプレートがありません",
+    "noTemplatesDescription": "新しいテンプレートを作成して、効率的に職務経歴書を生成しましょう。",
+    "createDialog": {
+      "title": "テンプレートを作成"
+    },
+    "editDialog": {
+      "title": "テンプレートを編集"
+    },
+    "name": "テンプレート名",
+    "description": "説明",
+    "save": "保存",
+    "cancel": "キャンセル",
+    "toast": {
+      "created": "テンプレートを作成しました",
+      "updated": "テンプレートを更新しました",
+      "deleted": "テンプレートを削除しました",
+      "failed": "操作に失敗しました"
+    }
   }
 }

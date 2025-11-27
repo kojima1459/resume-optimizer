@@ -497,18 +497,18 @@
     "view": "View Details",
     "delete": "Delete",
     "compare": "Compare",
-    "selectToCompare": "Select items to compare (2 or more)",
+    "selectToCompare": "Select patterns to compare",
     "loginRequired": "Login Required",
-    "loginDescription": "You need to log in with your Manus account to use this feature",
+    "loginDescription": "You need to log in with a Manus account to use this feature",
     "loginButton": "Login to Start",
     "compareMode": "Compare Mode",
     "compareModeEnd": "End Compare Mode",
     "selectedCount": "{{count}} selected",
-    "evaluationScore": "Score: {{score}}",
+    "evaluationScore": "Score: {{score}} pts",
     "compareTitle": "Pattern Comparison ({{count}})",
     "differenceRate": "Difference: {{rate}}%",
     "patternDetails": "Pattern Details",
-    "selectPattern": "Select a pattern from the left",
+    "selectPattern": "Please select a pattern from the left",
     "name": "Name",
     "notes": "Notes",
     "generatedContent": "Generated Content",
@@ -516,7 +516,7 @@
     "copy": "Copy",
     "editDialog": {
       "title": "Edit Favorite Pattern",
-      "name": "Name",
+      "name": "Pattern Name",
       "notes": "Notes",
       "save": "Save",
       "cancel": "Cancel"
@@ -531,7 +531,10 @@
     "confirm": {
       "delete": "Are you sure you want to delete this favorite pattern?"
     },
-    "noFavoritesDescription": "Add favorites from the generation results screen"
+    "noFavoritesDescription": "Patterns you save as favorites from the home screen will appear here.",
+    "deleteConfirm": "Are you sure you want to delete this favorite pattern?",
+    "backToHome": "Back to Home",
+    "comparePatterns": "Compare Patterns"
   },
   "template": {
     "systemTemplate": "System Templates",
@@ -684,5 +687,37 @@
     },
     "dismissForever": "Don't show again",
     "close": "Close"
+  },
+  "privacy": {
+    "title": "Privacy Policy",
+    "lastUpdated": "Last updated: {{date}}"
+  },
+  "terms": {
+    "title": "Terms of Service",
+    "lastUpdated": "Last updated: {{date}}"
+  },
+  "myTemplates": {
+    "title": "My Templates",
+    "create": "Create New",
+    "edit": "Edit",
+    "delete": "Delete",
+    "noTemplates": "No templates",
+    "noTemplatesDescription": "Create a new template to efficiently generate resumes.",
+    "createDialog": {
+      "title": "Create Template"
+    },
+    "editDialog": {
+      "title": "Edit Template"
+    },
+    "name": "Template Name",
+    "description": "Description",
+    "save": "Save",
+    "cancel": "Cancel",
+    "toast": {
+      "created": "Template created",
+      "updated": "Template updated",
+      "deleted": "Template deleted",
+      "failed": "Operation failed"
+    }
   }
 }
