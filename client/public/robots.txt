@@ -1,0 +1,11 @@
+# robots.txt for 職務経歴書最適化ツール
+
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://resume-optimizer.manus.space/sitemap.xml
+
+# Disallow admin or private paths (if any)
+# Disallow: /admin/
+# Disallow: /api/
