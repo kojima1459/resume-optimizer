@@ -47,6 +47,11 @@
     "selectIndustry": "業界を選択...",
     "template": "テンプレート",
     "selectTemplate": "テンプレートを選択...",
+    "details": "詳細",
+    "templateDetails": "テンプレート詳細",
+    "description": "説明",
+    "sampleOutput": "サンプル出力",
+    "clear": "クリア",
     "outputSection": "出力項目を選択",
     "customItemSection": "カスタム項目を追加",
     "customItemPlaceholder": "項目名（例: なぜ今転職するのか）",
@@ -191,6 +196,20 @@
     "delete": "削除",
     "compare": "比較",
     "selectToCompare": "比較するアイテムを選択してください（2つ以上）"
+  },
+  "template": {
+    "systemTemplate": "システムテンプレート",
+    "myTemplate": "マイテンプレート",
+    "templateManagement": "テンプレート管理",
+    "industryCategory": "業界・カテゴリ",
+    "selectIndustry": "業界を選択...",
+    "template": "テンプレート",
+    "selectTemplate": "テンプレートを選択...",
+    "details": "詳細",
+    "templateDetails": "テンプレート詳細",
+    "description": "説明",
+    "sampleOutput": "サンプル出力",
+    "clear": "クリア"
   },
   "templates": {
     "title": "マイテンプレート",

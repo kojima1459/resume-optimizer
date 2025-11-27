@@ -192,6 +192,20 @@
     "compare": "Compare",
     "selectToCompare": "Select items to compare (2 or more)"
   },
+  "template": {
+    "systemTemplate": "System Templates",
+    "myTemplate": "My Templates",
+    "templateManagement": "Template Management",
+    "industryCategory": "Industry / Category",
+    "selectIndustry": "Select industry...",
+    "template": "Template",
+    "selectTemplate": "Select template...",
+    "details": "Details",
+    "templateDetails": "Template Details",
+    "description": "Description",
+    "sampleOutput": "Sample Output",
+    "clear": "Clear"
+  },
   "templates": {
     "title": "My Templates",
     "create": "Create New",

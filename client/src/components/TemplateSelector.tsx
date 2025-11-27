@@ -2,6 +2,7 @@ import { useState } from "react";
 import { trpc } from "@/lib/trpc";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { useTranslation } from "react-i18next";
 import {
   Select,
   SelectContent,
@@ -41,6 +42,7 @@ const CATEGORY_LABELS: Record<string, string> = {
 };
 
 export function TemplateSelector({ onSelectTemplate, onSelectUserTemplate }: TemplateSelectorProps) {
+  const { t } = useTranslation();
   const [templateType, setTemplateType] = useState<"system" | "user">("system");
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [selectedTemplateId, setSelectedTemplateId] = useState<number | null>(null);
@@ -125,7 +127,7 @@ export function TemplateSelector({ onSelectTemplate, onSelectUserTemplate }: Tem
             handleClearSelection();
           }}
         >
-          システムテンプレート
+          {t('template.systemTemplate')}
         </Button>
         <Button
           variant={templateType === "user" ? "default" : "outline"}
@@ -135,7 +137,7 @@ export function TemplateSelector({ onSelectTemplate, onSelectUserTemplate }: Tem
             handleClearSelection();
           }}
         >
-          マイテンプレート
+          {t('template.myTemplate')}
         </Button>
         <Button
           variant="outline"
@@ -143,17 +145,17 @@ export function TemplateSelector({ onSelectTemplate, onSelectUserTemplate }: Tem
           asChild
         >
           <a href="/my-templates" target="_blank" className="inline-flex items-center justify-center">
-            テンプレート管理
+            {t('template.templateManagement')}
           </a>
         </Button>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {templateType === "system" && (
           <div>
-            <label className="text-sm font-medium mb-2 block">業界・カテゴリ</label>
+            <label className="text-sm font-medium mb-2 block">{t('template.industryCategory')}</label>
             <Select value={selectedCategory || ""} onValueChange={handleCategoryChange}>
               <SelectTrigger>
-                <SelectValue placeholder="業界を選択..." />
+                <SelectValue placeholder={t('template.selectIndustry')} />
               </SelectTrigger>
               <SelectContent>
                 {categories.map((category) => (
@@ -167,14 +169,14 @@ export function TemplateSelector({ onSelectTemplate, onSelectUserTemplate }: Tem
         )}
 
         <div>
-          <label className="text-sm font-medium mb-2 block">テンプレート</label>
+          <label className="text-sm font-medium mb-2 block">{t('template.template')}</label>
           <Select
             value={currentSelectedId?.toString() || ""}
             onValueChange={handleTemplateSelect}
             disabled={templateType === "system" && !selectedCategory}
           >
             <SelectTrigger>
-              <SelectValue placeholder="テンプレートを選択..." />
+              <SelectValue placeholder={t('template.selectTemplate')} />
             </SelectTrigger>
             <SelectContent>
               {currentTemplates.map((template) => (
@@ -216,12 +218,12 @@ export function TemplateSelector({ onSelectTemplate, onSelectUserTemplate }: Tem
                     }}
                   >
                       <Info className="h-4 w-4 mr-1" />
-                      詳細
+                      {t('template.details')}
                     </Button>
                   </DialogTrigger>
                   <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto">
                     <DialogHeader>
-                      <DialogTitle>テンプレート詳細</DialogTitle>
+                      <DialogTitle>{t('template.templateDetails')}</DialogTitle>
                       <DialogDescription>
                         {previewTemplate?.name}
                       </DialogDescription>
@@ -233,13 +235,13 @@ export function TemplateSelector({ onSelectTemplate, onSelectUserTemplate }: Tem
                     ) : templateDetailQuery.data ? (
                       <div className="space-y-4">
                         <div>
-                          <h4 className="font-semibold mb-2">説明</h4>
+                          <h4 className="font-semibold mb-2">{t('template.description')}</h4>
                           <p className="text-sm text-muted-foreground">
                             {templateDetailQuery.data.description}
                           </p>
                         </div>
                         <div>
-                          <h4 className="font-semibold mb-2">サンプル出力</h4>
+                          <h4 className="font-semibold mb-2">{t('template.sampleOutput')}</h4>
                           <div className="bg-muted p-4 rounded-lg space-y-3">
                             {JSON.parse(templateDetailQuery.data.sampleContent) &&
                               Object.entries(
@@ -266,7 +268,7 @@ export function TemplateSelector({ onSelectTemplate, onSelectUserTemplate }: Tem
                 </Dialog>
               )}
               <Button size="sm" variant="ghost" onClick={handleClearSelection}>
-                クリア
+                {t('template.clear')}
               </Button>
             </div>
           </div>
