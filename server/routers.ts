@@ -10,7 +10,7 @@ import type { InsertFavoritePattern } from "../drizzle/schema";
 import { encryptApiKey, decryptApiKey } from "./encryption";
 import { invokeGemini, type GeminiMessage } from "./gemini";
 import { invokeLLMWithUserSettings } from "./llmHelper";
-import { evaluateResume } from "./evaluation";
+import { evaluateResume, evaluateResumesInParallel } from "./evaluation";
 
 const STANDARD_ITEMS = [
   "summary",
@@ -131,8 +131,24 @@ ${outputItems.map((item) => `"${item}": "内容"`).join(", ")}`;
           patterns.push(result);
         }
 
+        // 複数パターンを並列で評価
+        const resumesForEvaluation = patterns.map((pattern, index) => ({
+          id: index,
+          content: Object.entries(pattern)
+            .map(([key, value]) => `${itemLabels[key] || key}: ${value}`)
+            .join("\n\n"),
+        }));
+
+        const evaluations = await evaluateResumesInParallel(resumesForEvaluation, jobDescription);
+
+        // パターンと評価をマージ
+        const patternsWithEvaluations = patterns.map((pattern, index) => ({
+          pattern,
+          evaluation: evaluations.find((e) => e.id === index)?.evaluation || null,
+        }));
+
         return {
-          patterns,
+          patterns: patternsWithEvaluations,
           patternCount,
         };
       }),

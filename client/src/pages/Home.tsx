@@ -109,46 +109,21 @@ export default function Home() {
 
   const generateMultipleMutation = trpc.resume.generateMultiple.useMutation({
     onSuccess: async (data) => {
-      setGeneratedPatterns(data.patterns);
+      // サーバー側で評価済みのデータを受け取る
+      const patterns = data.patterns.map((item: any) => item.pattern);
+      setGeneratedPatterns(patterns);
       setShowPatternDialog(true);
       toast.success(t('toast.generatedSuccess'));
       
-      // 自動評価を並列実行
-      setIsEvaluating(true);
-      
-      try {
-        // Promise.allを使用して並列評価
-        const evaluationPromises = data.patterns.map(async (pattern, i) => {
-          try {
-            const resumeContent = Object.values(pattern).join('\n\n');
-            const evaluation = await evaluateMutation.mutateAsync({
-              resumeContent,
-              jobDescription,
-            });
-            return { index: i, evaluation };
-          } catch (error) {
-            console.error(`Pattern ${i} evaluation failed:`, error);
-            return null;
-          }
-        });
-        
-        const results = await Promise.all(evaluationPromises);
-        
-        // 結果をRecord形式に変換
-        const evaluations: Record<number, { score: number; details: any }> = {};
-        results.forEach((result) => {
-          if (result) {
-            evaluations[result.index] = result.evaluation;
-          }
-        });
-        
-        setPatternEvaluations(evaluations);
-      } catch (error) {
-        console.error('Parallel evaluation failed:', error);
-        toast.error(t('toast.generatedError'));
-      } finally {
-        setIsEvaluating(false);
-      }
+      // 評価結果を設定
+      const evaluations: Record<number, { score: number; details: any }> = {};
+      data.patterns.forEach((item: any, index: number) => {
+        if (item.evaluation) {
+          evaluations[index] = item.evaluation;
+        }
+      });
+      setPatternEvaluations(evaluations);
+      setIsEvaluating(false);
     },
     onError: (error) => {
       toast.error(error.message || t('toast.generatedError'));
@@ -328,6 +303,7 @@ export default function Home() {
       return;
     }
 
+    setIsEvaluating(true);
     generateMultipleMutation.mutate({
       resumeText,
       jobDescription,
