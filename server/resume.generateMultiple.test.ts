@@ -55,17 +55,19 @@ describe("resume.generateMultiple", () => {
     expect(result.patterns).toHaveLength(3);
     
     // 各パターンが必要な項目を含んでいることを確認
-    result.patterns.forEach((pattern) => {
-      expect(pattern).toHaveProperty("summary");
-      expect(pattern).toHaveProperty("motivation");
-      expect(typeof pattern.summary).toBe("string");
-      expect(typeof pattern.motivation).toBe("string");
-      expect(pattern.summary.length).toBeGreaterThan(0);
-      expect(pattern.motivation.length).toBeGreaterThan(0);
+    result.patterns.forEach((item) => {
+      expect(item).toHaveProperty("pattern");
+      expect(item).toHaveProperty("evaluation");
+      expect(item.pattern).toHaveProperty("summary");
+      expect(item.pattern).toHaveProperty("motivation");
+      expect(typeof item.pattern.summary).toBe("string");
+      expect(typeof item.pattern.motivation).toBe("string");
+      expect(item.pattern.summary.length).toBeGreaterThan(0);
+      expect(item.pattern.motivation.length).toBeGreaterThan(0);
     });
 
     // 各パターンが異なる内容であることを確認
-    const summaries = result.patterns.map((p) => p.summary);
+    const summaries = result.patterns.map((item) => item.pattern.summary);
     const uniqueSummaries = new Set(summaries);
     expect(uniqueSummaries.size).toBeGreaterThan(1);
     },
@@ -119,11 +121,13 @@ describe("resume.generateMultiple", () => {
     });
 
     expect(result.patterns).toHaveLength(3);
-    result.patterns.forEach((pattern) => {
-      expect(pattern).toHaveProperty("summary");
-      expect(pattern).toHaveProperty("custom_why_now");
-      expect(typeof pattern.custom_why_now).toBe("string");
-      expect(pattern.custom_why_now.length).toBeGreaterThan(0);
+    result.patterns.forEach((item) => {
+      expect(item).toHaveProperty("pattern");
+      expect(item).toHaveProperty("evaluation");
+      expect(item.pattern).toHaveProperty("summary");
+      expect(item.pattern).toHaveProperty("custom_why_now");
+      expect(typeof item.pattern.custom_why_now).toBe("string");
+      expect(item.pattern.custom_why_now.length).toBeGreaterThan(0);
     });
     },
     60000

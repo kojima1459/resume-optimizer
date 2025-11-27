@@ -1063,8 +1063,8 @@ export default function Home() {
           </div>
         </div>
 
-        <p className="text-center text-gray-600 mb-8">
-          求人情報に合わせて、あなたの職務経歴書を最適化します
+        <p className="text-center text-2xl md:text-3xl font-bold text-blue-900 mb-8 px-4">
+          求人情報に合わせて、あなたの職務経歴書をAIが最適化するチート便利ツールです！
         </p>
 
         {/* 機能説明セクション */}

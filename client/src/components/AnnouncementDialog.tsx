@@ -22,18 +22,29 @@ const COMING_SOON_FEATURES = [
     description: "現在の職務経歴書を分析して、改善点を具体的に指摘。「読みやすさ」「具体性」「インパクト」などの項目別スコアを表示します。",
     icon: "📝",
     priority: "高",
+    status: "実装済み",
   },
+
   {
-    title: "求人情報の自動収集・マッチング機能",
-    description: "Indeed、LinkedIn、Wantedlyなどから求人情報を自動収集し、あなたの職務経歴書に基づいてマッチ度の高い求人を推薦します。",
-    icon: "🔍",
-    priority: "高",
-  },
-  {
-    title: "面接対策機能（想定質問と回答例生成）",
-    description: "求人情報から想定される面接質問を自動生成し、あなたの経歴に基づいた回答例を提示します。",
+    title: "AI面接対策機能（無料！）",
+    description: "求人情報と職務経歴書からAIが想定質問を自動生成し、あなたの経歴に基づいた回答例を提示します。面接前の準備が効率的に行えます。",
     icon: "💬",
     priority: "高",
+    status: "予定",
+  },
+  {
+    title: "LinkedIn人材検索機能",
+    description: "LinkedIn APIを使用して企業情報や人材情報を取得し、あなたの職務経歴書に基づいて関連企業を提案します。転職先の発見がスムーズになります。",
+    icon: "🔗",
+    priority: "中",
+    status: "予定",
+  },
+  {
+    title: "バッチ一括応募機能",
+    description: "複数企業への応募を一括で行える機能。求人情報を選択し、最適化された職務経歴書を自動で送信します。比較を3社以上に同時応募でき、転職活動を大幅に効率化します。",
+    icon: "🚀",
+    priority: "高",
+    status: "予定",
   },
   {
     title: "職務経歴書のビフォー・アフター比較機能",
@@ -93,6 +104,23 @@ export function AnnouncementDialog({ open, onOpenChange, onDismissForever }: Ann
                       {feature.priority === "高" && (
                         <span className="bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-200 text-xs px-2 py-1 rounded-full">
                           優先度: 高
+                        </span>
+                      )}
+                      {feature.status === "実装済み" && (
+                        <span className="bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-200 text-xs px-2 py-1 rounded-full flex items-center gap-1">
+                          <CheckCircle2 className="h-3 w-3" />
+                          実装済み
+                        </span>
+                      )}
+                      {feature.status === "開発中" && (
+                        <span className="bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-200 text-xs px-2 py-1 rounded-full flex items-center gap-1">
+                          <Clock className="h-3 w-3" />
+                          開発中
+                        </span>
+                      )}
+                      {feature.status === "予定" && (
+                        <span className="bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-200 text-xs px-2 py-1 rounded-full">
+                          予定
                         </span>
                       )}
                       {feature.priority === "中" && (
