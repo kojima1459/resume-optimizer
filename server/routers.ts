@@ -446,6 +446,57 @@ JSON形式で出力してください:
         const result = JSON.parse(jsonString.trim());
         return { translation: result.translation };
       }),
+
+    convertToEnglish: protectedProcedure
+      .input(
+        z.object({
+          content: z.record(z.string(), z.string()),
+          targetWordCount: z.number().optional(),
+        })
+      )
+      .mutation(async ({ input, ctx }) => {
+        const { content, targetWordCount } = input;
+
+        const prompt = `以下の日本語の職務経歴書を英語に変換してください。
+
+原文:
+${Object.entries(content)
+  .map(([key, value]) => `${key}:\n${value}`)
+  .join("\n\n")}
+
+条件:
+1. 英語圈の履歴書フォーマットに最適化
+2. ビジネス英語として自然で洗練された表現を使用
+3. 職務経歴書で使われる専門用語を適切に使用
+4. 原文のニュアンスを保ちながら翻訳
+5. 動詞を使って成果を強調（例: "Achieved", "Developed", "Led"）${targetWordCount ? `\n6. 合計単語数を約${targetWordCount}単語に調整` : ""}
+
+出力形式:
+JSON形式で出力してください。各項目を英語に変換して返してください。
+{
+  "項目名1": "英語に変換されたテキスト",
+  "項目名2": "英語に変換されたテキスト",
+  ...
+}`;
+
+        const llmContent = await invokeLLMWithUserSettings(ctx.user.id, [
+          {
+            role: "user",
+            content: prompt,
+          },
+        ]);
+
+        if (!llmContent || typeof llmContent !== "string") {
+          throw new Error("英語変換に失敗しました");
+        }
+
+        // JSONパース（マークダウンのコードブロックを削除）
+        const jsonMatch = llmContent.match(/```json\n([\s\S]*?)\n```/) || llmContent.match(/```\n([\s\S]*?)\n```/);
+        const jsonString = jsonMatch ? jsonMatch[1] : llmContent;
+        const result = JSON.parse(jsonString.trim());
+
+        return { englishContent: result };
+      }),
   }),
 
   // テンプレート用のrouter

@@ -31,6 +31,9 @@ import { TemplateSelector } from "@/components/TemplateSelector";
 import { FileDropZone } from "@/components/FileDropZone";
 import Footer from "@/components/Footer";
 import { AnnouncementDialog } from "@/components/AnnouncementDialog";
+import { LanguageSwitcher } from "@/components/LanguageSwitcher";
+import { useTranslation } from "react-i18next";
+import { EnglishConversionDialog } from "@/components/EnglishConversionDialog";
 
 type OutputItem = {
   key: string;
@@ -48,6 +51,7 @@ const STANDARD_ITEMS: OutputItem[] = [
 ];
 
 export default function Home() {
+  const { t } = useTranslation();
   const { user, loading: authLoading } = useAuth();
   const { theme, toggleTheme } = useTheme();
   const [showApiKeyBanner, setShowApiKeyBanner] = useState(false);
@@ -97,6 +101,7 @@ export default function Home() {
   const [historyDateFilter, setHistoryDateFilter] = useState<"all" | "today" | "week" | "month">("all");
   const [showFavoritesOnly, setShowFavoritesOnly] = useState(false);
   const [showAnnouncement, setShowAnnouncement] = useState(false);
+  const [showEnglishConversion, setShowEnglishConversion] = useState(false);
   const { scheduleSave, loadData, clearData, lastSaved, isSaving } = useAutoSave();
 
   const evaluateMutation = trpc.resume.evaluate.useMutation();
@@ -849,6 +854,7 @@ export default function Home() {
               <Bell className="h-4 w-4" />
               <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center">7</span>
             </Button>
+            <LanguageSwitcher />
             <Button
               variant="outline"
               size="icon"
@@ -1427,9 +1433,13 @@ export default function Home() {
                     <Download className="h-3.5 w-3.5 mr-1.5" />
                     Markdown
                   </Button>
-                  <Button onClick={handleShareToLinkedIn} variant="outline" size="sm" className="bg-[#0A66C2] text-white hover:bg-[#004182] text-xs">
+                  <Button onClick={handleShareToLinkedIn} variant="outline" size="sm" className="bg-[#0A66C2] text-white hover:bg-[#0A66C2]/90 text-xs">
                     <Share2 className="h-3.5 w-3.5 mr-1.5" />
                     LinkedIn
+                  </Button>
+                  <Button onClick={() => setShowEnglishConversion(true)} variant="outline" size="sm" className="bg-green-600 text-white hover:bg-green-700 text-xs">
+                    <Languages className="h-3.5 w-3.5 mr-1.5" />
+                    英語に変換
                   </Button>
                 </div>
               </div>
@@ -1733,6 +1743,13 @@ export default function Home() {
       <AnnouncementDialog
         open={showAnnouncement}
         onOpenChange={setShowAnnouncement}
+      />
+
+      {/* 英語変換ダイアログ */}
+      <EnglishConversionDialog
+        open={showEnglishConversion}
+        onOpenChange={setShowEnglishConversion}
+        content={editedContent}
       />
       
       <Footer />
