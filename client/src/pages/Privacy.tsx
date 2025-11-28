@@ -7,12 +7,11 @@ import { Link } from "wouter";
 import { useTranslation } from "react-i18next";
 
 export default function Privacy() {
-  const { isAuthenticated } = useAuth();
   const { t } = useTranslation();
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-background to-muted/20">
-      {/* ヘッダー */}
+      {/* Header */}
       <header className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 sticky top-0 z-50">
         <div className="container flex h-16 items-center justify-between">
           <Link href="/">
@@ -27,16 +26,12 @@ export default function Privacy() {
             <Link href="/guide">
               <Button variant="ghost">{t('privacy.nav.guide')}</Button>
             </Link>
-            {isAuthenticated && (
-              <>
-                <Link href="/my-templates">
-                  <Button variant="ghost">{t('privacy.nav.myTemplates')}</Button>
-                </Link>
-                <Link href="/favorites">
-                  <Button variant="ghost">{t('privacy.nav.favorites')}</Button>
-                </Link>
-              </>
-            )}
+            <Link href="/my-templates">
+              <Button variant="ghost">{t('privacy.nav.myTemplates')}</Button>
+            </Link>
+            <Link href="/favorites">
+              <Button variant="ghost">{t('privacy.nav.favorites')}</Button>
+            </Link>
           </nav>
         </div>
       </header>

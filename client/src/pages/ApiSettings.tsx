@@ -8,6 +8,7 @@ import { toast } from "sonner";
 import { ExternalLink, Save, Eye, EyeOff } from "lucide-react";
 import Footer from "@/components/Footer";
 import { useTranslation } from "react-i18next";
+import { trpc } from "@/lib/trpc";
 
 type ApiProvider = "openai" | "gemini" | "claude";
 
@@ -26,17 +27,35 @@ export default function ApiSettings() {
     if (savedApiKey) setApiKey(savedApiKey);
   }, []);
 
-  const handleSave = () => {
+  const saveApiKeyMutation = trpc.apiKey.save.useMutation();
+
+  const handleSave = async () => {
     if (!apiKey.trim()) {
       toast.error(t('apiSettings.toastEnterApiKey'));
       return;
     }
 
-    // localStorageに保存
-    localStorage.setItem("apiProvider", provider);
-    localStorage.setItem("apiKey", apiKey);
-    
-    toast.success(t('apiSettings.toast.saved'));
+    try {
+      const input: Record<string, string> = {
+        primaryProvider: provider,
+      };
+
+      if (provider === "openai") {
+        input.openAIKey = apiKey;
+      } else if (provider === "gemini") {
+        input.geminiKey = apiKey;
+      }
+
+      await saveApiKeyMutation.mutateAsync(input);
+
+      localStorage.setItem("apiProvider", provider);
+      localStorage.setItem("apiKey", apiKey);
+      
+      toast.success(t('apiSettings.toast.saved'));
+    } catch (error) {
+      console.error("Failed to save API key:", error);
+      toast.error("Failed to save API key");
+    }
   };
 
   const getApiKeyLink = (provider: ApiProvider) => {
