@@ -18,9 +18,11 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import Footer from "@/components/Footer";
+import { useTranslation } from "react-i18next";
 
 export default function MyTemplates() {
   const { user, loading: authLoading } = useAuth();
+  const { t } = useTranslation();
   const [showCreateDialog, setShowCreateDialog] = useState(false);
   const [showEditDialog, setShowEditDialog] = useState(false);
   const [editingTemplate, setEditingTemplate] = useState<any>(null);
@@ -36,36 +38,36 @@ export default function MyTemplates() {
 
   const createMutation = trpc.userTemplate.create.useMutation({
     onSuccess: () => {
-      toast.success("テンプレートを作成しました");
+      toast.success(t('myTemplates.toast.created'));
       setShowCreateDialog(false);
       setFormData({ name: "", description: "", promptTemplate: "" });
       templatesQuery.refetch();
     },
     onError: (error) => {
-      toast.error(error.message || "作成に失敗しました");
+      toast.error(error.message || t('myTemplates.toast.error'));
     },
   });
 
   const updateMutation = trpc.userTemplate.update.useMutation({
     onSuccess: () => {
-      toast.success("テンプレートを更新しました");
+      toast.success(t('myTemplates.toast.updated'));
       setShowEditDialog(false);
       setEditingTemplate(null);
       setFormData({ name: "", description: "", promptTemplate: "" });
       templatesQuery.refetch();
     },
     onError: (error) => {
-      toast.error(error.message || "更新に失敗しました");
+      toast.error(error.message || t('myTemplates.toast.error'));
     },
   });
 
   const deleteMutation = trpc.userTemplate.delete.useMutation({
     onSuccess: () => {
-      toast.success("テンプレートを削除しました");
+      toast.success(t('myTemplates.toast.deleted'));
       templatesQuery.refetch();
     },
     onError: (error) => {
-      toast.error(error.message || "削除に失敗しました");
+      toast.error(error.message || t('myTemplates.toast.error'));
     },
   });
 

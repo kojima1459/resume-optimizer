@@ -1,0 +1,38 @@
+{
+  "title": "マイテンプレート",
+  "description": "カスタムテンプレートを作成・管理できます。",
+  "createButton": "新規テンプレート作成",
+  "noTemplates": "テンプレートがありません",
+  "noTemplatesDescription": "新規テンプレートを作成して、よく使う設定を保存しましょう。",
+  "edit": {
+    "title": "テンプレート編集"
+  },
+  "delete": "削除",
+  "use": "使用",
+  "confirmDelete": "このテンプレートを削除してもよろしいですか？",
+  "create": {
+    "title": "新規テンプレート作成",
+    "nameLabel": "テンプレート名",
+    "namePlaceholder": "例: IT業界向けテンプレート",
+    "categoryLabel": "カテゴリ",
+    "categoryPlaceholder": "例: IT・エンジニア",
+    "descriptionLabel": "説明（任意）",
+    "descriptionPlaceholder": "このテンプレートの用途を説明してください",
+    "outputItemsLabel": "出力項目",
+    "charLimitsLabel": "文字数設定",
+    "chars": "文字",
+    "saveButton": "保存",
+    "cancelButton": "キャンセル"
+  },
+  "toast": {
+    "created": "テンプレートを作成しました",
+    "updated": "テンプレートを更新しました",
+    "deleted": "テンプレートを削除しました",
+    "applied": "テンプレートを適用しました"
+  },
+  "nav": {
+    "home": "ホーム",
+    "guide": "ガイド",
+    "favorites": "お気に入り"
+  }
+}

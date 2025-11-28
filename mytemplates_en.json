@@ -1,0 +1,38 @@
+{
+  "title": "My Templates",
+  "description": "Create and manage custom templates.",
+  "createButton": "Create New Template",
+  "noTemplates": "No templates",
+  "noTemplatesDescription": "Create a new template to save frequently used settings.",
+  "edit": {
+    "title": "Edit Template"
+  },
+  "delete": "Delete",
+  "use": "Use",
+  "confirmDelete": "Are you sure you want to delete this template?",
+  "create": {
+    "title": "Create New Template",
+    "nameLabel": "Template Name",
+    "namePlaceholder": "e.g., IT Industry Template",
+    "categoryLabel": "Category",
+    "categoryPlaceholder": "e.g., IT・Engineer",
+    "descriptionLabel": "Description (Optional)",
+    "descriptionPlaceholder": "Describe the purpose of this template",
+    "outputItemsLabel": "Output Items",
+    "charLimitsLabel": "Character Settings",
+    "chars": "chars",
+    "saveButton": "Save",
+    "cancelButton": "Cancel"
+  },
+  "toast": {
+    "created": "Template created",
+    "updated": "Template updated",
+    "deleted": "Template deleted",
+    "applied": "Template applied"
+  },
+  "nav": {
+    "home": "Home",
+    "guide": "Guide",
+    "favorites": "Favorites"
+  }
+}

@@ -4,9 +4,11 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { APP_TITLE } from "@/const";
 import { FileText, AlertCircle, Ban, Shield } from "lucide-react";
 import { Link } from "wouter";
+import { useTranslation } from "react-i18next";
 
 export default function Terms() {
   const { isAuthenticated } = useAuth();
+  const { t } = useTranslation();
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-background to-muted/20">
@@ -20,18 +22,18 @@ export default function Terms() {
           </Link>
           <nav className="flex items-center gap-4">
             <Link href="/">
-              <Button variant="ghost">ホーム</Button>
+              <Button variant="ghost">{t('terms.nav.home')}</Button>
             </Link>
             <Link href="/guide">
-              <Button variant="ghost">ガイド</Button>
+              <Button variant="ghost">{t('terms.nav.guide')}</Button>
             </Link>
             {isAuthenticated && (
               <>
                 <Link href="/my-templates">
-                  <Button variant="ghost">マイテンプレート</Button>
+                  <Button variant="ghost">{t('terms.nav.myTemplates')}</Button>
                 </Link>
                 <Link href="/favorites">
-                  <Button variant="ghost">お気に入り</Button>
+                  <Button variant="ghost">{t('terms.nav.favorites')}</Button>
                 </Link>
               </>
             )}
@@ -46,11 +48,11 @@ export default function Terms() {
           <div className="flex items-center justify-center gap-3 mb-4">
             <FileText className="h-10 w-10 text-primary" />
             <h1 className="text-4xl font-bold bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">
-              利用規約
+              {t('terms.title')}
             </h1>
           </div>
           <p className="text-muted-foreground">
-            最終更新日: 2025年1月26日
+            {t('terms.lastUpdated')}
           </p>
         </div>
 
