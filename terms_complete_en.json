@@ -1,0 +1,110 @@
+{
+  "article1": {
+    "title": "Article 1 (Application)",
+    "content1": "These Terms of Service (hereinafter referred to as \"these Terms\") define the terms and conditions for using {APP_TITLE} (hereinafter referred to as \"the Service\").",
+    "content2": "All users (hereinafter referred to as \"Users\") who use the Service are deemed to have agreed to these Terms."
+  },
+  "article2": {
+    "title": "Article 2 (Service Content)",
+    "content1": "The Service is a web application that assists in creating resumes using AI technology.",
+    "content2": "The main features are as follows:",
+    "features": [
+      "Automatic resume generation",
+      "Optimization based on job postings",
+      "Multiple pattern generation",
+      "Saving and managing generation history",
+      "Creating and managing templates",
+      "Saving favorite patterns",
+      "Export in various formats (Word, PDF, Text, Markdown)"
+    ]
+  },
+  "article3": {
+    "title": "Article 3 (Account)",
+    "section1": {
+      "title": "1. Account Registration",
+      "content": "To use the Service, you must log in using Manus OAuth. By logging in, an account is automatically created."
+    },
+    "section2": {
+      "title": "2. Account Management",
+      "content": "Users shall manage their account information at their own responsibility. The Service assumes no responsibility for damages caused by unauthorized use of account information."
+    },
+    "section3": {
+      "title": "3. API Key Management",
+      "content": "The Service requires setting an API key for OpenAI, Gemini, or Claude. API key management is the user's responsibility, and the Service assumes no responsibility for damages caused by unauthorized use of API keys."
+    }
+  },
+  "article4": {
+    "title": "Article 4 (Prohibited Acts)",
+    "content": "Users shall not engage in the following acts when using the Service:",
+    "items": [
+      "Acts that violate laws or public order and morals",
+      "Acts related to criminal activities",
+      "Acts that interfere with the operation of the Service",
+      "Acts that infringe on the rights of other users or third parties",
+      "Acts of registering false information",
+      "Acts that threaten the security of the Service",
+      "Acts of using the Service for commercial purposes (excluding personal job hunting activities)",
+      "Acts of reproducing, reprinting, or distributing the Service's content without permission",
+      "Acts of reverse engineering, decompiling, or disassembling",
+      "Other acts deemed inappropriate by the Service"
+    ]
+  },
+  "article5": {
+    "title": "Article 5 (Intellectual Property Rights)",
+    "section1": {
+      "title": "1. Service Intellectual Property Rights",
+      "content": "All intellectual property rights related to the Service belong to the Service or those who have licensed the Service."
+    },
+    "section2": {
+      "title": "2. Generated Content Rights",
+      "content": "The rights to content such as resumes generated using the Service belong to the user. Users can freely use, edit, and distribute the generated content."
+    },
+    "section3": {
+      "title": "3. Use of Input Data",
+      "content": "Data entered by users is used to provide and improve the Service. However, personally identifiable information will not be disclosed to third parties."
+    }
+  },
+  "article6": {
+    "title": "Article 6 (Disclaimer)",
+    "section1": {
+      "title": "1. Service Quality",
+      "content": "The Service makes no warranties regarding the quality, accuracy, completeness, or usefulness of the Service. Since AI technology is used, the generated content is not necessarily accurate."
+    },
+    "section2": {
+      "title": "2. Usage Results",
+      "content": "The Service assumes no responsibility for the results of using resumes generated using the Service. Users must review the generated content and make necessary corrections before use."
+    },
+    "section3": {
+      "title": "3. Service Interruption/Suspension",
+      "content": "The Service may change, interrupt, or suspend all or part of the Service without prior notice. The Service assumes no responsibility for damages caused by this."
+    },
+    "section4": {
+      "title": "4. Data Loss",
+      "content": "User data may be lost due to system failures, maintenance, or other reasons. The Service assumes no responsibility for data loss. Please be sure to back up important data."
+    },
+    "section5": {
+      "title": "5. External Services",
+      "content": "The Service uses external AI services such as OpenAI, Gemini, and Claude. The Service assumes no responsibility for the quality, availability, or security of these external services."
+    }
+  },
+  "article7": {
+    "title": "Article 7 (Service Changes/Termination)",
+    "content1": "The Service may change, add, or delete the content of the Service without prior notice to users. The Service may also terminate the provision of the Service.",
+    "content2": "In the event of service termination, we will make efforts to notify in advance as much as possible, but this does not apply in emergency cases."
+  },
+  "article8": {
+    "title": "Article 8 (Changes to Terms of Service)",
+    "content1": "The Service may change these Terms as necessary. The revised Terms of Service shall take effect when posted on this page.",
+    "content2": "If there are significant changes, we will notify within the Service."
+  },
+  "article9": {
+    "title": "Article 9 (Governing Law/Jurisdiction)",
+    "content1": "Japanese law shall govern the interpretation of these Terms.",
+    "content2": "In the event of a dispute regarding the Service, the court having jurisdiction over the location of the Service shall have exclusive agreed jurisdiction."
+  },
+  "footer": {
+    "lastUpdated": "Last Updated: January 26, 2025",
+    "copyright": "© 2025 {APP_TITLE}. All rights reserved.",
+    "backToHome": "Back to Home"
+  }
+}

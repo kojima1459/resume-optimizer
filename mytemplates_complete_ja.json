@@ -1,0 +1,42 @@
+{
+  "title": "マイテンプレート",
+  "newButton": "新規作成",
+  "description": "独自のテンプレートを作成・管理して、効率的に職務経歴書を最適化できます",
+  "noTemplates": "まだテンプレートがありません",
+  "createFirst": "最初のテンプレートを作成",
+  "createdAt": "作成日: {date}",
+  "loginRequired": {
+    "title": "ログインが必要です",
+    "description": "ご利用にはManusアカウントでのログインが必要です",
+    "button": "ログインして開始"
+  },
+  "createDialog": {
+    "title": "新しいテンプレートを作成",
+    "description": "独自のプロンプトテンプレートを作成して、繰り返し使用できます",
+    "nameLabel": "テンプレート名",
+    "namePlaceholder": "例: 外資系IT企業向けテンプレート",
+    "descriptionLabel": "説明",
+    "descriptionPlaceholder": "このテンプレートの用途や特徴を説明してください",
+    "promptLabel": "プロンプトテンプレート",
+    "promptPlaceholder": "あなたは職務経歴書最適化の専門家です。以下の点を重視して作成してください：\\n\\n1. ...\\n2. ...\\n\\n職務経歴書: {{resumeText}}\\n求人情報: {{jobDescription}}",
+    "promptNote": "※ {{resumeText}} と {{jobDescription}} を使用すると、入力内容が自動的に埋め込まれます",
+    "cancel": "キャンセル",
+    "create": "作成"
+  },
+  "editDialog": {
+    "title": "テンプレートを編集",
+    "description": "テンプレートの内容を更新できます",
+    "nameLabel": "テンプレート名",
+    "descriptionLabel": "説明",
+    "promptLabel": "プロンプトテンプレート",
+    "promptNote": "※ {{resumeText}} と {{jobDescription}} を使用すると、入力内容が自動的に埋め込まれます",
+    "cancel": "キャンセル",
+    "update": "更新"
+  },
+  "validation": {
+    "allFieldsRequired": "全ての項目を入力してください"
+  },
+  "confirm": {
+    "delete": "このテンプレートを削除してもよろしいですか？"
+  }
+}

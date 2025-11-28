@@ -73,7 +73,7 @@ export default function MyTemplates() {
 
   const handleCreate = () => {
     if (!formData.name.trim() || !formData.description.trim() || !formData.promptTemplate.trim()) {
-      toast.error("全ての項目を入力してください");
+      toast.error(t('myTemplates.validation.allFieldsRequired'));
       return;
     }
 
@@ -98,7 +98,7 @@ export default function MyTemplates() {
     if (!editingTemplate) return;
 
     if (!formData.name.trim() || !formData.description.trim() || !formData.promptTemplate.trim()) {
-      toast.error("全ての項目を入力してください");
+      toast.error(t('myTemplates.validation.allFieldsRequired'));
       return;
     }
 
@@ -111,7 +111,7 @@ export default function MyTemplates() {
   };
 
   const handleDelete = (id: number) => {
-    if (confirm("このテンプレートを削除してもよろしいですか？")) {
+    if (confirm(t('myTemplates.confirm.delete'))) {
       deleteMutation.mutate({ id });
     }
   };
@@ -129,14 +129,14 @@ export default function MyTemplates() {
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100">
         <Card className="w-full max-w-md">
           <CardHeader>
-            <CardTitle>ログインが必要です</CardTitle>
+            <CardTitle>{t('myTemplates.loginRequired.title')}</CardTitle>
           </CardHeader>
           <CardContent className="text-center">
             <p className="text-sm text-muted-foreground mb-4">
-              ご利用にはManusアカウントでのログインが必要です
+              {t('myTemplates.loginRequired.description')}
             </p>
             <Button asChild className="w-full">
-              <a href={getLoginUrl()}>ログインして開始</a>
+              <a href={getLoginUrl()}>{t('myTemplates.loginRequired.button')}</a>
             </Button>
           </CardContent>
         </Card>
@@ -155,63 +155,62 @@ export default function MyTemplates() {
               </a>
             </Button>
             <FileText className="h-10 w-10 text-primary" />
-            <h1 className="text-3xl font-bold text-gray-900">マイテンプレート</h1>
+            <h1 className="text-3xl font-bold text-gray-900">{t('myTemplates.title')}</h1>
           </div>
           <Dialog open={showCreateDialog} onOpenChange={setShowCreateDialog}>
             <DialogTrigger asChild>
               <Button>
                 <Plus className="h-4 w-4 mr-2" />
-                新規作成
+                {t('myTemplates.newButton')}
               </Button>
             </DialogTrigger>
             <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto">
               <DialogHeader>
-                <DialogTitle>新しいテンプレートを作成</DialogTitle>
+                <DialogTitle>{t('myTemplates.createDialog.title')}</DialogTitle>
                 <DialogDescription>
-                  独自のプロンプトテンプレートを作成して、繰り返し使用できます
+                  {t('myTemplates.createDialog.description')}
                 </DialogDescription>
               </DialogHeader>
               <div className="space-y-4">
                 <div>
-                  <Label htmlFor="create-name">テンプレート名</Label>
+                  <Label htmlFor="create-name">{t('myTemplates.createDialog.nameLabel')}</Label>
                   <Input
                     id="create-name"
-                    placeholder="例: 外資系IT企業向けテンプレート"
+                    placeholder={t('myTemplates.createDialog.namePlaceholder')}
                     value={formData.name}
                     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                   />
                 </div>
                 <div>
-                  <Label htmlFor="create-description">説明</Label>
+                  <Label htmlFor="create-description">{t('myTemplates.createDialog.descriptionLabel')}</Label>
                   <Textarea
                     id="create-description"
-                    placeholder="このテンプレートの用途や特徴を説明してください"
+                    placeholder={t('myTemplates.createDialog.descriptionPlaceholder')}
                     value={formData.description}
                     onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                     className="min-h-[80px]"
                   />
                 </div>
                 <div>
-                  <Label htmlFor="create-prompt">プロンプトテンプレート</Label>
+                  <Label htmlFor="create-prompt">{t('myTemplates.createDialog.promptLabel')}</Label>
                   <Textarea
                     id="create-prompt"
-                    placeholder={`あなたは職務経歴書最適化の専門家です。以下の点を重視して作成してください：\n\n1. ...\n2. ...\n\n職務経歴書: {{resumeText}}\n求人情報: {{jobDescription}}`}
+                    placeholder={t('myTemplates.createDialog.promptPlaceholder')}
                     value={formData.promptTemplate}
                     onChange={(e) => setFormData({ ...formData, promptTemplate: e.target.value })}
                     className="min-h-[300px] font-mono text-sm"
                   />
                   <p className="text-xs text-muted-foreground mt-2">
-                    ※ {"{{resumeText}}"} と {"{{jobDescription}}"}{" "}
-                    を使用すると、入力内容が自動的に埋め込まれます
+                    {t('myTemplates.createDialog.promptNote')}
                   </p>
                 </div>
                 <div className="flex justify-end gap-2">
                   <Button variant="outline" onClick={() => setShowCreateDialog(false)}>
-                    キャンセル
+                    {t('myTemplates.createDialog.cancel')}
                   </Button>
                   <Button onClick={handleCreate} disabled={createMutation.isPending}>
                     {createMutation.isPending && <Loader2 className="h-4 w-4 mr-2 animate-spin" />}
-                    作成
+                    {t('myTemplates.createDialog.create')}
                   </Button>
                 </div>
               </div>
@@ -220,7 +219,7 @@ export default function MyTemplates() {
         </div>
 
         <p className="text-center text-gray-600 mb-8">
-          独自のテンプレートを作成・管理して、効率的に職務経歴書を最適化できます
+          {t('myTemplates.description')}
         </p>
 
         {templatesQuery.isLoading ? (
@@ -261,7 +260,7 @@ export default function MyTemplates() {
                     </p>
                   </div>
                   <p className="text-xs text-muted-foreground mt-3">
-                    作成日: {new Date(template.createdAt).toLocaleDateString("ja-JP")}
+                    {t('myTemplates.createdAt', { date: new Date(template.createdAt).toLocaleDateString() })}
                   </p>
                 </CardContent>
               </Card>
@@ -271,10 +270,10 @@ export default function MyTemplates() {
           <Card>
             <CardContent className="text-center py-12">
               <FileText className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
-              <p className="text-muted-foreground mb-4">まだテンプレートがありません</p>
+              <p className="text-muted-foreground mb-4">{t('myTemplates.noTemplates')}</p>
               <Button onClick={() => setShowCreateDialog(true)}>
                 <Plus className="h-4 w-4 mr-2" />
-                最初のテンプレートを作成
+                {t('myTemplates.createFirst')}
               </Button>
             </CardContent>
           </Card>
@@ -284,12 +283,12 @@ export default function MyTemplates() {
         <Dialog open={showEditDialog} onOpenChange={setShowEditDialog}>
           <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto">
             <DialogHeader>
-              <DialogTitle>テンプレートを編集</DialogTitle>
-              <DialogDescription>テンプレートの内容を更新できます</DialogDescription>
+              <DialogTitle>{t('myTemplates.editDialog.title')}</DialogTitle>
+              <DialogDescription>{t('myTemplates.editDialog.description')}</DialogDescription>
             </DialogHeader>
             <div className="space-y-4">
               <div>
-                <Label htmlFor="edit-name">テンプレート名</Label>
+                <Label htmlFor="edit-name">{t('myTemplates.editDialog.nameLabel')}</Label>
                 <Input
                   id="edit-name"
                   value={formData.name}
@@ -297,7 +296,7 @@ export default function MyTemplates() {
                 />
               </div>
               <div>
-                <Label htmlFor="edit-description">説明</Label>
+                <Label htmlFor="edit-description">{t('myTemplates.editDialog.descriptionLabel')}</Label>
                 <Textarea
                   id="edit-description"
                   value={formData.description}
@@ -306,7 +305,7 @@ export default function MyTemplates() {
                 />
               </div>
               <div>
-                <Label htmlFor="edit-prompt">プロンプトテンプレート</Label>
+                <Label htmlFor="edit-prompt">{t('myTemplates.editDialog.promptLabel')}</Label>
                 <Textarea
                   id="edit-prompt"
                   value={formData.promptTemplate}
@@ -314,17 +313,16 @@ export default function MyTemplates() {
                   className="min-h-[300px] font-mono text-sm"
                 />
                 <p className="text-xs text-muted-foreground mt-2">
-                  ※ {"{{resumeText}}"} と {"{{jobDescription}}"}{" "}
-                  を使用すると、入力内容が自動的に埋め込まれます
+                  {t('myTemplates.editDialog.promptNote')}
                 </p>
               </div>
               <div className="flex justify-end gap-2">
                 <Button variant="outline" onClick={() => setShowEditDialog(false)}>
-                  キャンセル
+                  {t('myTemplates.editDialog.cancel')}
                 </Button>
                 <Button onClick={handleUpdate} disabled={updateMutation.isPending}>
                   {updateMutation.isPending && <Loader2 className="h-4 w-4 mr-2 animate-spin" />}
-                  更新
+                  {t('myTemplates.editDialog.update')}
                 </Button>
               </div>
             </div>
