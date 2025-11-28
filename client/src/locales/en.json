@@ -620,7 +620,9 @@
     "inputRequired": "Please input resume, job posting, and output items to generate",
     "noContentToCopy": "No content to copy",
     "shortcutGenerate": "Shortcut: Ctrl+Enter",
-    "shortcutCopyAll": "Shortcut: Ctrl+Shift+C"
+    "shortcutCopyAll": "Shortcut: Ctrl+Shift+C",
+    "fileSizeError": "File size is too large. Please upload a file {{maxSize}}MB or smaller. (Current: {{currentSize}}MB)",
+    "fileFormatError": "Unsupported file format. Please upload a file in {{supportedFormats}} format."
   },
   "common": {
     "loading": "Loading...",

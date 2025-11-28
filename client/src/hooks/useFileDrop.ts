@@ -1,11 +1,16 @@
 import { useState, useCallback, DragEvent } from 'react';
+import { toast } from 'sonner';
+import { useTranslation } from 'react-i18next';
 
 export interface UseFileDropOptions {
   onFileDrop: (file: File) => void;
   accept?: string[];
+  maxSizeMB?: number;
+  onError?: (error: string) => void;
 }
 
-export function useFileDrop({ onFileDrop, accept }: UseFileDropOptions) {
+export function useFileDrop({ onFileDrop, accept, maxSizeMB = 5, onError }: UseFileDropOptions) {
+  const { t } = useTranslation();
   const [isDragging, setIsDragging] = useState(false);
 
   const handleDragEnter = useCallback((e: DragEvent<HTMLElement>) => {
@@ -46,6 +51,15 @@ export function useFileDrop({ onFileDrop, accept }: UseFileDropOptions) {
 
     const file = files[0];
     
+    // Check file size
+    const fileSizeMB = file.size / (1024 * 1024);
+    if (fileSizeMB > maxSizeMB) {
+      const errorMsg = t('toast.fileSizeError', { maxSize: maxSizeMB, currentSize: fileSizeMB.toFixed(2) });
+      toast.error(errorMsg);
+      onError?.(errorMsg);
+      return;
+    }
+    
     // Check file type if accept is specified
     if (accept && accept.length > 0) {
       const fileExtension = '.' + file.name.split('.').pop()?.toLowerCase();
@@ -63,12 +77,23 @@ export function useFileDrop({ onFileDrop, accept }: UseFileDropOptions) {
       });
       
       if (!isAccepted) {
+        const supportedFormats = accept.map(type => {
+          if (type.startsWith('.')) return type.toUpperCase();
+          if (type.includes('*')) {
+            const [typePrefix] = type.split('/');
+            return typePrefix.toUpperCase();
+          }
+          return type.split('/')[1]?.toUpperCase() || type;
+        }).join(', ');
+        const errorMsg = t('toast.fileFormatError', { supportedFormats });
+        toast.error(errorMsg);
+        onError?.(errorMsg);
         return;
       }
     }
 
     onFileDrop(file);
-  }, [onFileDrop, accept]);
+  }, [onFileDrop, accept, maxSizeMB, onError, t]);
 
   return {
     isDragging,
