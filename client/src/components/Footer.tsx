@@ -23,31 +23,23 @@ export default function Footer() {
             <h3 className="font-semibold mb-3">{t('footer.links')}</h3>
             <ul className="space-y-2 text-sm">
               <li>
-                <Link href="/">
-                  <a className="text-muted-foreground hover:text-primary transition-colors">
-                    {t('footer.home')}
-                  </a>
+                <Link href="/" className="text-muted-foreground hover:text-primary transition-colors">
+                  {t('footer.home')}
                 </Link>
               </li>
               <li>
-                <Link href="/guide">
-                  <a className="text-muted-foreground hover:text-primary transition-colors">
-                    {t('footer.guide')}
-                  </a>
+                <Link href="/guide" className="text-muted-foreground hover:text-primary transition-colors">
+                  {t('footer.guide')}
                 </Link>
               </li>
               <li>
-                <Link href="/my-templates">
-                  <a className="text-muted-foreground hover:text-primary transition-colors">
-                    {t('footer.myTemplates')}
-                  </a>
+                <Link href="/my-templates" className="text-muted-foreground hover:text-primary transition-colors">
+                  {t('footer.myTemplates')}
                 </Link>
               </li>
               <li>
-                <Link href="/favorites">
-                  <a className="text-muted-foreground hover:text-primary transition-colors">
-                    {t('footer.favorites')}
-                  </a>
+                <Link href="/favorites" className="text-muted-foreground hover:text-primary transition-colors">
+                  {t('footer.favorites')}
                 </Link>
               </li>
             </ul>
@@ -58,24 +50,18 @@ export default function Footer() {
             <h3 className="font-semibold mb-3">{t('footer.legal')}</h3>
             <ul className="space-y-2 text-sm">
               <li>
-                <Link href="/privacy">
-                  <a className="text-muted-foreground hover:text-primary transition-colors">
-                    {t('footer.privacy')}
-                  </a>
+                <Link href="/privacy" className="text-muted-foreground hover:text-primary transition-colors">
+                  {t('footer.privacy')}
                 </Link>
               </li>
               <li>
-                <Link href="/terms">
-                  <a className="text-muted-foreground hover:text-primary transition-colors">
-                    {t('footer.terms')}
-                  </a>
+                <Link href="/terms" className="text-muted-foreground hover:text-primary transition-colors">
+                  {t('footer.terms')}
                 </Link>
               </li>
               <li>
-                <Link href="/adsense-guide">
-                  <a className="text-muted-foreground hover:text-primary transition-colors">
-                    {t('footer.adsenseGuide')}
-                  </a>
+                <Link href="/adsense-guide" className="text-muted-foreground hover:text-primary transition-colors">
+                  {t('footer.adsenseGuide')}
                 </Link>
               </li>
             </ul>
