@@ -59,11 +59,6 @@ export default function Footer() {
                   {t('footer.terms')}
                 </Link>
               </li>
-              <li>
-                <Link href="/adsense-guide" className="text-muted-foreground hover:text-primary transition-colors">
-                  {t('footer.adsenseGuide')}
-                </Link>
-              </li>
             </ul>
           </div>
 
